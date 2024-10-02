@@ -24,13 +24,9 @@ class _AccountState extends State<Account> {
   }
 
   Future<void> getUserData() async {
-    // Ambil user ID yang sedang login
     String uid = _auth.currentUser!.uid;
-
-    // Ambil dokumen pengguna dari koleksi 'users'
     DocumentSnapshot snapshot = await _firestore.collection('users').doc(uid).get();
 
-    // Jika dokumen ada, ambil nilai 'name'
     if (snapshot.exists) {
       setState(() {
         userName = snapshot.get('name');
@@ -56,7 +52,7 @@ class _AccountState extends State<Account> {
               color: Colors.white,
             ),
             onPressed: () {
-              // TODO: Handle notifications
+              // TODO: Halaman Notifikasi
             },
           )
         ],
@@ -64,7 +60,6 @@ class _AccountState extends State<Account> {
       body: SafeArea(
         child: Column(
           children: [
-            // Bagian Atas Profil Pengguna
             Container(
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               width: MediaQuery.of(context).size.width * 1,
@@ -97,16 +92,14 @@ class _AccountState extends State<Account> {
                   ElevatedButton.icon(
                     onPressed: () {
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Options()),
+                        context, MaterialPageRoute(
+                            builder: (context) => Options()
+                        ),
                       );
                     },
                     icon: const Icon(Icons.settings, size: 20),
                     label: const Text('Pengaturan'),
                     style: ElevatedButton.styleFrom(
-                      // primary: Colors.white,
-                      // onPrimary: Colors.black,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -116,7 +109,6 @@ class _AccountState extends State<Account> {
               ),
             ),
             const SizedBox(height: 20),
-            // Informasi Detail Pengguna
             Expanded(
               child: Container(
                 decoration: const BoxDecoration(
@@ -127,13 +119,10 @@ class _AccountState extends State<Account> {
                 child: ListView(
                   children: [
                     _buildProfileItem(Icons.email, 'Email', 'contoh@email.com'),
-                    _buildProfileItem(
-                        Icons.phone, 'No. Telepon', '08xx-xxxx-xxxx'),
-                    _buildProfileItem(
-                        Icons.home, 'Alamat', 'JL. xxxxx xxxxxxxxxx xxxxx'),
+                    _buildProfileItem(Icons.phone, 'No. Telepon', '08xx-xxxx-xxxx'),
+                    _buildProfileItem(Icons.home, 'Alamat', 'JL. xxxxx xxxxxxxxxx xxxxx'),
                     _buildProfileItem(Icons.person, 'Jenis Kelamin', 'xxxxx'),
-                    _buildProfileItem(
-                        Icons.credit_card, 'NIK', '2171xxxxxxxxxxx'),
+                    _buildProfileItem(Icons.credit_card, 'NIK', '2171xxxxxxxxxxx'),
                   ],
                 ),
               ),
@@ -148,7 +137,7 @@ class _AccountState extends State<Account> {
         unselectedItemColor: Colors.white70,
         showSelectedLabels: true,
         showUnselectedLabels: true,
-        currentIndex: 3, // Indeks halaman beranda
+        currentIndex: 3,
         onTap: (index) {
           if (index == 0) {
             Navigator.pushReplacementNamed(context, '/home');
@@ -182,7 +171,6 @@ class _AccountState extends State<Account> {
     );
   }
 
-  // Widget untuk item profil
   Widget _buildProfileItem(IconData icon, String title, String subtitle) {
     return Card(
       elevation: 1,

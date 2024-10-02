@@ -23,20 +23,17 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> getUserData() async {
-    // Ambil user ID yang sedang login
     String uid = _auth.currentUser!.uid;
+    DocumentSnapshot snapshot =
+        await _firestore.collection('users').doc(uid).get();
 
-    // Ambil dokumen pengguna dari koleksi 'users'
-    DocumentSnapshot snapshot = await _firestore.collection('users').doc(uid).get();
-
-    // Jika dokumen ada, ambil nilai 'name'
     if (snapshot.exists) {
       setState(() {
         userName = snapshot.get('name');
       });
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,9 +43,7 @@ class _HomeState extends State<Home> {
         title: Text(
           'Trashify',
           style: GoogleFonts.poppins(
-              fontWeight: FontWeight.bold, 
-              fontSize: 20, 
-              color: Colors.white),
+              fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
         ),
         actions: [
           IconButton(
@@ -57,7 +52,7 @@ class _HomeState extends State<Home> {
               color: Colors.white,
             ),
             onPressed: () {
-              // TODO: Handle notifications
+              // TODO: Halaman Notifikasi
             },
           )
         ],
@@ -66,17 +61,15 @@ class _HomeState extends State<Home> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Greeting Section
             Container(
               height: 256,
               decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                    'assets/images/beranda_warga.png',
-                  ),
-                  fit: BoxFit.cover,
-                )
-              ),
+                  image: DecorationImage(
+                image: AssetImage(
+                  'assets/images/beranda_warga.png',
+                ),
+                fit: BoxFit.cover,
+              )),
               padding: EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,8 +93,6 @@ class _HomeState extends State<Home> {
               ),
             ),
             SizedBox(height: 20),
-
-            // Features Section
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
@@ -118,18 +109,19 @@ class _HomeState extends State<Home> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Lapor Button
                   Expanded(
                     child: Card(
                       child: InkWell(
                         onTap: () {
-                          // TODO: Navigate to Lapor
+                          // TODO: Halaman Lapor
                         },
                         child: Container(
                           padding: EdgeInsets.all(16),
                           child: Column(
                             children: [
-                              Icon(Icons.edit, size: 40, color: Color.fromARGB(255, 54, 133, 102)),
+                              Icon(Icons.edit,
+                                  size: 40,
+                                  color: Color.fromARGB(255, 54, 133, 102)),
                               SizedBox(height: 10),
                               Text(
                                 'Lapor',
@@ -149,20 +141,19 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   SizedBox(width: 10),
-
-                  // Jadwal Button
                   Expanded(
                     child: Card(
                       child: InkWell(
                         onTap: () {
-                          // TODO: Navigate to Jadwal
+                          // TODO: Halaman Jadwal
                         },
                         child: Container(
                           padding: EdgeInsets.all(16),
                           child: Column(
                             children: [
                               Icon(Icons.calendar_today,
-                                  size: 40, color: Color.fromARGB(255, 54, 133, 102)),
+                                  size: 40,
+                                  color: Color.fromARGB(255, 54, 133, 102)),
                               SizedBox(height: 10),
                               Text(
                                 'Jadwal',
@@ -184,10 +175,7 @@ class _HomeState extends State<Home> {
                 ],
               ),
             ),
-
             SizedBox(height: 20),
-
-            // Education Section
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
@@ -199,8 +187,6 @@ class _HomeState extends State<Home> {
               ),
             ),
             SizedBox(height: 10),
-
-            // Tabs for Video and Article
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -208,7 +194,7 @@ class _HomeState extends State<Home> {
                   Expanded(
                     child: TextButton(
                       onPressed: () {
-                        // TODO: Show videos
+                        // TODO: Halaman Video Edukasi
                       },
                       child: Text('Video'),
                     ),
@@ -216,22 +202,20 @@ class _HomeState extends State<Home> {
                   Expanded(
                     child: TextButton(
                       onPressed: () {
-                        // TODO: Show articles
+                        // TODO: Halaman Artikel Edukasi
                       },
                       child: Text('Artikel'),
                     ),
                   ),
                   TextButton(
                     onPressed: () {
-                      // TODO: Navigate to "Lihat Semua"
+                      // TODO: Halaman Edukasi
                     },
                     child: Text('Lihat Semua'),
                   )
                 ],
               ),
             ),
-
-            // Educational Content
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -244,7 +228,8 @@ class _HomeState extends State<Home> {
                           children: [
                             Text(
                               'Langkah Sederhana Memilah Sampah di Rumah',
-                              style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.bold),
                             ),
                             SizedBox(height: 10),
                             Row(
@@ -270,7 +255,8 @@ class _HomeState extends State<Home> {
                           children: [
                             Text(
                               'Karya Daur Ulang Sampah Plastik',
-                              style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.bold),
                             ),
                             SizedBox(height: 10),
                             Row(
@@ -302,7 +288,7 @@ class _HomeState extends State<Home> {
         unselectedItemColor: Colors.white70,
         showSelectedLabels: true,
         showUnselectedLabels: true,
-        currentIndex: 0, // Indeks halaman beranda
+        currentIndex: 0,
         onTap: (index) {
           if (index == 0) {
             Navigator.pushReplacementNamed(context, '/home');

@@ -6,12 +6,11 @@ import 'package:trashify/pages/auth/login.dart';
 class Options extends StatelessWidget {
   const Options({super.key});
 
-  // Fungsi untuk keluar/log out
   Future<void> _logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => LogIn()),
+      context, MaterialPageRoute(builder: (context) => LogIn()
+    ),
       (route) => false,
     );
   }
@@ -26,7 +25,7 @@ class Options extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.pop(context); // Kembali ke halaman sebelumnya
+            Navigator.pop(context);
           },
         ),
         title: Text(
@@ -54,7 +53,6 @@ class Options extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
-            // Bagian Pengaturan Umum
             Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -71,7 +69,7 @@ class Options extends StatelessWidget {
                       title: 'Ubah Profil',
                       subtitle: 'Ubah foto profil, nama, no. telp, dan lainnya',
                       onTap: () {
-                        // Aksi untuk ubah profil
+                        // TODO: Halaman Ubah Profil
                       },
                     ),
                     _buildSettingItem(
@@ -80,7 +78,7 @@ class Options extends StatelessWidget {
                       subtitle:
                           'Perbarui kata sandi untuk mengamankan akun anda',
                       onTap: () {
-                        // Aksi untuk ganti kata sandi
+                        // TODO: Halaman Ganti Kata Sandi
                       },
                     ),
                     const SizedBox(height: 20),
@@ -90,7 +88,7 @@ class Options extends StatelessWidget {
                       title: 'Pengaturan Notifikasi',
                       subtitle: 'Atur berbagai notifikasi dari aplikasi',
                       onTap: () {
-                        // Aksi untuk pengaturan notifikasi
+                        // TODO: Halaman Notifikasi
                       },
                     ),
                     _buildSettingItem(
@@ -99,11 +97,10 @@ class Options extends StatelessWidget {
                       subtitle:
                           'Perjanjian hukum antara penyedia layanan dan pengguna',
                       onTap: () {
-                        // Aksi untuk melihat syarat dan ketentuan
+                        // TODO: Halaman Syarat dan Ketentuan
                       },
                     ),
                     const SizedBox(height: 20),
-                    // Tombol Keluar
                     _buildSettingItem(
                       icon: Icons.exit_to_app,
                       title: 'Keluar',
@@ -122,7 +119,6 @@ class Options extends StatelessWidget {
     );
   }
 
-  // Fungsi untuk membuat section title (contoh: Umum, Preferensi)
   Widget _buildSettingSection(String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -137,7 +133,6 @@ class Options extends StatelessWidget {
     );
   }
 
-  // Fungsi untuk membuat item pengaturan
   Widget _buildSettingItem({
     required IconData icon,
     required String title,

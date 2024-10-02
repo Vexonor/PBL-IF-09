@@ -183,8 +183,10 @@ class _RegisterState extends State<Register> {
                                 controller: _emailController,
                                 textInputAction: TextInputAction.next,
                                 decoration: InputDecoration(
-                                  prefixIcon: Icon(Icons.email_outlined,
-                                      color: Colors.grey),
+                                  prefixIcon: Icon(
+                                      Icons.email_outlined,
+                                      color: Colors.grey
+                                  ),
                                   labelText: 'Alamat Email',
                                   labelStyle: GoogleFonts.poppins(
                                       fontSize: 16,
@@ -202,8 +204,10 @@ class _RegisterState extends State<Register> {
                                 textInputAction: TextInputAction.next,
                                 obscureText: true,
                                 decoration: InputDecoration(
-                                  prefixIcon: Icon(Icons.lock_outline,
-                                      color: Colors.grey),
+                                  prefixIcon: Icon(
+                                      Icons.lock_outline,
+                                      color: Colors.grey
+                                  ),
                                   labelText: 'Kata Sandi',
                                   labelStyle: GoogleFonts.poppins(
                                       fontSize: 16,
@@ -235,8 +239,7 @@ class _RegisterState extends State<Register> {
                               ),
                               SizedBox(height: 30),
                               Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 100.0),
+                                padding: const EdgeInsets.symmetric(horizontal: 100.0),
                                 child: ElevatedButton(
                                   onPressed: _register,
                                   style: ElevatedButton.styleFrom(
@@ -270,7 +273,9 @@ class _RegisterState extends State<Register> {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => LogIn()));
+                                              builder: (context) => LogIn()
+                                          )
+                                      );
                                     },
                                     child: Text(
                                       "Masuk",
