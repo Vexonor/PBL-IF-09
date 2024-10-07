@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "274335731810",
+    "project_id": "trashify-mobile",
+    "storage_bucket": "trashify-mobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:274335731810:android:3e953ca37f324a7882013b",
+        "android_client_info": {
+          "package_name": "com.example.trashify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "274335731810-69tthie2jhjhpiu0evrfi8q15j8h3c2c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.trashify",
+            "certificate_hash": "fafee18874d761e377eccbc21e8c20ba681554db"
+          }
+        },
+        {
+          "client_id": "274335731810-vs09o1043ofjl0aj81o75e5up5n91fh5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9lpKjCmqrdn3qFF2qbVZB5BsLtFoYpMw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "274335731810-vs09o1043ofjl0aj81o75e5up5n91fh5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "274335731810-3kvmrbuisr477fn8afm3tch4h3jg68nt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.trashify"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
