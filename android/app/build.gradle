@@ -32,6 +32,10 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         minSdkVersion 23
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 18a3f0859288f5d04d71d12094ebdccc351a7623
     }
 
     buildTypes {

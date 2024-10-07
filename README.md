@@ -1,4 +1,4 @@
-# trashify
+# Trashify
 
 A new Flutter project.
 
