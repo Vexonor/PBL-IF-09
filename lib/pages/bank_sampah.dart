@@ -35,8 +35,8 @@ class _BankSampahState extends State<BankSampah> {
         nomorTelpon: '+62 896-1297-0033',
         jamOperasional: '06.00 - 17.00',
         status: 'Buka',
-        kordinatLatitude: 1.1022518592374857,
-        kordinatLongitude: 103.98770545397619,
+        koordinatLatitude: 1.1022518592374857,
+        koordinatLongitude: 103.98770545397619,
       ),
     ),
     JenisSampah(
@@ -47,8 +47,8 @@ class _BankSampahState extends State<BankSampah> {
         nomorTelpon: '+62 896-1297-1598',
         jamOperasional: '08.00 - 20.00',
         status: 'Buka',
-        kordinatLatitude: 1.032927583184759,
-        kordinatLongitude: 103.97502762583923,
+        koordinatLatitude: 1.032927583184759,
+        koordinatLongitude: 103.97502762583923,
       ),
     ),
     JenisSampah(
@@ -59,8 +59,8 @@ class _BankSampahState extends State<BankSampah> {
         nomorTelpon: '+62 896-4724-9603',
         jamOperasional: '10.00 - 17.00',
         status: 'Buka',
-        kordinatLatitude: 1.0406992992140933,
-        kordinatLongitude: 103.95928685373055,
+        koordinatLatitude: 1.0406992992140933,
+        koordinatLongitude: 103.95928685373055,
       ),
     ),
     JenisSampah(
@@ -71,8 +71,8 @@ class _BankSampahState extends State<BankSampah> {
         nomorTelpon: '+62 896-2156-8535',
         jamOperasional: '05.00 - 12.00',
         status: 'Buka',
-        kordinatLatitude: 1.1803204867097832,
-        kordinatLongitude: 104.02262251648999,
+        koordinatLatitude: 1.1803204867097832,
+        koordinatLongitude: 104.02262251648999,
       ),
     ),
     JenisSampah(
@@ -83,8 +83,8 @@ class _BankSampahState extends State<BankSampah> {
         nomorTelpon: '+62 896-1532-9328',
         jamOperasional: '10.00 - 03.00',
         status: 'Buka',
-        kordinatLatitude: 1.0422834247309472,
-        kordinatLongitude: 103.96806034384643,
+        koordinatLatitude: 1.0422834247309472,
+        koordinatLongitude: 103.96806034384643,
       ),
     ),
   ];
@@ -123,9 +123,9 @@ class _BankSampahState extends State<BankSampah> {
                                 setState(() {
                                   _sampahTerpilih = jenisSampah;
                                   _latitudeTerkini =
-                                      jenisSampah.bankSampah.kordinatLatitude;
+                                      jenisSampah.bankSampah.koordinatLatitude;
                                   _longitudeTerkini =
-                                      jenisSampah.bankSampah.kordinatLongitude;
+                                      jenisSampah.bankSampah.koordinatLongitude;
                                   _kondisiSampahTerpilih = true;
                                 });
                                 _mapController.move(
@@ -169,12 +169,13 @@ class _BankSampahState extends State<BankSampah> {
         backgroundColor: const Color.fromARGB(255, 59, 142, 110),
         elevation: 0,
         title: Center(
+          widthFactor: 2.0,
           child: Text(
             'Bank Sampah',
             style: GoogleFonts.poppins(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
         ),
@@ -300,8 +301,8 @@ class _BankSampahState extends State<BankSampah> {
                   SizedBox(
                     height: 200,
                     child: _buildMaps(
-                        _sampahTerpilih!.bankSampah.kordinatLatitude,
-                        _sampahTerpilih!.bankSampah.kordinatLongitude),
+                        _sampahTerpilih!.bankSampah.koordinatLatitude,
+                        _sampahTerpilih!.bankSampah.koordinatLongitude),
                   ),
                 ],
               ],
@@ -318,8 +319,8 @@ class _BankSampahState extends State<BankSampah> {
                 return Container(
                   color: Colors.white,
                   child: _buildMaps(
-                      _sampahTerpilih!.bankSampah.kordinatLatitude,
-                      _sampahTerpilih!.bankSampah.kordinatLongitude),
+                      _sampahTerpilih!.bankSampah.koordinatLatitude,
+                      _sampahTerpilih!.bankSampah.koordinatLongitude),
                 );
               },
             )
@@ -453,15 +454,15 @@ class DetailBankSampah {
   final String nomorTelpon;
   final String jamOperasional;
   final String status;
-  final double kordinatLongitude;
-  final double kordinatLatitude;
+  final double koordinatLongitude;
+  final double koordinatLatitude;
 
   DetailBankSampah({
     required this.namaBank,
     required this.nomorTelpon,
     required this.jamOperasional,
     required this.status,
-    required this.kordinatLatitude,
-    required this.kordinatLongitude,
+    required this.koordinatLatitude,
+    required this.koordinatLongitude,
   });
 }

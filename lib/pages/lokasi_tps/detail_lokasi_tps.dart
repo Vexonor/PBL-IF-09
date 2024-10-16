@@ -21,13 +21,13 @@ class _DetailLokasiTpsState extends State<DetailLokasiTps> {
           'namaTps': 'TPS Kamp. Jabi',
           'status': 'Kosong',
           'jarakTps': '7 menit',
-          'kordinat': const LatLng(1.0828, 104.0305)
+          'koordinat': const LatLng(1.0828, 104.0305)
         },
         {
           'namaTps': 'TPS 02',
           'status': 'Penuh',
           'jarakTps': '15 menit',
-          'kordinat': const LatLng(1.1825, 104.0302)
+          'koordinat': const LatLng(1.1825, 104.0302)
         },
       ],
       'Sagulung': [
@@ -35,20 +35,19 @@ class _DetailLokasiTpsState extends State<DetailLokasiTps> {
           'namaTps': 'TPS Kaling Baru Sagulung',
           'status': 'Kosong',
           'jarakTps': '23 menit',
-          'kordinat': const LatLng(1.0828, 104.0305)
+          'koordinat': const LatLng(1.0828, 104.0305)
         },
       ],
-      // Add other Kecamatan data here
     };
     final List<Map<String, dynamic>> selectedTps =
         tpsData[widget.kecamatan] ?? [];
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         backgroundColor: const Color.fromARGB(255, 59, 142, 110),
         elevation: 0,
         title: Center(
+          widthFactor: 1.2,
           child: Text(
             'Lokasi TPS - ${widget.kecamatan}',
             style: GoogleFonts.poppins(
@@ -59,18 +58,17 @@ class _DetailLokasiTpsState extends State<DetailLokasiTps> {
           ),
         ),
         leading: IconButton(
-          icon: const Icon(
-            Icons.location_on,
-            color: Colors.white,
-          ),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            // TODO: Halaman Notifikasi
+            Navigator.pop(context);
           },
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_none, color: Colors.white),
-            onPressed: () {},
+            onPressed: () {
+              // TODO: Halaman Notifikasi
+            },
           ),
         ],
       ),
@@ -85,7 +83,7 @@ class _DetailLokasiTpsState extends State<DetailLokasiTps> {
                 height: 250,
                 child: FlutterMap(
                   options: MapOptions(
-                    initialCenter: tps['kordinat'],
+                    initialCenter: tps['koordinat'],
                     initialZoom: 15,
                   ),
                   children: [
@@ -98,7 +96,7 @@ class _DetailLokasiTpsState extends State<DetailLokasiTps> {
                         Marker(
                           width: 80.0,
                           height: 80.0,
-                          point: tps['kordinat'],
+                          point: tps['koordinat'],
                           child: const Icon(
                             Icons.location_on,
                             size: 40,

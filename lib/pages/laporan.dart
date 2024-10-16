@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:trashify/pages/laporan/tambah_laporan.dart';
 
 class Laporan extends StatefulWidget {
   const Laporan({super.key});
@@ -22,12 +23,15 @@ class _LaporanState extends State<Laporan> {
             Navigator.pop(context);
           },
         ),
-        title: Text(
-          'Pengaturan',
-          style: GoogleFonts.poppins(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+        title: Center(
+          widthFactor: 3.75,
+          child: Text(
+            'Laporan',
+            style: GoogleFonts.poppins(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
         ),
       ),
@@ -77,7 +81,14 @@ class _LaporanState extends State<Laporan> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const TambahLaporan(),
+            ),
+          );
+        },
         backgroundColor: const Color.fromARGB(255, 59, 142, 110),
         shape: const CircleBorder(),
         child: Padding(

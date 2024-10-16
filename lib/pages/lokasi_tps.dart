@@ -19,6 +19,7 @@ class _LokasiTpsState extends State<LokasiTps> {
         backgroundColor: const Color.fromARGB(255, 59, 142, 110),
         elevation: 0,
         title: Center(
+          widthFactor: 2.75,
           child: Text(
             'Lokasi TPS',
             style: GoogleFonts.poppins(
