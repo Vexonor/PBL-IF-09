@@ -5,23 +5,32 @@ import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:trashify/pages/laporan/fungsi_tambahan/pilih_koordinat.dart';
 
-class TambahLaporan extends StatefulWidget {
-  const TambahLaporan({super.key});
+class EditLaporan extends StatefulWidget {
+  final String kategori;
+  final String deskripsi;
+  final String koordinat;
+  final String gambar;
+  const EditLaporan(
+      {super.key,
+      required this.kategori,
+      required this.deskripsi,
+      required this.koordinat,
+      required this.gambar});
 
   @override
-  State<TambahLaporan> createState() => _TambahLaporanState();
+  State<EditLaporan> createState() => _EditLaporanState();
 }
 
-class _TambahLaporanState extends State<TambahLaporan> {
-  final _deskripsiLaporanController = TextEditingController();
-  final _koordinatController = TextEditingController();
+class _EditLaporanState extends State<EditLaporan> {
+  late TextEditingController _deskripsiLaporanController;
+  late TextEditingController _koordinatController;
 
   final _formkey = GlobalKey<FormState>();
 
   // ignore: unused_field
   LatLng? _koordinatPilihan;
 
-  Future<void> _openMap() async {
+  Future<void> _bukaMap() async {
     final LatLng? result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -37,11 +46,27 @@ class _TambahLaporanState extends State<TambahLaporan> {
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+
+    _deskripsiLaporanController = TextEditingController(text: widget.deskripsi);
+    _koordinatController = TextEditingController(text: widget.koordinat);
+    _kategoriLaporan = widget.kategori;
+  }
+
+  @override
+  void dispose() {
+    _deskripsiLaporanController.dispose();
+    _koordinatController.dispose();
+    super.dispose();
+  }
+
   String? _kategoriLaporan;
   XFile? _gambarPilihan;
   final _pemilih = ImagePicker();
 
-  void _pickImage() async {
+  void _pilihGambar() async {
     final gambarTerpilih =
         await _pemilih.pickImage(source: ImageSource.gallery);
     setState(() {
@@ -63,9 +88,9 @@ class _TambahLaporanState extends State<TambahLaporan> {
           },
         ),
         title: Center(
-          widthFactor: 1.65,
+          widthFactor: 2.3,
           child: Text(
-            'Tambah Laporan',
+            'Edit Laporan',
             style: GoogleFonts.poppins(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -116,7 +141,7 @@ class _TambahLaporanState extends State<TambahLaporan> {
                 TextFormField(
                   controller: _koordinatController,
                   readOnly: true,
-                  onTap: _openMap,
+                  onTap: _bukaMap,
                   decoration: InputDecoration(
                       border: const OutlineInputBorder(),
                       hintText: 'Ketuk untuk memilih koordinat dari map',
@@ -133,7 +158,7 @@ class _TambahLaporanState extends State<TambahLaporan> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
-                    onPressed: _pickImage,
+                    onPressed: _pilihGambar,
                     icon: const Icon(
                       Icons.file_upload,
                       color: Colors.white,
@@ -189,9 +214,9 @@ class _TambahLaporanState extends State<TambahLaporan> {
     );
   }
 
-  Widget _buildRadioInput(String kategori) {
+  Widget _buildRadioInput(String title) {
     return RadioListTile<String>(
-      value: kategori,
+      value: title,
       groupValue: _kategoriLaporan,
       onChanged: (String? value) {
         setState(() {
@@ -199,7 +224,7 @@ class _TambahLaporanState extends State<TambahLaporan> {
         });
       },
       title: Text(
-        kategori,
+        title,
         style: TextStyle(
           fontSize: 14,
         ),

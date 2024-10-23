@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:trashify/pages/notifikasi.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailLokasiTps extends StatefulWidget {
@@ -41,6 +42,7 @@ class _DetailLokasiTpsState extends State<DetailLokasiTps> {
     };
     final List<Map<String, dynamic>> selectedTps =
         tpsData[widget.kecamatan] ?? [];
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
@@ -65,9 +67,12 @@ class _DetailLokasiTpsState extends State<DetailLokasiTps> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_none, color: Colors.white),
+            icon: const Icon(Icons.notifications, color: Colors.white),
             onPressed: () {
-              // TODO: Halaman Notifikasi
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Notifikasi()),
+              );
             },
           ),
         ],
@@ -117,7 +122,8 @@ class _DetailLokasiTpsState extends State<DetailLokasiTps> {
                   ],
                 ),
               ),
-              Card(
+              Card(elevation: 2,
+                color: Colors.white,
                 margin: const EdgeInsets.only(bottom: 16),
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
@@ -126,53 +132,15 @@ class _DetailLokasiTpsState extends State<DetailLokasiTps> {
                   ),
                 ),
                 child: ListTile(
-                  title: Text(tps['namaTps']!, style: GoogleFonts.poppins()),
+                  title: Text(tps['namaTps']!, style: TextStyle()),
                   subtitle: Text('${tps['status']} - ${tps['jarakTps']}',
-                      style: GoogleFonts.poppins()),
+                      style: TextStyle()),
                   leading: const Icon(Icons.location_on),
                 ),
               ),
             ],
           );
         },
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color.fromARGB(255, 59, 142, 110),
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white70,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        currentIndex: 1,
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushReplacementNamed(context, '/beranda');
-          } else if (index == 1) {
-            Navigator.pushReplacementNamed(context, '/lokasi_tps');
-          } else if (index == 2) {
-            Navigator.pushReplacementNamed(context, '/bank_sampah');
-          } else if (index == 3) {
-            Navigator.pushReplacementNamed(context, '/akun');
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Beranda',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.location_on),
-            label: 'Lokasi TPS',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance),
-            label: 'Bank Sampah',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Akun',
-          ),
-        ],
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:trashify/pages/laporan/detail_laporan.dart';
 import 'package:trashify/pages/laporan/tambah_laporan.dart';
+import 'package:trashify/pages/notifikasi.dart';
 
 class Laporan extends StatefulWidget {
   const Laporan({super.key});
@@ -24,16 +26,30 @@ class _LaporanState extends State<Laporan> {
           },
         ),
         title: Center(
-          widthFactor: 3.75,
+          widthFactor: 3.4,
           child: Text(
             'Laporan',
             style: GoogleFonts.poppins(
-              fontSize: 18,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
           ),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.notifications,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Notifikasi()),
+              );
+            },
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -42,38 +58,78 @@ class _LaporanState extends State<Laporan> {
           children: [
             Text(
               'Sedang Diproses',
-              style: GoogleFonts.poppins(
+              style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 18,
+                fontSize: 16,
               ),
             ),
             Expanded(
               child: ListView(
                 children: [
-                  _buildDaftarLaporan('Laporan: Tempat Sampah Liar',
-                      'Ada tempat sampah liar baru di samping lapangan sepak bola...'),
-                  _buildDaftarLaporan('Laporan: Lainnya',
-                      'Setelah acara pasar malam di VITB, sampah dari kegiatan tsb be...'),
-                  _buildDaftarLaporan('Laporan: Tempat Sampah Liar',
-                      'Di tepi jalan dekat arah SMAN 3 Batam, warga mulai membuang...'),
+                  _buildDaftarLaporan(
+                      'Tempat Sampah Liar',
+                      'Ada tempat sampah liar baru di samping lapangan sepak bola...',
+                      '1.0828, 104.0305',
+                      'assets/images/laporan/contoh1.png'),
+                  _buildDaftarLaporan(
+                      'Lainnya',
+                      'Setelah acara pasar malam di VITB, sampah dari kegiatan tsb be...',
+                      '1.0828, 104.0305',
+                      'assets/images/laporan/contoh2.png'),
+                  _buildDaftarLaporan(
+                      'Tempat Sampah Liar',
+                      'Di tepi jalan dekat arah SMAN 3 Batam, warga mulai membuang...',
+                      '1.0828, 104.0305',
+                      'assets/images/laporan/contoh1.png'),
+                  _buildDaftarLaporan(
+                      'Lainnya',
+                      'Setelah acara pasar malam di VITB, sampah dari kegiatan tsb be...',
+                      '1.0828, 104.0305',
+                      'assets/images/laporan/contoh2.png'),
+                  _buildDaftarLaporan(
+                      'Tempat Sampah Liar',
+                      'Di tepi jalan dekat arah SMAN 3 Batam, warga mulai membuang...',
+                      '1.0828, 104.0305',
+                      'assets/images/laporan/contoh1.png'),
+                  _buildDaftarLaporan(
+                      'Lainnya',
+                      'Setelah acara pasar malam di VITB, sampah dari kegiatan tsb be...',
+                      '1.0828, 104.0305',
+                      'assets/images/laporan/contoh2.png'),
                 ],
               ),
             ),
             const SizedBox(height: 16),
             Text(
               'Sudah Selesai',
-              style: GoogleFonts.poppins(
+              style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 18,
+                fontSize: 16,
               ),
             ),
             Expanded(
               child: ListView(
                 children: [
-                  _buildDaftarLaporan('Laporan: Kondisi TPS',
-                      'TPS di Piayu mengalami kebocoran dan air limbah mengalir ke ja...'),
-                  _buildDaftarLaporan('Laporan: Pengangkutan Sampah',
-                      'Sampah di RW 03 blm diambil sejak minggu lalu. Sudah menum...'),
+                  _buildDaftarLaporan(
+                      'Kondisi TPS',
+                      'TPS di Piayu mengalami kebocoran dan air limbah mengalir ke ja...',
+                      '1.0828, 104.0305',
+                      'assets/images/laporan/contoh3.png'),
+                  _buildDaftarLaporan(
+                      'Pengangkutan Sampah',
+                      'Sampah di RW 03 blm diambil sejak minggu lalu. Sudah menum...',
+                      '1.0828, 104.0305',
+                      'assets/images/laporan/contoh4.png'),
+                  _buildDaftarLaporan(
+                      'Kondisi TPS',
+                      'TPS di Piayu mengalami kebocoran dan air limbah mengalir ke ja...',
+                      '1.0828, 104.0305',
+                      'assets/images/laporan/contoh3.png'),
+                  _buildDaftarLaporan(
+                      'Pengangkutan Sampah',
+                      'Sampah di RW 03 blm diambil sejak minggu lalu. Sudah menum...',
+                      '1.0828, 104.0305',
+                      'assets/images/laporan/contoh4.png'),
                 ],
               ),
             ),
@@ -98,7 +154,7 @@ class _LaporanState extends State<Laporan> {
               const Icon(Icons.edit, color: Colors.white),
               Text(
                 'Buat Laporan',
-                style: GoogleFonts.poppins(
+                style: TextStyle(
                   fontSize: 6,
                   color: Colors.white,
                 ),
@@ -107,69 +163,42 @@ class _LaporanState extends State<Laporan> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color.fromARGB(255, 59, 142, 110),
-        selectedItemColor: Colors.white70,
-        unselectedItemColor: Colors.white70,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        currentIndex: 0,
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushReplacementNamed(context, '/beranda');
-          } else if (index == 1) {
-            Navigator.pushReplacementNamed(context, '/lokasi_tps');
-          } else if (index == 2) {
-            Navigator.pushReplacementNamed(context, '/bank_sampah');
-          } else if (index == 3) {
-            Navigator.pushReplacementNamed(context, '/akun');
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Beranda',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.location_on),
-            label: 'Lokasi TPS',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance),
-            label: 'Bank Sampah',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Akun',
-          ),
-        ],
-      ),
     );
   }
 
-  Widget _buildDaftarLaporan(String title, String subtitle) {
+  Widget _buildDaftarLaporan(
+      String kategori, String deskripsi, String koordinat, String gambar) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 239, 245, 239),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.grey.shade300),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            subtitle,
-            style: GoogleFonts.poppins(color: Colors.grey),
-          ),
-        ],
+      child: ListTile(
+        leading: Icon(Icons.article, color: Colors.grey[700]),
+        title: Text(
+          'Laporan: $kategori',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+        ),
+        subtitle: Text(
+          deskripsi,
+          style: TextStyle(color: Colors.grey, fontSize: 14),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DetailLaporan(
+                kategori: kategori,
+                deskripsi: deskripsi,
+                koordinat: koordinat,
+                gambar: gambar,
+              ),
+            ),
+          );
+        },
       ),
     );
   }

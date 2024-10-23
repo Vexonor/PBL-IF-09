@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:trashify/pages/lokasi_tps/detail_lokasi_tps.dart';
+import 'package:trashify/pages/notifikasi.dart';
 
 class LokasiTps extends StatefulWidget {
   const LokasiTps({super.key});
@@ -19,13 +20,13 @@ class _LokasiTpsState extends State<LokasiTps> {
         backgroundColor: const Color.fromARGB(255, 59, 142, 110),
         elevation: 0,
         title: Center(
-          widthFactor: 2.75,
+          widthFactor: 2.7,
           child: Text(
             'Lokasi TPS',
             style: GoogleFonts.poppins(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
         ),
@@ -35,12 +36,15 @@ class _LokasiTpsState extends State<LokasiTps> {
             color: Colors.white,
           ),
           onPressed: () {
-            // TODO: Halaman Notifikasi
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Notifikasi()),
+            );
           },
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_none, color: Colors.white),
+            icon: const Icon(Icons.notifications, color: Colors.white),
             onPressed: () {},
           ),
         ],
@@ -84,10 +88,10 @@ class _LokasiTpsState extends State<LokasiTps> {
                         Center(
                           child: Text(
                             'Kecamatan',
-                            style: GoogleFonts.poppins(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
                             ),
                           ),
                         ),
@@ -112,28 +116,6 @@ class _LokasiTpsState extends State<LokasiTps> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 75),
-                        Center(
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  const Color.fromARGB(255, 59, 142, 110),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 40, vertical: 12),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                            child: Text(
-                              'Filter',
-                              style: GoogleFonts.poppins(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ),
@@ -143,65 +125,31 @@ class _LokasiTpsState extends State<LokasiTps> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color.fromARGB(255, 59, 142, 110),
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white70,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        currentIndex: 1,
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushReplacementNamed(context, '/beranda');
-          } else if (index == 1) {
-            Navigator.pushReplacementNamed(context, '/lokasi_tps');
-          } else if (index == 2) {
-            Navigator.pushReplacementNamed(context, '/bank_sampah');
-          } else if (index == 3) {
-            Navigator.pushReplacementNamed(context, '/akun');
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Beranda',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.location_on),
-            label: 'Lokasi TPS',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance),
-            label: 'Bank Sampah',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Akun',
-          ),
-        ],
-      ),
     );
   }
 
-  Widget _buildTombolKecamatan(String title) {
+  Widget _buildTombolKecamatan(String kecamatan) {
     return ElevatedButton(
       onPressed: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DetailLokasiTps(kecamatan: title),
+            builder: (context) => DetailLokasiTps(kecamatan: kecamatan),
           ),
         );
       },
       style: ElevatedButton.styleFrom(
+        elevation: 5,
         fixedSize: const Size.fromWidth(140),
-        backgroundColor: Colors.grey[200],
+        backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
       ),
-      child: Text(title, style: GoogleFonts.poppins()),
+      child: Text(
+        kecamatan,
+        style: TextStyle(color: Colors.black),
+      ),
     );
   }
 }

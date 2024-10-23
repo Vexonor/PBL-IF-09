@@ -27,11 +27,15 @@ class _PengaturanState extends State<Pengaturan> {
             Navigator.pop(context);
           },
         ),
-        title: Text(
-          'Kembali',
-          style: GoogleFonts.poppins(
-            fontSize: 20,
-            color: Colors.white,
+        title: Center(
+          widthFactor: 2.4,
+          child: Text(
+            'Pengaturan',
+            style: GoogleFonts.poppins(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
         ),
       ),
@@ -42,14 +46,6 @@ class _PengaturanState extends State<Pengaturan> {
             Center(
               child: Column(
                 children: [
-                  Text(
-                    'Pengaturan',
-                    style: GoogleFonts.poppins(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
                   const SizedBox(
                     height: 10,
                   ),
@@ -77,10 +73,10 @@ class _PengaturanState extends State<Pengaturan> {
                         _buildBagianPengaturan('Umum'),
                         _buildDaftarPengaturan(
                           icon: Icons.person_outline,
-                          title: 'Ubah Profil',
-                          subtitle:
+                          judul: 'Ubah Profil',
+                          deskripsi:
                               'Ubah foto profil, nama, no. telp, dan lainnya',
-                          onTap: () {
+                          rute: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -90,10 +86,10 @@ class _PengaturanState extends State<Pengaturan> {
                         ),
                         _buildDaftarPengaturan(
                           icon: Icons.lock_outline,
-                          title: 'Ganti Kata Sandi',
-                          subtitle:
+                          judul: 'Ganti Kata Sandi',
+                          deskripsi:
                               'Perbarui kata sandi untuk mengamankan akun anda',
-                          onTap: () {
+                          rute: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -120,9 +116,9 @@ class _PengaturanState extends State<Pengaturan> {
                         _buildBagianPengaturan('Preferensi'),
                         _buildDaftarPengaturan(
                           icon: Icons.notifications_outlined,
-                          title: 'Pengaturan Notifikasi',
-                          subtitle: 'Atur berbagai notifikasi dari aplikasi',
-                          onTap: () {
+                          judul: 'Pengaturan Notifikasi',
+                          deskripsi: 'Atur berbagai notifikasi dari aplikasi',
+                          rute: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -132,10 +128,10 @@ class _PengaturanState extends State<Pengaturan> {
                         ),
                         _buildDaftarPengaturan(
                           icon: Icons.info_outline,
-                          title: 'Syarat & Ketentuan',
-                          subtitle:
+                          judul: 'Syarat & Ketentuan',
+                          deskripsi:
                               'Perjanjian hukum antara penyedia layanan dan pengguna',
-                          onTap: () {
+                          rute: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -145,10 +141,10 @@ class _PengaturanState extends State<Pengaturan> {
                         ),
                         _buildDaftarPengaturan(
                           icon: Icons.exit_to_app,
-                          title: 'Keluar',
-                          subtitle: '',
+                          judul: 'Keluar',
+                          deskripsi: '',
                           color: Colors.redAccent,
-                          onTap: () {
+                          rute: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -168,44 +164,46 @@ class _PengaturanState extends State<Pengaturan> {
     );
   }
 
-  Widget _buildBagianPengaturan(String title) {
+  Widget _buildBagianPengaturan(String bagian) {
     return Text(
-      title,
+      bagian,
       style: GoogleFonts.poppins(
         fontSize: 16,
         fontWeight: FontWeight.bold,
-        color: Colors.black54,
+        color: Colors.black,
       ),
     );
   }
 
   Widget _buildDaftarPengaturan({
     required IconData icon,
-    required String title,
-    required String subtitle,
-    required Function() onTap,
+    required String judul,
+    required String deskripsi,
+    required Function() rute,
     Color color = Colors.black87,
   }) {
     return Card(
+      color: Colors.white,
+      elevation: 3,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: ListTile(
         leading: Icon(icon, color: color),
         title: Text(
-          title,
-          style: GoogleFonts.poppins(
+          judul,
+          style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
             color: color,
           ),
         ),
-        subtitle: subtitle.isNotEmpty
+        subtitle: deskripsi.isNotEmpty
             ? Text(
-                subtitle,
-                style: GoogleFonts.poppins(fontSize: 14, color: Colors.black54),
+                deskripsi,
+                style: TextStyle(fontSize: 14, color: Colors.black54),
               )
             : null,
-        onTap: onTap,
+        onTap: rute,
       ),
     );
   }

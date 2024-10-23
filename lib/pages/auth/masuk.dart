@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:trashify/main.dart';
 import 'package:trashify/pages/auth/daftar.dart';
-import 'package:trashify/pages/beranda.dart';
 
 class Masuk extends StatefulWidget {
   const Masuk({super.key});
@@ -19,35 +19,35 @@ class _MasukState extends State<Masuk> {
   Future<void> _masuk() async {
     if (_emailController.text.trim().isEmpty &&
         _kataSandiController.text.trim().isEmpty) {
-      _munculkanPesanError('Alamat Email atau Kata Sandi tidak boleh kosong!');
+      _tampilkanModalError('Alamat Email atau Kata Sandi tidak boleh kosong!');
       return;
     } else if (_emailController.text.trim().isEmpty) {
-      _munculkanPesanError('Alamat Email tidak boleh kosong!');
+      _tampilkanModalError('Alamat Email tidak boleh kosong!');
       return;
     } else if (_kataSandiController.text.trim().isEmpty) {
-      _munculkanPesanError('Kata Sandi tidak boleh kosong!');
+      _tampilkanModalError('Kata Sandi tidak boleh kosong!');
       return;
     } else {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const Beranda()),
+        MaterialPageRoute(builder: (context) => const HalamanUtama()),
       );
     }
   }
 
-  void _munculkanPesanError(String message) {
+  void _tampilkanModalError(String message) {
     showDialog(
       context: context,
       builder: (alert) => AlertDialog(
         title: Text(
           'Masuk Gagal',
           style: GoogleFonts.poppins(
-              fontSize: 24, fontWeight: FontWeight.bold, color: Colors.red),
+              fontSize: 28, fontWeight: FontWeight.bold, color: Colors.red),
           textAlign: TextAlign.center,
         ),
         content: Text(
           message,
-          style: GoogleFonts.poppins(
+          style: TextStyle(
               fontSize: 14, fontWeight: FontWeight.normal, color: Colors.black),
         ),
         actions: <Widget>[
@@ -61,7 +61,7 @@ class _MasukState extends State<Masuk> {
             },
             child: Text(
               'Oke',
-              style: GoogleFonts.poppins(
+              style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.normal,
                   color: Colors.white),
@@ -112,7 +112,7 @@ class _MasukState extends State<Masuk> {
                       Text(
                         'Masuk',
                         style: GoogleFonts.poppins(
-                          fontSize: 36,
+                          fontSize: 28,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -124,8 +124,8 @@ class _MasukState extends State<Masuk> {
                           prefixIcon: const Icon(Icons.email_outlined,
                               color: Colors.grey),
                           labelText: 'Alamat Email',
-                          labelStyle: GoogleFonts.poppins(
-                              fontSize: 16,
+                          labelStyle: TextStyle(
+                              fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: Colors.grey),
                           border: OutlineInputBorder(
@@ -141,8 +141,8 @@ class _MasukState extends State<Masuk> {
                           prefixIcon: const Icon(Icons.lock_outline,
                               color: Colors.grey),
                           labelText: 'Kata Sandi',
-                          labelStyle: GoogleFonts.poppins(
-                              fontSize: 16,
+                          labelStyle: TextStyle(
+                              fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: Colors.grey),
                           border: OutlineInputBorder(
@@ -168,7 +168,7 @@ class _MasukState extends State<Masuk> {
                             child: Text(
                               'Masuk',
                               style: GoogleFonts.poppins(
-                                  fontSize: 22,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
                             ),
@@ -181,9 +181,9 @@ class _MasukState extends State<Masuk> {
                         children: [
                           Text(
                             'Belum memiliki akun?',
-                            style: GoogleFonts.poppins(
+                            style: TextStyle(
                                 color: const Color(0xFF8c8e98),
-                                fontSize: 18.0,
+                                fontSize: 14.0,
                                 fontWeight: FontWeight.w500),
                           ),
                           TextButton(
@@ -195,11 +195,12 @@ class _MasukState extends State<Masuk> {
                             },
                             child: Text(
                               "Daftar",
-                              style: GoogleFonts.poppins(
-                                  color:
-                                      const Color.fromARGB(255, 59, 142, 110),
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.w500),
+                              style: TextStyle(
+                                color: const Color.fromARGB(255, 59, 142, 110),
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w900,
+                                decoration: TextDecoration.underline,
+                              ),
                             ),
                           ),
                         ],

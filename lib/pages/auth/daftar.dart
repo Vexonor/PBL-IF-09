@@ -21,20 +21,20 @@ class _DaftarState extends State<Daftar> {
         _emailController.text.trim().isEmpty &&
         _kataSandiController.text.trim().isEmpty &&
         _konfirmasiKataSandiController.text.trim().isEmpty) {
-      _munculkanPesanError('Nama, Email, atau Kata Sandi tidak boleh kosong!');
+      _tampilkanModalError('Nama, Email, atau Kata Sandi tidak boleh kosong!');
       return;
     } else if (_namaController.text.trim().isEmpty) {
-      _munculkanPesanError('Nama tidak boleh kosong!');
+      _tampilkanModalError('Nama tidak boleh kosong!');
       return;
     } else if (_emailController.text.trim().isEmpty) {
-      _munculkanPesanError('Email tidak boleh kosong!');
+      _tampilkanModalError('Email tidak boleh kosong!');
       return;
     } else if (_kataSandiController.text.trim().isEmpty) {
-      _munculkanPesanError('Kata Sandi tidak boleh kosong!');
+      _tampilkanModalError('Kata Sandi tidak boleh kosong!');
       return;
     } else if (_kataSandiController.text !=
         _konfirmasiKataSandiController.text) {
-      _munculkanPesanError("Kata Sandi tidak sesuai!");
+      _tampilkanModalError("Kata Sandi tidak sesuai!");
       return;
     } else {
       Navigator.pushReplacement(
@@ -44,19 +44,19 @@ class _DaftarState extends State<Daftar> {
     }
   }
 
-  void _munculkanPesanError(String message) {
+  void _tampilkanModalError(String message) {
     showDialog(
       context: context,
       builder: (alert) => AlertDialog(
         title: Text(
           'Daftar Gagal',
           style: GoogleFonts.poppins(
-              fontSize: 24, fontWeight: FontWeight.bold, color: Colors.red),
+              fontSize: 28, fontWeight: FontWeight.bold, color: Colors.red),
           textAlign: TextAlign.center,
         ),
         content: Text(
           message,
-          style: GoogleFonts.poppins(
+          style: TextStyle(
               fontSize: 14, fontWeight: FontWeight.normal, color: Colors.black),
         ),
         actions: <Widget>[
@@ -70,7 +70,7 @@ class _DaftarState extends State<Daftar> {
             },
             child: Text(
               'Oke',
-              style: GoogleFonts.poppins(
+              style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.normal,
                   color: Colors.white),
@@ -121,7 +121,7 @@ class _DaftarState extends State<Daftar> {
                       Text(
                         'Daftar',
                         style: GoogleFonts.poppins(
-                          fontSize: 36,
+                          fontSize: 28,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -133,8 +133,8 @@ class _DaftarState extends State<Daftar> {
                           prefixIcon:
                               const Icon(Icons.people, color: Colors.grey),
                           labelText: 'Nama Lengkap',
-                          labelStyle: GoogleFonts.poppins(
-                              fontSize: 16,
+                          labelStyle: TextStyle(
+                              fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: Colors.grey),
                           border: OutlineInputBorder(
@@ -150,8 +150,8 @@ class _DaftarState extends State<Daftar> {
                           prefixIcon: const Icon(Icons.email_outlined,
                               color: Colors.grey),
                           labelText: 'Alamat Email',
-                          labelStyle: GoogleFonts.poppins(
-                              fontSize: 16,
+                          labelStyle: TextStyle(
+                              fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: Colors.grey),
                           border: OutlineInputBorder(
@@ -168,8 +168,8 @@ class _DaftarState extends State<Daftar> {
                           prefixIcon: const Icon(Icons.lock_outline,
                               color: Colors.grey),
                           labelText: 'Kata Sandi',
-                          labelStyle: GoogleFonts.poppins(
-                              fontSize: 16,
+                          labelStyle: TextStyle(
+                              fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: Colors.grey),
                           border: OutlineInputBorder(
@@ -185,8 +185,8 @@ class _DaftarState extends State<Daftar> {
                           prefixIcon: const Icon(Icons.lock_outline,
                               color: Colors.grey),
                           labelText: 'Konfirmasi Kata Sandi',
-                          labelStyle: GoogleFonts.poppins(
-                              fontSize: 16,
+                          labelStyle: TextStyle(
+                              fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: Colors.grey),
                           border: OutlineInputBorder(
@@ -212,7 +212,7 @@ class _DaftarState extends State<Daftar> {
                             child: Text(
                               'Daftar',
                               style: GoogleFonts.poppins(
-                                  fontSize: 22,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
                             ),
@@ -225,9 +225,9 @@ class _DaftarState extends State<Daftar> {
                         children: [
                           Text(
                             'Sudah memiliki akun?',
-                            style: GoogleFonts.poppins(
+                            style: TextStyle(
                                 color: const Color(0xFF8c8e98),
-                                fontSize: 18.0,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w500),
                           ),
                           TextButton(
@@ -239,11 +239,12 @@ class _DaftarState extends State<Daftar> {
                             },
                             child: Text(
                               "Masuk",
-                              style: GoogleFonts.poppins(
-                                  color:
-                                      const Color.fromARGB(255, 59, 142, 110),
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.w500),
+                              style: TextStyle(
+                                color: const Color.fromARGB(255, 59, 142, 110),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w900,
+                                decoration: TextDecoration.underline,
+                              ),
                             ),
                           ),
                         ],

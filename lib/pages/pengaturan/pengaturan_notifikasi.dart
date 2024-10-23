@@ -22,13 +22,6 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
             Navigator.pop(context);
           },
         ),
-        title: Text(
-          'Kembali',
-          style: GoogleFonts.poppins(
-            fontSize: 20,
-            color: Colors.white,
-          ),
-        ),
       ),
       body: SafeArea(
         child: ListView(
@@ -66,7 +59,7 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                           const SizedBox(height: 10),
                           Text(
                             'Atur bagaimana Anda ingin menerima berbagai notifikasi yang tersedia',
-                            style: GoogleFonts.poppins(
+                            style: TextStyle(
                               fontSize: 16,
                             ),
                             textAlign: TextAlign.justify,
@@ -74,23 +67,23 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
                           const SizedBox(height: 10),
                           _buildDaftarPengaturanNotifikasi(
                             icon: Icons.notifications_on,
-                            title: 'Notifikasi Push',
-                            onTap: () {},
+                            judul: 'Notifikasi Push',
+                            rute: () {},
                           ),
                           _buildDaftarPengaturanNotifikasi(
                             icon: Icons.notification_important,
-                            title: 'Notifikasi Laporan',
-                            onTap: () {},
+                            judul: 'Notifikasi Laporan',
+                            rute: () {},
                           ),
                           _buildDaftarPengaturanNotifikasi(
                             icon: Icons.circle_notifications,
-                            title: 'Notifikasi Informasi Pengangkutan',
-                            onTap: () {},
+                            judul: 'Notifikasi Informasi Pengangkutan',
+                            rute: () {},
                           ),
                           _buildDaftarPengaturanNotifikasi(
                             icon: Icons.edit_notifications,
-                            title: 'Notifikasi Edukasi',
-                            onTap: () {},
+                            judul: 'Notifikasi Edukasi',
+                            rute: () {},
                           ),
                           const SizedBox(height: 10),
                         ],
@@ -108,24 +101,26 @@ class _PengaturanNotifikasiState extends State<PengaturanNotifikasi> {
 
   Widget _buildDaftarPengaturanNotifikasi({
     required IconData icon,
-    required String title,
-    required Function() onTap,
+    required String judul,
+    required Function() rute,
     Color color = Colors.black87,
   }) {
     return Card(
+      color: Colors.white,
+      elevation: 3,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: ListTile(
         leading: Icon(icon, color: color),
         title: Text(
-          title,
-          style: GoogleFonts.poppins(
+          judul,
+          style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
             color: color,
           ),
         ),
-        onTap: onTap,
+        onTap: rute,
       ),
     );
   }

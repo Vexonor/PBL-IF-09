@@ -19,11 +19,11 @@ class _PengaturanKataSandiState extends State<PengaturanKataSandi> {
     if (_kataSandiLamaController.text.trim().isEmpty &&
         _kataSandiBaruController.text.trim().isEmpty &&
         _konfirmasiKataSandiBaruController.text.trim().isEmpty) {
-      _munculkanPesanError('Kata Sandi tidak boleh kosong!');
+      _tampilkanModalError('Kata Sandi tidak boleh kosong!');
       return;
     } else if (_kataSandiBaruController.text !=
         _konfirmasiKataSandiBaruController.text) {
-      _munculkanPesanError("Kata Sandi tidak sesuai!");
+      _tampilkanModalError("Kata Sandi tidak sesuai!");
       return;
     } else {
       Navigator.pushReplacement(
@@ -33,19 +33,19 @@ class _PengaturanKataSandiState extends State<PengaturanKataSandi> {
     }
   }
 
-  void _munculkanPesanError(String message) {
+  void _tampilkanModalError(String message) {
     showDialog(
       context: context,
       builder: (alert) => AlertDialog(
         title: Text(
           'Ganti Kata Sandi Gagal',
-          style: GoogleFonts.poppins(
+          style: TextStyle(
               fontSize: 24, fontWeight: FontWeight.bold, color: Colors.red),
           textAlign: TextAlign.center,
         ),
         content: Text(
           message,
-          style: GoogleFonts.poppins(
+          style: TextStyle(
               fontSize: 14, fontWeight: FontWeight.normal, color: Colors.black),
         ),
         actions: <Widget>[
@@ -59,7 +59,7 @@ class _PengaturanKataSandiState extends State<PengaturanKataSandi> {
             },
             child: Text(
               'Oke',
-              style: GoogleFonts.poppins(
+              style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.normal,
                   color: Colors.white),
@@ -82,13 +82,6 @@ class _PengaturanKataSandiState extends State<PengaturanKataSandi> {
           onPressed: () {
             Navigator.pop(context);
           },
-        ),
-        title: Text(
-          'Kembali',
-          style: GoogleFonts.poppins(
-            fontSize: 20,
-            color: Colors.white,
-          ),
         ),
       ),
       body: SafeArea(
@@ -132,7 +125,7 @@ class _PengaturanKataSandiState extends State<PengaturanKataSandi> {
                               children: [
                                 Text(
                                   'Untuk memperbarui kata sandi anda, Mohon masukkan kada sandi anda yang lama',
-                                  style: GoogleFonts.poppins(
+                                  style: TextStyle(
                                     fontSize: 16,
                                   ),
                                   textAlign: TextAlign.justify,
@@ -164,7 +157,7 @@ class _PengaturanKataSandiState extends State<PengaturanKataSandi> {
                                       child: Text(
                                         'Simpan',
                                         style: GoogleFonts.poppins(
-                                            fontSize: 22,
+                                            fontSize: 16,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white),
                                       ),
@@ -174,7 +167,7 @@ class _PengaturanKataSandiState extends State<PengaturanKataSandi> {
                                 const SizedBox(height: 15),
                                 Text(
                                   'Atau jika anda lupa kata sandi sebelumnya bisa menggunakan fitur Lupa Kata Sandi',
-                                  style: GoogleFonts.poppins(
+                                  style: TextStyle(
                                     fontSize: 16,
                                   ),
                                   textAlign: TextAlign.justify,
@@ -205,7 +198,7 @@ class _PengaturanKataSandiState extends State<PengaturanKataSandi> {
           textInputAction: TextInputAction.next,
           decoration: InputDecoration(
             labelText: label,
-            labelStyle: GoogleFonts.poppins(fontSize: 14, color: Colors.grey),
+            labelStyle: TextStyle(fontSize: 14, color: Colors.grey),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15.0),
             ),

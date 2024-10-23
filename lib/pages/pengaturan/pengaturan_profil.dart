@@ -39,13 +39,13 @@ class _PengaturanProfilState extends State<PengaturanProfil> {
       builder: (alert) => AlertDialog(
         title: Text(
           'Ubah Profil Gagal',
-          style: GoogleFonts.poppins(
+          style: TextStyle(
               fontSize: 24, fontWeight: FontWeight.bold, color: Colors.red),
           textAlign: TextAlign.center,
         ),
         content: Text(
           message,
-          style: GoogleFonts.poppins(
+          style: TextStyle(
               fontSize: 14, fontWeight: FontWeight.normal, color: Colors.black),
         ),
         actions: <Widget>[
@@ -59,7 +59,7 @@ class _PengaturanProfilState extends State<PengaturanProfil> {
             },
             child: Text(
               'Oke',
-              style: GoogleFonts.poppins(
+              style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.normal,
                   color: Colors.white),
@@ -82,13 +82,6 @@ class _PengaturanProfilState extends State<PengaturanProfil> {
           onPressed: () {
             Navigator.pop(context);
           },
-        ),
-        title: Text(
-          'Kembali',
-          style: GoogleFonts.poppins(
-            fontSize: 20,
-            color: Colors.white,
-          ),
         ),
       ),
       body: SafeArea(
@@ -174,7 +167,7 @@ class _PengaturanProfilState extends State<PengaturanProfil> {
                                       child: Text(
                                         'Simpan',
                                         style: GoogleFonts.poppins(
-                                            fontSize: 22,
+                                            fontSize: 16,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white),
                                       ),
@@ -209,7 +202,7 @@ class _PengaturanProfilState extends State<PengaturanProfil> {
           decoration: InputDecoration(
             prefixIcon: Icon(icon, color: Colors.grey),
             labelText: label,
-            labelStyle: GoogleFonts.poppins(fontSize: 14, color: Colors.grey),
+            labelStyle: TextStyle(fontSize: 14, color: Colors.grey),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15.0),
             ),

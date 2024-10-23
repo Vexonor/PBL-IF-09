@@ -15,7 +15,7 @@ class _PilihkoordinatState extends State<Pilihkoordinat> {
   LatLng? _lokasiTerpilih;
   final LatLng _posisiAwal = const LatLng(1.0828, 104.0305);
 
-  void _handleTap(TapPosition tapPosition, LatLng latLng) {
+  void _tandaiLokasi(TapPosition tapPosition, LatLng latLng) {
     setState(() {
       _lokasiTerpilih = latLng;
     });
@@ -35,11 +35,11 @@ class _PilihkoordinatState extends State<Pilihkoordinat> {
           },
         ),
         title: Center(
-          widthFactor: 2.15,
+          widthFactor: 1.9,
           child: Text(
             'Pilih Koordinat',
             style: GoogleFonts.poppins(
-              fontSize: 18,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
@@ -53,7 +53,7 @@ class _PilihkoordinatState extends State<Pilihkoordinat> {
               options: MapOptions(
                 initialCenter: _posisiAwal,
                 initialZoom: 13,
-                onTap: _handleTap,
+                onTap: _tandaiLokasi,
               ),
               children: [
                 TileLayer(
@@ -94,21 +94,21 @@ class _PilihkoordinatState extends State<Pilihkoordinat> {
                 children: [
                   Text(
                     'Koordinat terpilih:',
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                       color: Colors.white,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   Text(
                     'Latitude: ${_lokasiTerpilih!.latitude},',
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                       color: Colors.white,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   Text(
                     'Longitude: ${_lokasiTerpilih!.longitude}',
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                       color: Colors.white,
                     ),
                     textAlign: TextAlign.center,
@@ -125,7 +125,11 @@ class _PilihkoordinatState extends State<Pilihkoordinat> {
                     }
                   : null,
               icon: const Icon(Icons.check),
-              label: const Text('Konfirmasi Lokasi'),
+              label: Text(
+                'Konfirmasi Lokasi',
+                style: GoogleFonts.poppins(
+                    fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
         ],

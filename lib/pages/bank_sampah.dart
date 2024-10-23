@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:trashify/pages/notifikasi.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BankSampah extends StatefulWidget {
@@ -16,7 +17,7 @@ class _BankSampahState extends State<BankSampah> {
   bool _modalTerbuka = false;
   bool _kondisiSampahTerpilih = false;
 
-  void _toggleModal() {
+  void _bukaModal() {
     setState(() {
       _modalTerbuka = !_modalTerbuka;
     });
@@ -89,7 +90,7 @@ class _BankSampahState extends State<BankSampah> {
     ),
   ];
 
-  void _munculkanSlider(BuildContext context) {
+  void _tampilkanSlider(BuildContext context) {
     showModalBottomSheet(
       context: context,
       useRootNavigator: false,
@@ -97,7 +98,7 @@ class _BankSampahState extends State<BankSampah> {
         return Container(
           decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
           ),
           child: Column(
             children: [
@@ -138,7 +139,7 @@ class _BankSampahState extends State<BankSampah> {
                                     color: Colors.grey[700]),
                                 title: Text(
                                   jenisSampah.nama,
-                                  style: GoogleFonts.poppins(
+                                  style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -185,12 +186,15 @@ class _BankSampahState extends State<BankSampah> {
             color: Colors.white,
           ),
           onPressed: () {
-            // TODO: Halaman Notifikasi
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Notifikasi()),
+            );
           },
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_none, color: Colors.white),
+            icon: const Icon(Icons.notifications, color: Colors.white),
             onPressed: () {},
           ),
         ],
@@ -219,20 +223,20 @@ class _BankSampahState extends State<BankSampah> {
                   children: [
                     Expanded(
                       child: Card(
-                        elevation: 1,
+                        color: Colors.white,
+                        elevation: 5,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: InkWell(
                           onTap: () {
-                            _munculkanSlider(context);
+                            _tampilkanSlider(context);
                           },
                           child: ListTile(
-                            leading:
-                                Icon(Icons.recycling, color: Colors.grey[700]),
+                            leading: Icon(Icons.recycling, color: Colors.black),
                             title: Text(
                               _sampahTerpilih?.nama ?? 'Pilih Jenis Sampah',
-                              style: GoogleFonts.poppins(
+                              style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -272,7 +276,7 @@ class _BankSampahState extends State<BankSampah> {
                             'Pemilik Bank Sampah',
                             style: GoogleFonts.poppins(
                               fontSize: 16,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
                           ),
@@ -304,6 +308,7 @@ class _BankSampahState extends State<BankSampah> {
                         _sampahTerpilih!.bankSampah.koordinatLatitude,
                         _sampahTerpilih!.bankSampah.koordinatLongitude),
                   ),
+                  SizedBox(height: 30)
                 ],
               ],
             ),
@@ -325,48 +330,10 @@ class _BankSampahState extends State<BankSampah> {
               },
             )
           : const SizedBox(),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color.fromARGB(255, 59, 142, 110),
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white70,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        currentIndex: 2,
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushReplacementNamed(context, '/beranda');
-          } else if (index == 1) {
-            Navigator.pushReplacementNamed(context, '/lokasi_tps');
-          } else if (index == 2) {
-            Navigator.pushReplacementNamed(context, '/bank_sampah');
-          } else if (index == 3) {
-            Navigator.pushReplacementNamed(context, '/akun');
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Beranda',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.location_on),
-            label: 'Lokasi TPS',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance),
-            label: 'Bank Sampah',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Akun',
-          ),
-        ],
-      ),
     );
   }
 
-  Widget _buildDetailPemilik(String title) {
+  Widget _buildDetailPemilik(String isi) {
     return Row(
       children: [
         Expanded(
@@ -377,10 +344,9 @@ class _BankSampahState extends State<BankSampah> {
             ),
             child: ListTile(
               title: Text(
-                title,
-                style: GoogleFonts.poppins(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
+                isi,
+                style: TextStyle(
+                  fontSize: 14,
                 ),
               ),
             ),
@@ -429,7 +395,7 @@ class _BankSampahState extends State<BankSampah> {
           top: 10,
           child: _kondisiSampahTerpilih
               ? ElevatedButton(
-                  onPressed: _toggleModal,
+                  onPressed: _bukaModal,
                   child: Icon(
                       _modalTerbuka ? Icons.fullscreen_exit : Icons.fullscreen),
                 )

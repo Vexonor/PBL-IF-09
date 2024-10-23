@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class SyaratKetentuan extends StatefulWidget {
   const SyaratKetentuan({super.key});
@@ -22,13 +21,6 @@ class _SyaratKetentuanState extends State<SyaratKetentuan> {
             Navigator.pop(context);
           },
         ),
-        title: Text(
-          'Kembali',
-          style: GoogleFonts.poppins(
-            fontSize: 20,
-            color: Colors.white,
-          ),
-        ),
       ),
       body: SafeArea(
         child: ListView(
@@ -39,7 +31,7 @@ class _SyaratKetentuanState extends State<SyaratKetentuan> {
                 children: [
                   Text(
                     'Syarat & Ketentuan',
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -66,21 +58,21 @@ class _SyaratKetentuanState extends State<SyaratKetentuan> {
                           const SizedBox(height: 10),
                           Text(
                             '1. Penerimaan Syarat dan Ketentuan Dengan menggunakan aplikasi ini, Anda setuju untuk mematuhi syarat dan ketentuan yang ditetapkan. Jika Anda tidak setuju, mohon untuk tidak menggunakan aplikasi ini.',
-                            style: GoogleFonts.poppins(
+                            style: TextStyle(
                               fontSize: 16,
                             ),
                             textAlign: TextAlign.justify,
                           ),
                           Text(
                             '2. Pendaftaran Akun Pengguna diwajibkan untuk mendaftar dan membuat akun untuk dapat mengakses fitur aplikasi. Pengguna bertanggung jawab untuk menjaga kerahasiaan informasi akun dan password.',
-                            style: GoogleFonts.poppins(
+                            style: TextStyle(
                               fontSize: 16,
                             ),
                             textAlign: TextAlign.justify,
                           ),
                           Text(
                             '3. Penggunaan Aplikasi Aplikasi ini hanya boleh digunakan untuk tujuan pelaporan dan pengelolaan sampah yang berkaitan dengan lingkungan. Pengguna dilarang melakukan tindakan yang dapat merugikan pihak lain atau menciptakan konten yang melanggar hukum.',
-                            style: GoogleFonts.poppins(
+                            style: TextStyle(
                               fontSize: 16,
                             ),
                             textAlign: TextAlign.justify,

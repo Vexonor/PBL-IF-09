@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:trashify/pages/notifikasi.dart';
 import 'package:trashify/pages/pengaturan.dart';
 
 class Akun extends StatefulWidget {
@@ -30,7 +31,10 @@ class _AkunState extends State<Akun> {
               color: Colors.white,
             ),
             onPressed: () {
-              // TODO: Halaman Notifikasi
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Notifikasi()),
+              );
             },
           )
         ],
@@ -61,7 +65,7 @@ class _AkunState extends State<Akun> {
                   const SizedBox(height: 10),
                   Text(
                     'Pengguna',
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                       fontSize: 20,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -76,9 +80,12 @@ class _AkunState extends State<Akun> {
                             builder: (context) => const Pengaturan()),
                       );
                     },
-                    icon: const Icon(Icons.settings, size: 20),
-                    label: const Text('Pengaturan'),
+                    icon: const Icon(Icons.settings, size: 20, color: Colors.black),
+                    label: const Text('Pengaturan',
+                        style: TextStyle(color: Colors.black)),
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      elevation: 5,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -112,66 +119,29 @@ class _AkunState extends State<Akun> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color.fromARGB(255, 59, 142, 110),
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white70,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        currentIndex: 3,
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushReplacementNamed(context, '/beranda');
-          } else if (index == 1) {
-            Navigator.pushReplacementNamed(context, '/lokasi_tps');
-          } else if (index == 2) {
-            Navigator.pushReplacementNamed(context, '/bank_sampah');
-          } else if (index == 3) {
-            Navigator.pushReplacementNamed(context, '/akun');
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Beranda',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.location_on),
-            label: 'Lokasi TPS',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance),
-            label: 'Bank Sampah',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Akun',
-          ),
-        ],
-      ),
     );
   }
 
   Widget _buildProfilPengguna(IconData icon, String title, String subtitle) {
     return Card(
-      elevation: 1,
+      color: Colors.white,
+      elevation: 5,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      margin: const EdgeInsets.symmetric(vertical: 7),
+      margin: const EdgeInsets.symmetric(vertical: 6),
       child: ListTile(
         leading: Icon(icon, color: Colors.grey[700]),
         title: Text(
           title,
-          style: GoogleFonts.poppins(
+          style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
         ),
         subtitle: Text(
           subtitle,
-          style: GoogleFonts.poppins(
+          style: TextStyle(
             fontSize: 14,
             color: Colors.black54,
           ),

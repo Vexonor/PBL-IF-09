@@ -1,6 +1,11 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:trashify/pages/edukasi.dart';
+import 'package:trashify/pages/edukasi/edukasi_video.dart';
+import 'package:trashify/pages/informasi_pengangkutan.dart';
 import 'package:trashify/pages/laporan.dart';
+import 'package:trashify/pages/notifikasi.dart';
 
 class Beranda extends StatefulWidget {
   const Beranda({super.key});
@@ -30,7 +35,10 @@ class _BerandaState extends State<Beranda> {
               color: Colors.white,
             ),
             onPressed: () {
-              // TODO: Halaman Notifikasi
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Notifikasi()),
+              );
             },
           )
         ],
@@ -54,7 +62,7 @@ class _BerandaState extends State<Beranda> {
                 children: [
                   Text(
                     'Hi, Pengguna!',
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -62,7 +70,7 @@ class _BerandaState extends State<Beranda> {
                   ),
                   Text(
                     '(slogan aplikasi)',
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                       fontSize: 16,
                       color: Colors.white,
                     ),
@@ -95,77 +103,9 @@ class _BerandaState extends State<Beranda> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: Card(
-                      child: SizedBox(
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Laporan()),
-                            );
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              children: [
-                                const Icon(Icons.edit,
-                                    size: 40,
-                                    color: Color.fromARGB(255, 59, 142, 110)),
-                                const SizedBox(height: 10),
-                                Text(
-                                  'Lapor',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const Text(
-                                  'Laporkan terkait masalah sampah, TPS, dan kebersihan di sekitar Anda.',
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  _buildCardFitur(const Laporan(), Icons.report, 'Lapor', 'Laporkan terkait masalah sampah, TPS, dan kebersihan di sekitar Anda.'),
                   const SizedBox(width: 10),
-                  Expanded(
-                    child: Card(
-                      child: SizedBox(
-                        child: InkWell(
-                          onTap: () {
-                            // TODO: Halaman Jadwal
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              children: [
-                                const Icon(Icons.calendar_today,
-                                    size: 40,
-                                    color: Color.fromARGB(255, 59, 142, 110)),
-                                const SizedBox(height: 10),
-                                Text(
-                                  'Jadwal',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const Text(
-                                  'Lihat jadwal dan rute pengangkutan sampah di area Anda.',
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  _buildCardFitur(const InformasiPengangkutan(), Icons.calendar_month, 'Informasi', 'Lihat jadwal dan rute pengangkutan sampah di area Anda.'),
                 ],
               ),
             ),
@@ -191,131 +131,258 @@ class _BerandaState extends State<Beranda> {
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
+              child: Column(
                 children: [
-                  Expanded(
-                    child: TextButton(
-                      onPressed: () {
-                        // TODO: Halaman Video Edukasi
-                      },
-                      child: const Text('Video'),
-                    ),
-                  ),
-                  Expanded(
-                    child: TextButton(
-                      onPressed: () {
-                        // TODO: Halaman Artikel Edukasi
-                      },
-                      child: const Text('Artikel'),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      // TODO: Halaman Edukasi
-                    },
-                    child: const Text('Lihat Semua'),
-                  )
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Card(
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          children: [
-                            Text(
-                              'Langkah Sederhana Memilah Sampah di Rumah',
-                              style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.bold),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // TODO: Halaman Video Edukasi
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            elevation: 2,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20)),
                             ),
-                            const SizedBox(height: 10),
-                            const Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Icon(Icons.thumb_up, size: 16),
-                                Text('120'),
-                                Icon(Icons.comment, size: 16),
-                                Text('45'),
-                              ],
-                            )
-                          ],
+                          ),
+                          child: Text(
+                            'Video',
+                            style: TextStyle(
+                              fontSize: 14, color: Colors.black
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // TODO: Halaman Artikel Edukasi
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            elevation: 2,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20)),
+                            ),
+                          ),
+                          child: Text(
+                            'Artikel',
+                            style: TextStyle(
+                              fontSize: 14, color: Colors.black
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 30,
+                      ),
+                      SizedBox(
+                        height: 30,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Edukasi()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            elevation: 5,
+                          ),
+                          child: Text(
+                            'Lihat Semua',
+                            style: TextStyle(
+                              fontSize: 12, color: Colors.black
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  Card(
+                    color: Colors.white,
+                    elevation: 5,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                      child: SizedBox(
+                        height: 250,
+                        child: Container(
+                          child: _buildCarouselEdukasi(),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Card(
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          children: [
-                            Text(
-                              'Karya Daur Ulang Sampah Plastik',
-                              style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 10),
-                            const Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Icon(Icons.thumb_up, size: 16),
-                                Text('75'),
-                                Icon(Icons.comment, size: 16),
-                                Text('56'),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
+            const SizedBox(
+              height: 40,
+            )
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color.fromARGB(255, 59, 142, 110),
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white70,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        currentIndex: 0,
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushReplacementNamed(context, '/beranda');
-          } else if (index == 1) {
-            Navigator.pushReplacementNamed(context, '/lokasi_tps');
-          } else if (index == 2) {
-            Navigator.pushReplacementNamed(context, '/bank_sampah');
-          } else if (index == 3) {
-            Navigator.pushReplacementNamed(context, '/akun');
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Beranda',
+    );
+  }
+
+  Widget _buildCardFitur(Widget rute,IconData icon, String fitur, String deskripsi) {
+    return Expanded(
+      child: Card(
+        elevation: 5,
+        color: Colors.white,
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => rute),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(icon,
+                    size: 40, color: const Color.fromARGB(255, 59, 142, 110)),
+                const SizedBox(height: 10),
+                Text(
+                  fitur,
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  deskripsi,
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.justify,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: const Icon(
+                    Icons.arrow_forward,
+                    size: 20,
+                    color: Colors.black,
+                  ),
+                )
+              ],
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.location_on),
-            label: 'Lokasi TPS',
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCarouselEdukasi() {
+    return CarouselSlider(
+      options: CarouselOptions(
+        height: 300,
+        enableInfiniteScroll: false,
+        enlargeCenterPage: true,
+        viewportFraction: 0.8,
+      ),
+      items: [
+        _buildKontenEdukasi('Langkah Sederhana Memilah Sampah di Rumah',
+            'assets/images/edukasi/contoh1.png', '1rb', '45',
+            'https://youtu.be/tVuNnac7m0o?si=_V1jTyLC7QJvuDQO',
+            'Salah satu solusi untuk menanggulangi masalah sampah adalah dengan memilah sampah dari sumbernya. Dengan memilah sampah, kita bisa mengurangi volume sampah yang berakhir di TPA, mempermudah proses daur ulang, dan mengetahui sampah-sampah apa saja yang masih memiliki nilai pakai mau pun nilai ekonomi.'),
+        _buildKontenEdukasi('Karya Daur Ulang Sampah Plastik',
+            'assets/images/edukasi/contoh2.png', '15rb', '56',
+            'https://youtu.be/CGd3lgxReFE?si=-s4WpVT55tAW8OwM',
+            'Mengajak tentang bagaimana pentingnya mengolah #sampah , dampak buruk seperti lingkungan dan kesehatan, serta bagaimana cara pengelolaan sampah yg benar yaitu dengan, CEGAH, PILAH, OLAH '),
+      ],
+    );
+  }
+
+  Widget _buildKontenEdukasi(
+      String judul, String gambar, String suka, String komen, String videoUrl, String deskripsi) {
+    return Container(
+      margin: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 5,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance),
-            label: 'Bank Sampah',
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EdukasiVideo(
+                      videoUrl: videoUrl, judul: judul, deskripsi: deskripsi),
+                ),
+              );
+            },
+            child: SizedBox(
+              height: 150,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.green[300],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Image.asset(
+                        gambar, width: 270,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  const Icon(
+                    Icons.play_circle_filled,
+                    color: Colors.white,
+                    size: 50.0,
+                  ),
+                ],
+              ),
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Akun',
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              judul,
+              style: TextStyle(
+                  fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Row(
+              children: [
+                const Icon(Icons.thumb_up, size: 16),
+                const SizedBox(width: 4),
+                Text(suka),
+                const SizedBox(width: 16),
+                const Icon(Icons.comment, size: 16),
+                const SizedBox(width: 4),
+                Text(komen),
+              ],
+            ),
           ),
         ],
       ),
