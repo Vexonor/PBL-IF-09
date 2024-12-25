@@ -47,6 +47,13 @@ dependencies:
   table_calendar: ^3.1.2
   flutter_localizations:
     sdk: flutter
+  http: ^1.2.2
+  shared_preferences: ^2.0.6
+  provider: ^6.1.2
+  geolocator: ^13.0.2
+  video_player: ^2.2.10
+  flutter_native_splash: ^2.0.5
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:
@@ -72,8 +79,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
-    - assets/images/edukasi/
-    - assets/images/laporan/
+    - assets/videos/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -100,3 +106,10 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+# Konfigurasi flutter_native_splash
+flutter_native_splash:
+  color: "#FF3B8E6E" # Warna latar belakang splash screen
+  image: assets/splash.png # Ganti dengan gambar splash screen jika ada
+  android:fullscreen: true
+  ios:fullscreen: true
