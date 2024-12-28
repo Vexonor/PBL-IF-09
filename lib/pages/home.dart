@@ -31,7 +31,6 @@ class _HomeState extends State<Home> {
 
   @override
   void dispose() {
-    // Clean up any resources here if necessary
     super.dispose();
   }
 
@@ -48,7 +47,10 @@ class _HomeState extends State<Home> {
         title: Text(
           'Trashify',
           style: GoogleFonts.poppins(
-              fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.white,
+          ),
         ),
         actions: [
           IconButton(
@@ -59,7 +61,7 @@ class _HomeState extends State<Home> {
             onPressed: () {
               Navigator.pushNamed(context, '/notifikasi');
             },
-          )
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -69,12 +71,11 @@ class _HomeState extends State<Home> {
             Container(
               height: 256,
               decoration: const BoxDecoration(
-                  image: DecorationImage(
-                image: AssetImage(
-                  'assets/images/beranda_warga.png',
+                image: DecorationImage(
+                  image: AssetImage('assets/images/beranda_warga.png'),
+                  fit: BoxFit.cover,
                 ),
-                fit: BoxFit.cover,
-              )),
+              ),
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,20 +125,22 @@ class _HomeState extends State<Home> {
                 children: [
                   Expanded(
                     child: controller.buildResponsiveCard(
-                        context,
-                        '/pengaduan',
-                        'Icon_Pengaduan',
-                        'Pengaduan',
-                        'Adukan terkait masalah sampah, TPS, dan kebersihan di sekitar Anda.'),
+                      context,
+                      '/pengaduan',
+                      'Icon_Pengaduan',
+                      'Pengaduan',
+                      'Adukan terkait masalah sampah, TPS, dan kebersihan di sekitar Anda.',
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: controller.buildResponsiveCard(
-                        context,
-                        '/informasi_pengangkutan',
-                        'Icon_Informasi',
-                        'Pengangkutan',
-                        'Lihat jadwal dan rute pengangkutan sampah di area Anda.'),
+                      context,
+                      '/informasi_pengangkutan',
+                      'Icon_Informasi',
+                      'Pengangkutan',
+                      'Lihat jadwal dan rute pengangkutan sampah di area Anda.',
+                    ),
                   ),
                 ],
               ),
@@ -242,13 +245,11 @@ class _HomeState extends State<Home> {
                         style: TextStyle(fontSize: 12, color: Colors.black),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
-            // Tampilkan konten berdasarkan jenis edukasi
             if (selectedEducationType == 'Video') ...[
-              // Carousel untuk Video
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Card(
@@ -290,7 +291,6 @@ class _HomeState extends State<Home> {
                                           String videoId;
                                           String youtubeUrl = item['Link_URL'];
 
-                                          // Cek apakah URL mengandung 'v='
                                           if (youtubeUrl.contains('v=')) {
                                             videoId = youtubeUrl
                                                     .split('v=')[1]
@@ -304,7 +304,7 @@ class _HomeState extends State<Home> {
                                                 0]; // Mengambil ID video dari short link
                                           } else {
                                             videoId =
-                                                ''; // Atau bisa throw error atau return widget kosong
+                                                ''; // ID video tidak ditemukan
                                           }
 
                                           String thumbnailUrl = videoId
@@ -412,7 +412,6 @@ class _HomeState extends State<Home> {
                 ),
               )
             ] else if (selectedEducationType == 'Artikel') ...[
-              // Card pembungkus untuk semua list card
               Card(
                 color: Colors.white,
                 elevation: 5,

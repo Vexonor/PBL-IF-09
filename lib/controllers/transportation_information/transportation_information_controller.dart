@@ -8,17 +8,19 @@ import 'package:trashify/services/transportation_information_service.dart';
 class TransportationInformationController {
   final TransportationInformationService service =
       TransportationInformationService();
-  Map<DateTime, Map<String, String>> detailInformation = {};
-  List<dynamic> transportationInformation = [];
-  Map<String, List<DateTime>> transportationSchedule = {};
-  String? selectedDistrict;
+
   bool isCalendarVisible = false;
-  DateTime selectedDate = DateTime.now();
-  List<DateTime> markedDates = [];
-  String transportationTime = '00:00';
   bool isDistrictChanged = false;
   bool isLoading = true;
+  DateTime selectedDate = DateTime.now();
+  List<DateTime> markedDates = [];
+  List<dynamic> transportationInformation = [];
+  Map<DateTime, Map<String, String>> detailInformation = {};
+  Map<String, List<DateTime>> transportationSchedule = {};
+  String? selectedDistrict;
+  String transportationTime = '00:00';
 
+  // Mengambil informasi transportasi dari service
   Future<void> fetchTransportationInformation(
       BuildContext context, Function updateState) async {
     updateState(() {
@@ -41,13 +43,13 @@ class TransportationInformationController {
               'Gagal memuat Informasi Pengangkutan, silakan coba lagi!',
               const Color.fromARGB(255, 181, 61, 62),
               2000);
-        } // Menangani kesalahan jika respons tidak berhasil
+        }
       }
     } catch (e) {
       if (context.mounted) {
         showSnackBar(context, 'Terjadi kesalahan, silakan coba lagi!',
             const Color.fromARGB(255, 181, 61, 62), 2000);
-      } // Menangani kesalahan umum
+      }
     } finally {
       if (context.mounted) {
         updateState(() {
@@ -57,6 +59,7 @@ class TransportationInformationController {
     }
   }
 
+  // Memproses jadwal transportasi
   void _processTransportSchedule() {
     transportationSchedule.clear();
     for (var item in transportationInformation) {
@@ -72,6 +75,7 @@ class TransportationInformationController {
     }
   }
 
+  // Memproses informasi detail transportasi
   void _processDetailInformation() {
     detailInformation.clear();
     for (var item in transportationInformation) {
@@ -87,20 +91,22 @@ class TransportationInformationController {
     }
   }
 
+  // Menampilkan slider informasi transportasi
   void showSlider(BuildContext context) {
     Map<String, String>? detail = detailInformation[selectedDate];
     String status = detail?['status'] ?? 'Tidak Diketahui';
     IconData statusIcon;
 
     if (status == 'Selesai') {
-      statusIcon = Icons.check; // Icon centang
+      statusIcon = Icons.check;
     } else if (status == 'Belum Selesai') {
-      statusIcon = Icons.close; // Icon silang
+      statusIcon = Icons.close;
     } else if (status == 'Tertunda') {
-      statusIcon = Icons.hourglass_empty; // Icon jam pasir
+      statusIcon = Icons.hourglass_empty;
     } else {
-      statusIcon = Icons.help; // Icon untuk status tidak diketahui
+      statusIcon = Icons.help;
     }
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -108,8 +114,9 @@ class TransportationInformationController {
         return SingleChildScrollView(
           child: Container(
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                color: Colors.white),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+              color: Colors.white,
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -161,10 +168,8 @@ class TransportationInformationController {
                           ),
                         );
                       },
-                      child: Text(
-                        'Maps',
-                        style: TextStyle(color: Colors.black),
-                      ),
+                      child:
+                          Text('Maps', style: TextStyle(color: Colors.black)),
                     ),
                   ],
                 ),
@@ -174,25 +179,19 @@ class TransportationInformationController {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildInformation(
-                        'Tanggal Pengangkutan',
-                        DateFormat('dd - MM - yyyy').format(selectedDate),
-                        Icons.calendar_today,
-                      ),
+                          'Tanggal Pengangkutan',
+                          DateFormat('dd - MM - yyyy').format(selectedDate),
+                          Icons.calendar_today),
                       _buildInformation(
-                        'Status Pengangkutan',
-                        status,
-                        statusIcon,
-                      ),
+                          'Status Pengangkutan', status, statusIcon),
                       _buildInformation(
-                        'Jam Pengangkutan',
-                        detail?['jam'] ?? 'Tidak Diketahui',
-                        Icons.access_time,
-                      ),
+                          'Jam Pengangkutan',
+                          detail?['jam'] ?? 'Tidak Diketahui',
+                          Icons.access_time),
                       _buildInformation(
-                        'Wilayah Pengangkutan',
-                        detail?['wilayah'] ?? 'Tidak Diketahui',
-                        Icons.location_on,
-                      ),
+                          'Wilayah Pengangkutan',
+                          detail?['wilayah'] ?? 'Tidak Diketahui',
+                          Icons.location_on),
                     ],
                   ),
                 ),
@@ -204,6 +203,7 @@ class TransportationInformationController {
     );
   }
 
+  // Membangun informasi untuk ditampilkan
   Widget _buildInformation(String label, String isi, IconData icon) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -214,10 +214,7 @@ class TransportationInformationController {
             children: [
               Icon(icon, color: const Color.fromARGB(255, 59, 142, 110)),
               SizedBox(width: 10),
-              Text(
-                '$label: ',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+              Text('$label: ', style: TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
           SizedBox(height: 4),
@@ -230,6 +227,7 @@ class TransportationInformationController {
     );
   }
 
+  // Menampilkan alert jika tidak ada wilayah yang dipilih
   Widget buildAlert() {
     if (selectedDistrict == null || selectedDistrict!.isEmpty) {
       return Center(
@@ -272,21 +270,20 @@ class TransportationInformationController {
         ),
       );
     } else {
-      return Container(); // Or any other widget you want to show
+      return Container(); // Atau widget lain yang ingin ditampilkan
     }
   }
 
+  // Menampilkan snackbar dengan pesan
   void showSnackBar(
       BuildContext context, String message, Color color, int time) {
     final overlay = Overlay.of(context);
     final overlayEntry = OverlayEntry(
       builder: (context) {
-        // Mendapatkan tinggi keyboard
         final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
         return Positioned(
-          bottom: 20.0 +
-              keyboardHeight, // Jarak dari bawah ditambah tinggi keyboard
+          bottom: 20.0 + keyboardHeight,
           left: 0,
           right: 0,
           child: Center(

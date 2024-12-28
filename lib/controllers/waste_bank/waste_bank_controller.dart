@@ -4,10 +4,6 @@ import 'package:trashify/services/waste_bank_service.dart';
 
 class WasteBankController {
   final WasteBankService service = WasteBankService();
-  bool isLoading = true;
-  List<dynamic>? wasteBank;
-  String? selectedWasteType;
-
   final List<String> wasteTypeList = [
     'Plastik',
     'Kaca',
@@ -17,6 +13,11 @@ class WasteBankController {
     'Elektronik',
   ];
 
+  bool isLoading = true;
+  List<dynamic>? wasteBank;
+  String? selectedWasteType;
+
+  // Mengambil data Bank Sampah berdasarkan jenis sampah
   Future<void> fetchWasteBank(BuildContext context, String wasteType) async {
     setLoading(true);
     try {
@@ -28,15 +29,15 @@ class WasteBankController {
             return {
               'coordinateLatitude': item['Titik_Koordinat'].split(',')[0],
               'coordinateLongitude': item['Titik_Koordinat'].split(',')[1],
-              'wasteBankName': item['Nama_Bank_Sampah'],
-              'wasteType': item['Jenis_Sampah'],
-              'wastePrice': item['Harga_Sampah'],
-              'wasteBankOwner': item['Nama_Pemilik'],
-              'phoneNumber': item['No_Telp'],
-              'wasteBankLocation': item['Wilayah_BankSampah'],
               'openTime': item['Jam_Buka'],
               'closedTime': item['Jam_Tutup'],
               'operationalStatus': item['Status_Operasional'],
+              'phoneNumber': item['No_Telp'],
+              'wasteBankLocation': item['Wilayah_BankSampah'],
+              'wasteBankName': item['Nama_Bank_Sampah'],
+              'wasteBankOwner': item['Nama_Pemilik'],
+              'wastePrice': item['Harga_Sampah'],
+              'wasteType': item['Jenis_Sampah'],
             };
           }).toList();
         }
@@ -62,10 +63,12 @@ class WasteBankController {
     }
   }
 
+  // Mengatur status loading
   void setLoading(bool loading) {
     isLoading = loading;
   }
 
+  // Menampilkan slider untuk memilih jenis sampah
   void showSlider(BuildContext context, Function(String) onSelect) {
     showModalBottomSheet(
       context: context,
@@ -76,8 +79,7 @@ class WasteBankController {
             borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
           ),
           child: Column(
-            mainAxisSize:
-                MainAxisSize.min, // Agar Column tidak mengisi seluruh ruang
+            mainAxisSize: MainAxisSize.min,
             children: [
               const Divider(thickness: 5, indent: 150, endIndent: 150),
               Expanded(
@@ -87,7 +89,6 @@ class WasteBankController {
                     final wasteType = wasteTypeList[index];
                     IconData icon;
 
-                    // Menentukan ikon berdasarkan jenis sampah
                     switch (wasteType) {
                       case 'Plastik':
                         icon = Icons.recycling;
@@ -144,17 +145,16 @@ class WasteBankController {
     );
   }
 
+  // Menampilkan snackbar dengan pesan tertentu
   void showSnackBar(
       BuildContext context, String message, Color color, int time) {
     final overlay = Overlay.of(context);
     final overlayEntry = OverlayEntry(
       builder: (context) {
-        // Mendapatkan tinggi keyboard
         final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
         return Positioned(
-          bottom: 20.0 +
-              keyboardHeight, // Jarak dari bawah ditambah tinggi keyboard
+          bottom: 20.0 + keyboardHeight,
           left: 0,
           right: 0,
           child: Center(

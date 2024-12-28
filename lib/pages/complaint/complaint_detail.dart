@@ -25,26 +25,26 @@ class _ComplaintDetailState extends State<ComplaintDetail> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_hasFetchedData) {
-      // Ambil argumen dari route
       final args =
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       controller.setcomplaintId(args['complaintId']);
-      fetchComplaintDetails(); // Panggil fetchComplaintDetails di sini
-      _hasFetchedData = true; // Set flag setelah data diambil
+      fetchComplaintDetails();
+      _hasFetchedData = true;
     }
   }
 
+  // Mengambil detail pengaduan dari controller
   Future<void> fetchComplaintDetails() async {
     await controller.fetchComplaintDetails(context);
     if (mounted) {
-      setState(() {}); // Update the UI setelah mengambil data
+      setState(() {});
     }
   }
 
+  // Memformat tanggal menjadi string yang lebih mudah dibaca
   String formatDate(String dateString) {
     DateTime dateTime = DateTime.parse(dateString);
-    return DateFormat('dd MMMM yyyy, HH:mm', 'id_ID')
-        .format(dateTime); // Format sesuai keinginan
+    return DateFormat('dd MMMM yyyy, HH:mm', 'id_ID').format(dateTime);
   }
 
   @override
@@ -57,7 +57,7 @@ class _ComplaintDetailState extends State<ComplaintDetail> {
         }
         Navigator.pushNamedAndRemoveUntil(
           context,
-          '/pengaduan', // Ganti dengan nama route yang sesuai
+          '/pengaduan',
           (Route<dynamic> route) => route.isFirst,
         );
       },
@@ -72,7 +72,7 @@ class _ComplaintDetailState extends State<ComplaintDetail> {
               if (context.mounted) {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
-                  '/pengaduan', // Ganti dengan nama route yang sesuai
+                  '/pengaduan',
                   (Route<dynamic> route) => route.isFirst,
                 );
               }
@@ -153,7 +153,7 @@ class _ComplaintDetailState extends State<ComplaintDetail> {
                                     controller.complaintDetails!['updated_at'])
                                 : 'Memuat...'),
                           ],
-                        )
+                        ),
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -167,8 +167,7 @@ class _ComplaintDetailState extends State<ComplaintDetail> {
                               height: 200,
                               enableInfiniteScroll: false,
                               aspectRatio: 16 / 9,
-                              viewportFraction:
-                                  0.8, // Mengatur ukuran gambar dalam viewport
+                              viewportFraction: 0.8,
                             ),
                             items: (controller
                                         .complaintDetails!['Gambar_Pengaduan']
@@ -195,7 +194,7 @@ class _ComplaintDetailState extends State<ComplaintDetail> {
                               );
                             }).toList(),
                           )
-                        : Container(
+                        : SizedBox(
                             height: 200,
                             child: Center(child: Text('Memuat...')),
                           ),
@@ -256,6 +255,7 @@ class _ComplaintDetailState extends State<ComplaintDetail> {
     );
   }
 
+  // Membuat judul untuk bagian tertentu
   Widget _buildTitle(String judul) {
     return Text(
       judul,
@@ -267,6 +267,7 @@ class _ComplaintDetailState extends State<ComplaintDetail> {
     );
   }
 
+  // Membuat deskripsi dengan styling
   Widget _buildDescription(String isi) {
     return Container(
       padding: const EdgeInsets.all(12.0),
@@ -282,6 +283,7 @@ class _ComplaintDetailState extends State<ComplaintDetail> {
     );
   }
 
+  // Membuat deskripsi tanggal dengan styling
   Widget _buildDescriptionDate(String isi) {
     return Container(
       padding: const EdgeInsets.all(12.0),

@@ -1,8 +1,9 @@
-import 'package:trashify/services/global_url.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trashify/services/global_url.dart';
 
 class EducationService {
+  // Mengambil konten edukasi
   Future<http.Response> getEducationContent() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
@@ -17,13 +18,13 @@ class EducationService {
     return response;
   }
 
+  // Menampilkan konten edukasi berdasarkan ID
   Future<http.Response> showEducationContent(int educationId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
 
     final response = await http.get(
-      Uri.parse(
-          '$apiUrl/konten_edukasi/$educationId'), // Include educationId in the URL
+      Uri.parse('$apiUrl/konten_edukasi/$educationId'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -32,13 +33,13 @@ class EducationService {
     return response;
   }
 
+  // Menampilkan galeri konten edukasi berdasarkan ID pengguna
   Future<http.Response> showEducationContentGalery(int userId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
 
     final response = await http.get(
-      Uri.parse(
-          '$apiUrl/konten_edukasi/user/$userId'), // Include educationId in the URL
+      Uri.parse('$apiUrl/konten_edukasi/user/$userId'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -47,13 +48,13 @@ class EducationService {
     return response;
   }
 
+  // Menampilkan detail konten edukasi berdasarkan ID
   Future<http.Response> showEducationContentDetail(int educationId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
 
     final response = await http.get(
-      Uri.parse(
-          '$apiUrl/konten_edukasi/detail/$educationId'), // Include educationId in the URL
+      Uri.parse('$apiUrl/konten_edukasi/detail/$educationId'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -62,13 +63,13 @@ class EducationService {
     return response;
   }
 
+  // Menampilkan konten edukasi untuk diedit berdasarkan ID
   Future<http.Response> showEducationContentEdit(int educationId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
 
     final response = await http.get(
-      Uri.parse(
-          '$apiUrl/konten_edukasi/detail/$educationId'), // Include educationId in the URL
+      Uri.parse('$apiUrl/konten_edukasi/detail/$educationId'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -77,6 +78,7 @@ class EducationService {
     return response;
   }
 
+  // Menyimpan konten edukasi baru
   Future<http.Response> storeEducationContent(
     String userId,
     String contentTitle,
@@ -108,6 +110,7 @@ class EducationService {
     });
   }
 
+  // Memperbarui konten edukasi berdasarkan ID
   Future<http.Response> updateEducationContent(
     int educationId,
     String contentTitle,
@@ -137,6 +140,7 @@ class EducationService {
     });
   }
 
+  // Menghapus konten edukasi berdasarkan ID
   Future<http.Response> destroyEducationContent(int educationId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');

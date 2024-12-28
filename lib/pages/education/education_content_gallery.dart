@@ -1,8 +1,8 @@
-import 'package:trashify/controllers/education/education_content_galery_controller.dart';
-import 'package:trashify/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:trashify/controllers/education/education_content_galery_controller.dart';
+import 'package:trashify/providers/user_provider.dart';
 
 class EducationContentGallery extends StatefulWidget {
   const EducationContentGallery({super.key});
@@ -14,16 +14,14 @@ class EducationContentGallery extends StatefulWidget {
 
 class _EducationContentGalleryState extends State<EducationContentGallery> {
   final EducationContentGaleryController controller =
-      EducationContentGaleryController(); // Create an instance of your controller
+      EducationContentGaleryController();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Load user data and fetch education content here
     Provider.of<UserProvider>(context, listen: false).loadUserData();
     final userId = Provider.of<UserProvider>(context).userId;
 
-    // Fetch education content
     controller.fetchEducationContentGalery(context, userId!, (loading) {
       if (mounted) {
         setState(() {
@@ -52,7 +50,7 @@ class _EducationContentGalleryState extends State<EducationContentGallery> {
           }
           Navigator.pushNamedAndRemoveUntil(
             context,
-            '/edukasi', // Ganti dengan nama route yang sesuai
+            '/edukasi',
             (Route<dynamic> route) => route.isFirst,
           );
         },
@@ -66,7 +64,7 @@ class _EducationContentGalleryState extends State<EducationContentGallery> {
               onPressed: () {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
-                  '/edukasi', // Ganti dengan nama route yang sesuai
+                  '/edukasi',
                   (Route<dynamic> route) => route.isFirst,
                 );
               },
@@ -90,12 +88,11 @@ class _EducationContentGalleryState extends State<EducationContentGallery> {
             ),
           ),
           body: controller.isLoading
-              ? Center(child: CircularProgressIndicator()) // Loading indicator
+              ? Center(child: CircularProgressIndicator())
               : Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
                     children: [
-                      // Pencarian dan Filter
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Autocomplete<String>(
@@ -110,7 +107,6 @@ class _EducationContentGalleryState extends State<EducationContentGallery> {
                             });
                           },
                           onSelected: (String selection) {
-                            // Simpan saran yang dipilih
                             setState(() {
                               controller.searchQuery = selection;
                             });
@@ -134,10 +130,8 @@ class _EducationContentGalleryState extends State<EducationContentGallery> {
                                 fillColor: Colors.white,
                               ),
                               onChanged: (value) {
-                                // Update searchQuery setiap kali teks berubah
                                 setState(() {
-                                  controller.searchQuery =
-                                      value; // Update variabel pencarian
+                                  controller.searchQuery = value;
                                 });
                               },
                             );
@@ -145,16 +139,10 @@ class _EducationContentGalleryState extends State<EducationContentGallery> {
                           optionsViewBuilder: (BuildContext context,
                               AutocompleteOnSelected<String> onSelected,
                               Iterable<String> options) {
-                            // Hitung tinggi maksimum (1/4 layar)
                             double maxHeight =
                                 MediaQuery.of(context).size.height * 0.25;
-
-                            // Hitung tinggi berdasarkan jumlah item
-                            double itemHeight =
-                                56.0; // Tinggi setiap item ListTile
+                            double itemHeight = 56.0;
                             double dynamicHeight = options.length * itemHeight;
-
-                            // Batasi tinggi maksimum
                             double height = dynamicHeight > maxHeight
                                 ? maxHeight
                                 : dynamicHeight;
@@ -163,7 +151,7 @@ class _EducationContentGalleryState extends State<EducationContentGallery> {
                               alignment: Alignment.topLeft,
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 0.9,
-                                height: height, // Gunakan tinggi dinamis
+                                height: height,
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(10.0),
@@ -198,7 +186,6 @@ class _EducationContentGalleryState extends State<EducationContentGallery> {
                           },
                         ),
                       ),
-                      // Daftar Edukasi
                       Expanded(
                         child: ListView.builder(
                           itemCount: controller.educationContent
@@ -207,7 +194,7 @@ class _EducationContentGalleryState extends State<EducationContentGallery> {
                                       .contains(
                                           controller.searchQuery.toLowerCase()))
                                   .length ??
-                              0, // Dynamic item count
+                              0,
                           itemBuilder: (context, index) {
                             final item = controller.educationContent!
                                 .where((item) => item['Judul_Edukasi']
@@ -216,8 +203,7 @@ class _EducationContentGalleryState extends State<EducationContentGallery> {
                                         controller.searchQuery.toLowerCase()))
                                 .toList()[index];
                             String videoId;
-                            String youtubeUrl = item['Link_URL'] ??
-                                ''; // Default to empty string if null
+                            String youtubeUrl = item['Link_URL'] ?? '';
 
                             if (youtubeUrl.isNotEmpty) {
                               if (youtubeUrl.contains('v=')) {
@@ -231,8 +217,7 @@ class _EducationContentGalleryState extends State<EducationContentGallery> {
                                 videoId = '';
                               }
                             } else {
-                              videoId =
-                                  ''; // Handle case where youtubeUrl is empty
+                              videoId = '';
                             }
 
                             String thumbnailUrl = videoId.isNotEmpty
@@ -257,16 +242,13 @@ class _EducationContentGalleryState extends State<EducationContentGallery> {
                                   child: ListTile(
                                     leading: item['Jenis_Edukasi'] == 'Video'
                                         ? AspectRatio(
-                                            aspectRatio:
-                                                16 / 9, // Mengatur rasio 16:9
+                                            aspectRatio: 16 / 9,
                                             child: ClipRRect(
                                               borderRadius:
-                                                  BorderRadius.circular(
-                                                      8), // Sudut melengkung
+                                                  BorderRadius.circular(8),
                                               child: Image.network(
                                                 thumbnailUrl,
-                                                fit: BoxFit
-                                                    .cover, // Mengisi area tanpa black bar
+                                                fit: BoxFit.cover,
                                               ),
                                             ),
                                           )
@@ -274,22 +256,18 @@ class _EducationContentGalleryState extends State<EducationContentGallery> {
                                     title: Text(
                                       item['Judul_Edukasi'],
                                       style: TextStyle(
-                                          fontWeight: FontWeight
-                                              .bold), // Judul menjadi bold
-                                      maxLines: 2, // Batasi menjadi 2 baris
-                                      overflow: TextOverflow
-                                          .ellipsis, // Tambahkan elipsis jika lebih dari 2 baris
+                                          fontWeight: FontWeight.bold),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                     subtitle: Text(
                                       item['Deskripsi_Edukasi'] ??
                                           "Deskripsi tidak tersedia",
-                                      maxLines: 2, // Batasi menjadi 2 baris
-                                      overflow: TextOverflow
-                                          .ellipsis, // Tambahkan elipsis jika lebih dari 2 baris
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                     trailing: item['Jenis_Edukasi'] == 'Artikel'
-                                        ? Icon(
-                                            Icons.article) // Ikon untuk Artikel
+                                        ? Icon(Icons.article)
                                         : Icon(Icons.play_arrow),
                                   ),
                                 ),

@@ -22,7 +22,7 @@ class _PasswordSettingState extends State<PasswordSetting> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Access the UserProvider here
+    // Memuat data pengguna saat widget diubah
     Provider.of<UserProvider>(context, listen: false).loadUserData();
   }
 
@@ -82,10 +82,8 @@ class _PasswordSettingState extends State<PasswordSetting> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  'Untuk memperbarui kata sandi anda, Mohon masukkan kada sandi anda yang lama',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
+                                  'Untuk memperbarui kata sandi anda, Mohon masukkan kata sandi anda yang lama',
+                                  style: TextStyle(fontSize: 16),
                                   textAlign: TextAlign.justify,
                                 ),
                                 const SizedBox(height: 20),
@@ -177,7 +175,7 @@ class _PasswordSettingState extends State<PasswordSetting> {
                                     return null;
                                   },
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 TextFormField(
                                   controller: controller
                                       .newConfirmationPasswordController,
@@ -224,7 +222,7 @@ class _PasswordSettingState extends State<PasswordSetting> {
                                     return null;
                                   },
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 SizedBox(
                                   width: double.infinity,
                                   child: Padding(
@@ -236,24 +234,21 @@ class _PasswordSettingState extends State<PasswordSetting> {
                                           : () {
                                               setState(() {
                                                 controller.isProcessing =
-                                                    true; // Set isProcessing to true
+                                                    true; // Mengatur isProcessing menjadi true
                                               });
 
                                               controller
                                                   .submitData(context, userId)
                                                   .then((_) {
-                                                // Setelah proses submit selesai, set isProcessing kembali ke false
                                                 setState(() {
                                                   controller.isProcessing =
-                                                      false;
+                                                      false; // Mengatur kembali isProcessing ke false setelah proses selesai
                                                 });
                                               }).catchError((error) {
-                                                // Tangani error jika ada
                                                 setState(() {
                                                   controller.isProcessing =
                                                       false; // Pastikan untuk mengatur kembali ke false
                                                 });
-                                                // Anda bisa menampilkan pesan kesalahan di sini jika diperlukan
                                                 if (context.mounted) {
                                                   ScaffoldMessenger.of(context)
                                                       .showSnackBar(
@@ -296,9 +291,7 @@ class _PasswordSettingState extends State<PasswordSetting> {
                                 const SizedBox(height: 15),
                                 Text(
                                   'Atau jika anda lupa kata sandi sebelumnya bisa menggunakan fitur Lupa Kata Sandi',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
+                                  style: TextStyle(fontSize: 16),
                                   textAlign: TextAlign.justify,
                                 ),
                               ],

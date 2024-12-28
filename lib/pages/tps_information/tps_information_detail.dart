@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:trashify/controllers/tps_information/tps_information_detail_controller.dart';
+import 'package:trashify/pages/complaint/complaint_add.dart';
 import 'package:trashify/pages/notification.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class TpsInformationDetail extends StatefulWidget {
   const TpsInformationDetail({super.key});
@@ -16,9 +19,10 @@ class TpsInformationDetail extends StatefulWidget {
 class _TpsInformationDetailState extends State<TpsInformationDetail> {
   final TpsInformationDetailController controller =
       TpsInformationDetailController();
-  bool isLoading = false; // Local loading state
-  final MapController mapController = MapController(); // Create a MapController
-  String? selectedTpsCode; // Track the selected TPS code
+  final MapController mapController = MapController();
+
+  bool isLoading = false;
+  String? selectedTpsCode;
 
   @override
   void initState() {
@@ -29,40 +33,208 @@ class _TpsInformationDetailState extends State<TpsInformationDetail> {
       controller.setDistrict(args['district']);
       controller.fetchTpsInformationDetail(context, (loading) {
         setState(() {
-          isLoading = loading; // Update local loading state
+          isLoading = loading;
         });
         if (!loading) {
-          // Cek apakah data ditemukan sebelum membuka bottom sheet
           if (controller.tpsInformationDetail != null &&
               controller.tpsInformationDetail!.isNotEmpty) {
-            _showBottomSheet(); // Show bottom sheet after loading
+            _showBottomSheet();
           }
         }
       });
     });
   }
 
-  void _showBottomSheet() {
+  void _showBottomSheet({Map<String, dynamic>? selectedTps}) {
+    // Menampilkan bottom sheet untuk memilih TPS
     List<Map<String, dynamic>> sortedTpsList = [];
-    if (controller.tpsInformationDetail != null) {
-      sortedTpsList.addAll(
-          controller.tpsInformationDetail!.cast<Map<String, dynamic>>());
+
+    if (selectedTps != null) {
+      sortedTpsList.add(selectedTps);
+    } else if (selectedTpsCode != null) {
+      final selectedTpsFromCode = controller.tpsInformationDetail!.firstWhere(
+        (tps) => tps['Kode_TPS'] == selectedTpsCode,
+        orElse: () => null,
+      );
+      if (selectedTpsFromCode != null) {
+        sortedTpsList.add(selectedTpsFromCode);
+      }
     }
 
-    controller.showBottomSheet(context, sortedTpsList, selectedTpsCode,
-        (tpsCode) {
-      setState(() {
-        selectedTpsCode = tpsCode; // Set selected TPS code
-      });
-      // Move the map to the selected TPS location
-      final selectedTps = controller.tpsInformationDetail!
-          .firstWhere((tps) => tps['Kode_TPS'] == tpsCode);
-      final String coordinatePoint = selectedTps['Titik_Koordinat'];
-      List<String> coordinates = coordinatePoint.split(',');
-      double latitude = double.parse(coordinates[0].trim());
-      double longitude = double.parse(coordinates[1].trim());
-      mapController.move(LatLng(latitude, longitude), 18);
-    });
+    sortedTpsList.addAll(controller.tpsInformationDetail!
+        .where((tps) => tps['Kode_TPS'] != selectedTpsCode)
+        .cast<Map<String, dynamic>>());
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.35,
+            child: ListView.builder(
+              itemCount: sortedTpsList.length,
+              itemBuilder: (context, index) {
+                final tps = sortedTpsList[index];
+                final String coordinatePoint = tps['Titik_Koordinat'];
+                List<String> coordinates = coordinatePoint.split(',');
+                double latitude = double.parse(coordinates[0].trim());
+                double longitude = double.parse(coordinates[1].trim());
+
+                bool isSelected = selectedTpsCode == tps['Kode_TPS'];
+
+                return GestureDetector(
+                  onTap: () {
+                    mapController.move(LatLng(latitude, longitude), 18);
+                    setState(() {
+                      selectedTpsCode = tps['Kode_TPS'];
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: Card(
+                    color: isSelected
+                        ? Color.fromARGB(255, 59, 142, 110)
+                        : Colors.white,
+                    child: ListTile(
+                      leading: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: const Icon(Icons.location_on, color: Colors.red),
+                      ),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Kode TPS: ${tps['Kode_TPS']}',
+                            style: isSelected
+                                ? TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  )
+                                : null,
+                          ),
+                          Text(
+                            'Titik Koordinat: ${tps['Titik_Koordinat']}',
+                            style: isSelected
+                                ? TextStyle(color: Colors.white, fontSize: 12)
+                                : TextStyle(fontSize: 12),
+                          ),
+                          Text(
+                            'Status TPS: ${tps['Status_TPS']}',
+                            style: isSelected
+                                ? TextStyle(color: Colors.white, fontSize: 12)
+                                : TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Transform.rotate(
+                            angle: 45 * 3.141592653589793238 / 180,
+                            child: Container(
+                              width: 35,
+                              height: 35,
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 58, 103, 134),
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Transform.rotate(
+                                angle: -45 * 3.141592653589793238 / 180,
+                                child: IconButton(
+                                  icon: const Icon(Icons.copy,
+                                      color: Colors.white),
+                                  iconSize: 16,
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text('Pilih Aksi'),
+                                          content: Text(
+                                              'Apa yang ingin Anda lakukan dengan koordinat ini?'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Clipboard.setData(ClipboardData(
+                                                    text: tps[
+                                                        'Titik_Koordinat']));
+                                                controller.showSnackBar(
+                                                    context,
+                                                    'Koordinat disalin ke clipboard',
+                                                    const Color.fromARGB(
+                                                        255, 58, 103, 134),
+                                                    2000);
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text('Salin Koordinat'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                final String url =
+                                                    'https://www.google.com/maps/search/?api=1&query=${tps['Titik_Koordinat']}';
+                                                launchUrlString(url);
+                                                Navigator.of(context).pop();
+                                              },
+                                              child:
+                                                  Text('Buka di Google Maps'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 12),
+                          Transform.rotate(
+                            angle: 45 * 3.141592653589793238 / 180,
+                            child: Container(
+                              width: 35,
+                              height: 35,
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 181, 61, 62),
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Transform.rotate(
+                                angle: -45 * 3.141592653589793238 / 180,
+                                child: IconButton(
+                                  icon: const Icon(Icons.warning,
+                                      color: Colors.white),
+                                  iconSize: 16,
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ComplaintAdd(
+                                          initialCategory: 'Kondisi TPS',
+                                          initialDescription:
+                                              'Ada masalah kondisi TPS di kecamatan ${tps['Wilayah_TPS']} pada ${tps['Kode_TPS']}',
+                                          initialCoordinates:
+                                              tps['Titik_Koordinat'],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -142,8 +314,7 @@ class _TpsInformationDetailState extends State<TpsInformationDetail> {
                     children: [
                       Expanded(
                         child: FlutterMap(
-                          mapController:
-                              mapController, // Pass the controller here
+                          mapController: mapController,
                           options: MapOptions(
                             initialCenter:
                                 LatLng(centerLatitude, centerLongitude),
@@ -176,10 +347,9 @@ class _TpsInformationDetailState extends State<TpsInformationDetail> {
                                   child: GestureDetector(
                                     onTap: () {
                                       setState(() {
-                                        selectedTpsCode = tps[
-                                            'Kode_TPS']; // Set selected TPS code
+                                        selectedTpsCode = tps['Kode_TPS'];
                                       });
-                                      _showBottomSheet(); // Show bottom sheet
+                                      _showBottomSheet(selectedTps: tps);
                                     },
                                     child: const Icon(
                                       Icons.location_on,
@@ -211,13 +381,13 @@ class _TpsInformationDetailState extends State<TpsInformationDetail> {
           ? Padding(
               padding: const EdgeInsets.only(left: 30.0),
               child: Align(
-                alignment: Alignment.bottomLeft, // Pindahkan ke kiri bawah
+                alignment: Alignment.bottomLeft,
                 child: FloatingActionButton(
                   onPressed: () {
-                    _showBottomSheet(); // Panggil fungsi untuk membuka BottomSheet
-                  }, // Ikon untuk tombol
+                    _showBottomSheet();
+                  },
                   backgroundColor: const Color.fromARGB(255, 59, 142, 110),
-                  child: const Icon(Icons.list), // Warna latar belakang tombol
+                  child: const Icon(Icons.list),
                 ),
               ),
             )

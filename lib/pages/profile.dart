@@ -2,19 +2,19 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:trashify/providers/user_provider.dart';
 import 'package:trashify/pages/notification.dart';
 import 'package:trashify/pages/settings/setting.dart';
+import 'package:trashify/providers/user_provider.dart';
 import 'package:trashify/services/global_url.dart';
 
-class Akun extends StatefulWidget {
-  const Akun({super.key});
+class Profile extends StatefulWidget {
+  const Profile({super.key});
 
   @override
-  State<Akun> createState() => _AkunState();
+  State<Profile> createState() => _ProfileState();
 }
 
-class _AkunState extends State<Akun> {
+class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
@@ -23,14 +23,14 @@ class _AkunState extends State<Akun> {
 
   @override
   Widget build(BuildContext context) {
-    final userPhoto = Provider.of<UserProvider>(context).userPhoto;
-    final userName = Provider.of<UserProvider>(context).userName;
-    final userEmail = Provider.of<UserProvider>(context).userEmail;
-    final userNumber = Provider.of<UserProvider>(context).userNumber;
     final userAddress = Provider.of<UserProvider>(context).userAddress;
     final userDateBirth = Provider.of<UserProvider>(context).userDateBirth;
+    final userEmail = Provider.of<UserProvider>(context).userEmail;
     final userGender = Provider.of<UserProvider>(context).userGender;
+    final userName = Provider.of<UserProvider>(context).userName;
     final userNik = Provider.of<UserProvider>(context).userNik;
+    final userNumber = Provider.of<UserProvider>(context).userNumber;
+    final userPhoto = Provider.of<UserProvider>(context).userPhoto;
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
@@ -136,8 +136,8 @@ class _AkunState extends State<Akun> {
                     _buildProfilPengguna(
                         Icons.phone, 'No. Telepon', '$userNumber'),
                     _buildProfilPengguna(Icons.home, 'Alamat', '$userAddress'),
-                    _buildProfilPengguna(
-                        Icons.calendar_month, 'Tanggal Lahir', '$userDateBirth'),
+                    _buildProfilPengguna(Icons.calendar_month, 'Tanggal Lahir',
+                        '$userDateBirth'),
                     _buildProfilPengguna(
                         Icons.wc, 'Jenis Kelamin', '$userGender'),
                   ],
@@ -150,6 +150,7 @@ class _AkunState extends State<Akun> {
     );
   }
 
+  // Fungsi untuk membangun tampilan profil pengguna
   Widget _buildProfilPengguna(IconData icon, String title, String subtitle) {
     return Card(
       color: Colors.white,

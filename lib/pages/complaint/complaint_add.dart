@@ -8,11 +8,12 @@ class ComplaintAdd extends StatefulWidget {
   final String? initialCoordinates;
   final String? initialDescription;
 
-  const ComplaintAdd(
-      {super.key,
-      this.initialCategory,
-      this.initialCoordinates,
-      this.initialDescription});
+  const ComplaintAdd({
+    super.key,
+    this.initialCategory,
+    this.initialCoordinates,
+    this.initialDescription,
+  });
 
   @override
   State<ComplaintAdd> createState() => _ComplaintAddState();
@@ -24,11 +25,8 @@ class _ComplaintAddState extends State<ComplaintAdd> {
   @override
   void initState() {
     super.initState();
-    if (widget.initialCategory != null) {
-      controller.complaintCategory = widget.initialCategory;
-    } else {
-      controller.complaintCategory = 'Pengangkutan Sampah';
-    }
+    controller.complaintCategory =
+        widget.initialCategory ?? 'Pengangkutan Sampah';
     if (widget.initialCoordinates != null) {
       controller.coordinateController.text = widget.initialCoordinates!;
     }
@@ -137,12 +135,13 @@ class _ComplaintAddState extends State<ComplaintAdd> {
                         ? null
                         : () => controller.openMapToSelectCoordinate(context),
                     decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        hintText: 'Ketuk untuk memilih koordinat dari map',
-                        hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
-                        suffixIcon: const SizedBox(
-                          child: Icon(Icons.map),
-                        )),
+                      border: const OutlineInputBorder(),
+                      hintText: 'Ketuk untuk memilih koordinat dari map',
+                      hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
+                      suffixIcon: const SizedBox(
+                        child: Icon(Icons.map),
+                      ),
+                    ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Titik koordinat tidak boleh kosong';
@@ -151,7 +150,7 @@ class _ComplaintAddState extends State<ComplaintAdd> {
                     },
                   ),
                   const SizedBox(height: 20),
-                  Text('Gambar Pengaduan:',
+                  Text(' Gambar Pengaduan:',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 10),
@@ -161,8 +160,7 @@ class _ComplaintAddState extends State<ComplaintAdd> {
                       onPressed: controller.isProcessing
                           ? null
                           : () async {
-                              await controller
-                                  .selectImages(context);
+                              await controller.selectImages(context);
                               setState(() {});
                             },
                       icon: const Icon(
@@ -284,6 +282,7 @@ class _ComplaintAddState extends State<ComplaintAdd> {
     );
   }
 
+  // Fungsi untuk membangun input radio
   Widget _buildRadioInput(String category) {
     return RadioListTile<String>(
       value: category,

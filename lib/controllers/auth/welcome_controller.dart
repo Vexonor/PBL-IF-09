@@ -9,35 +9,39 @@ import 'package:trashify/services/account_service.dart';
 
 class WelcomeController {
   final AccountService service = AccountService();
-  final formKey = GlobalKey<FormState>();
-  final phoneController = TextEditingController();
-  final addressController = TextEditingController();
-  final genderController = TextEditingController();
-  final nikController = TextEditingController();
-  final birthDateController = TextEditingController();
-  XFile? profilePicture; // Menyimpan file gambar
-  String? imageValidator; // Pesan kesalahan untuk gambar
-  String? selectedGender;
-  bool isProcessing = false;
-  bool imageValidatorError = false; // Status kesalahan gambar
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController birthDateController = TextEditingController();
+  final TextEditingController genderController = TextEditingController();
+  final TextEditingController nikController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
 
+  bool isProcessing = false;
+  bool imageValidatorError = false;
+  String? imageValidator;
+  String? selectedGender;
+  XFile? profilePicture;
+
+  // Mengambil gambar dari galeri
   Future<void> pickImage() async {
     final ImagePicker picker = ImagePicker();
     profilePicture = await picker.pickImage(source: ImageSource.gallery);
   }
 
+  // Memvalidasi form sebelum pengiriman data
   bool validateForm() {
     bool isValid = formKey.currentState!.validate();
     if (profilePicture == null) {
       isValid = false;
-      imageValidator = 'Foto profil wajib diupload'; // Set pesan kesalahan
+      imageValidator = 'Foto profil wajib diupload';
       imageValidatorError = true;
     } else {
-      imageValidatorError = false; // Reset kesalahan jika gambar ada
+      imageValidatorError = false;
     }
     return isValid;
   }
 
+  // Mengirim data pengguna ke server
   Future<void> submitData(BuildContext context, int userId) async {
     if (!validateForm()) {
       return;
@@ -53,7 +57,6 @@ class WelcomeController {
       fileName = profilePicture!.name;
     }
 
-    // Kirim data ke server
     final response = await service.saveUserData(
       userId.toString(),
       nikController.text,
@@ -61,8 +64,8 @@ class WelcomeController {
       addressController.text,
       birthDateController.text,
       selectedGender!,
-      imageBytes, // Mengirim file gambar sebagai bytes
-      fileName, // Mengirim nama file
+      imageBytes,
+      fileName,
     );
 
     try {
@@ -83,17 +86,16 @@ class WelcomeController {
             userPhoto: data['Foto_Profil'],
           );
         }
-        // Navigasi ke halaman utama setelah berhasil
         if (context.mounted) {
           Navigator.pushNamedAndRemoveUntil(
             context,
-            '/halaman_utama', // Ganti dengan nama route yang sesuai
+            '/halaman_utama',
             (Route<dynamic> route) => route.settings.name == '/halaman_utama',
           );
           showSnackBar(
               context, data['message'], Color.fromARGB(255, 59, 142, 110), 300);
         }
-      } else if (response.statusCode == 404) {
+      } else if (response.statusCode == 404 || response.statusCode == 500) {
         final data = json.decode(response.body);
         if (context.mounted) {
           showSnackBar(context, data['message'],
@@ -104,14 +106,7 @@ class WelcomeController {
           showSnackBar(context, 'Ukuran gambar terlalu besar!',
               const Color.fromARGB(255, 181, 61, 62), 2000);
         }
-      } else if (response.statusCode == 500) {
-        final data = json.decode(response.body);
-        if (context.mounted) {
-          showSnackBar(context, data['message'],
-              const Color.fromARGB(255, 181, 61, 62), 2000);
-        }
       } else {
-        // Tampilkan pesan kesalahan
         if (context.mounted) {
           showSnackBar(context, 'Terjadi kesalahan, silakan coba lagi!',
               const Color.fromARGB(255, 181, 61, 62), 2000);
@@ -123,21 +118,20 @@ class WelcomeController {
             const Color.fromARGB(255, 181, 61, 62), 2000);
       }
     } finally {
-      isProcessing = false; // Set loading menjadi false
+      isProcessing = false;
     }
   }
 
+  // Menampilkan snackbar dengan pesan tertentu
   void showSnackBar(
       BuildContext context, String message, Color color, int time) {
     final overlay = Overlay.of(context);
     final overlayEntry = OverlayEntry(
       builder: (context) {
-        // Mendapatkan tinggi keyboard
         final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
         return Positioned(
-          bottom: 20.0 +
-              keyboardHeight, // Jarak dari bawah ditambah tinggi keyboard
+          bottom: 20.0 + keyboardHeight,
           left: 0,
           right: 0,
           child: Center(

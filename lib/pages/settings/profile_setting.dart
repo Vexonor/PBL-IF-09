@@ -26,7 +26,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Access the UserProvider here
+    // Mengambil data pengguna dari UserProvider
     Provider.of<UserProvider>(context, listen: false).loadUserData();
     controller.currentProfilePicture =
         Provider.of<UserProvider>(context).userPhoto!;
@@ -76,39 +76,36 @@ class _ProfileSettingState extends State<ProfileSetting> {
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   Text(
                     'Foto Profil',
                     style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
                   ),
                   Stack(
-                    alignment: Alignment
-                        .bottomRight, // Menempatkan ikon di bawah kanan
+                    alignment: Alignment.bottomRight,
                     children: [
                       Container(
                         width: 100,
                         height: 100,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.grey[300], // Warna lingkaran
+                          color: Colors.grey[300],
                         ),
                         child: controller.profilePicture == null
                             ? (controller.currentProfilePicture != null &&
-                                        controller.currentProfilePicture != ''
-                                    ? ClipOval(
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              '$imageStorageUrl/${controller.currentProfilePicture!}',
-                                          fit: BoxFit.cover,
-                                        ),
-                                      )
-                                    : Icon(Icons.add, size: 40) // Ikon plus
-                                )
+                                    controller.currentProfilePicture != ''
+                                ? ClipOval(
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          '$imageStorageUrl/${controller.currentProfilePicture!}',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : Icon(Icons.add, size: 40))
                             : ClipOval(
                                 child: Image.file(
                                   File(controller.profilePicture!.path),
@@ -121,7 +118,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                         height: 30,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.white, // Latar belakang untuk ikon edit
+                          color: Colors.white,
                         ),
                         child: IconButton(
                           icon: Icon(Icons.edit,
@@ -131,9 +128,9 @@ class _ProfileSettingState extends State<ProfileSetting> {
                               : () async {
                                   await controller.pickImage();
                                   setState(
-                                      () {}); // Memanggil setState untuk memperbarui UI
+                                      () {}); // Memperbarui UI setelah memilih gambar
                                 },
-                          iconSize: 15, // Ukuran ikon edit lebih kecil
+                          iconSize: 15,
                         ),
                       ),
                     ],
@@ -227,10 +224,9 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                         color: Colors.grey),
                                     labelText: 'NIK',
                                     labelStyle: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.grey,
-                                    ),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
@@ -259,10 +255,9 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                         color: Colors.grey),
                                     labelText: 'No Telepon',
                                     labelStyle: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.grey,
-                                    ),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
@@ -287,10 +282,9 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                         color: Colors.grey),
                                     labelText: 'Alamat',
                                     labelStyle: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.grey,
-                                    ),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
@@ -313,10 +307,9 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                         color: Colors.grey),
                                     labelText: 'Tanggal Lahir',
                                     labelStyle: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.grey,
-                                    ),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
@@ -359,10 +352,9 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                         color: Colors.grey),
                                     labelText: 'Jenis Kelamin',
                                     labelStyle: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.grey,
-                                    ),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
@@ -391,10 +383,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                     }
                                     return null;
                                   },
-                                  // Mengatur dropdown menu
-                                  dropdownColor: Colors
-                                      .white, // Mengatur warna latar belakang dropdown menu
-                                  // Mengatur style untuk dropdown menu
+                                  dropdownColor: Colors.white,
                                   itemHeight: 50,
                                   borderRadius: BorderRadius.circular(15.0),
                                   isExpanded: true,
@@ -417,18 +406,15 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                               controller
                                                   .submitData(context, userId)
                                                   .then((_) {
-                                                // Setelah proses submit selesai, set isProcessing kembali ke false
                                                 setState(() {
                                                   controller.isProcessing =
-                                                      false;
+                                                      false; // Kembali ke false setelah submit
                                                 });
                                               }).catchError((error) {
-                                                // Tangani error jika ada
                                                 setState(() {
                                                   controller.isProcessing =
-                                                      false; // Pastikan untuk mengatur kembali ke false
+                                                      false; // Kembali ke false jika ada error
                                                 });
-                                                // Anda bisa menampilkan pesan kesalahan di sini jika diperlukan
                                                 if (context.mounted) {
                                                   ScaffoldMessenger.of(context)
                                                       .showSnackBar(
@@ -437,11 +423,12 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                                             'Terjadi kesalahan: $error')),
                                                   );
                                                   controller.showSnackBar(
-                                                      context,
-                                                      'Terjadi kesalahan: $error',
-                                                      const Color.fromARGB(
-                                                          255, 181, 61, 62),
-                                                      2000);
+                                                    context,
+                                                    'Terjadi kesalahan: $error',
+                                                    const Color.fromARGB(
+                                                        255, 181, 61, 62),
+                                                    2000,
+                                                  );
                                                 }
                                               });
                                             },

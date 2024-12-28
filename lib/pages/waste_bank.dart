@@ -72,13 +72,13 @@ class _WasteBankState extends State<WasteBank> {
               ),
               const SizedBox(height: 10),
               SizedBox(
-                width: double.infinity, // Mengatur lebar tombol selebar layar
+                width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: controller.selectedWasteType == null
                         ? Colors.black
-                        : Color.fromARGB(255, 59, 142, 110),
+                        : const Color.fromARGB(255, 59, 142, 110),
                   ),
                   onPressed: () {
                     controller.showSlider(context, (selectedWasteType) {
@@ -88,24 +88,21 @@ class _WasteBankState extends State<WasteBank> {
                       controller
                           .fetchWasteBank(context, selectedWasteType)
                           .then((_) {
-                        setState(() {
-                          // Pembaruan state jika diperlukan
-                        });
+                        setState(() {});
                       });
                     });
                   },
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start, // Rata kiri
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      // Menentukan ikon berdasarkan jenis sampah yang dipilih
                       Icon(
                         _getIconForWasteType(controller.selectedWasteType),
-                        color: Color.fromARGB(255, 59, 142, 110),
+                        color: const Color.fromARGB(255, 59, 142, 110),
                       ),
-                      const SizedBox(width: 10), // Jarak antara ikon dan teks
+                      const SizedBox(width: 10),
                       Text(
                         controller.selectedWasteType ?? 'Pilih Jenis Sampah',
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
                     ],
                   ),
@@ -116,23 +113,22 @@ class _WasteBankState extends State<WasteBank> {
                 Center(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white, // Latar belakang putih
-                      borderRadius:
-                          BorderRadius.circular(10.0), // Sudut melengkung
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.5),
                           spreadRadius: 2,
                           blurRadius: 5,
-                          offset: Offset(0, 3), // Mengatur posisi bayangan
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
-                    padding:
-                        EdgeInsets.all(16.0), // Padding untuk memberikan jarak
-                    child: Text('Harap memilih salah satu jenis sampah',
-                        style: TextStyle(
-                            color: const Color.fromARGB(255, 181, 61, 62))),
+                    padding: const EdgeInsets.all(16.0),
+                    child: const Text(
+                      'Harap memilih salah satu jenis sampah',
+                      style: TextStyle(color: Color.fromARGB(255, 181, 61, 62)),
+                    ),
                   ),
                 )
               else if (controller.isLoading)
@@ -144,8 +140,7 @@ class _WasteBankState extends State<WasteBank> {
               else
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(
-                        bottom: 20.0), // Atur jarak bawah sesuai kebutuhan
+                    padding: const EdgeInsets.only(bottom: 20.0),
                     child: _buildMaps(),
                   ),
                 ),
@@ -188,9 +183,8 @@ class _WasteBankState extends State<WasteBank> {
           : 0.0;
 
       return SizedBox(
-        // Use SizedBox instead of Expanded
         width: double.infinity,
-        height: 300, // Set a fixed height for the map
+        height: 300,
         child: FlutterMap(
           options: MapOptions(
             initialCenter: LatLng(centerLatitude, centerLongitude),
@@ -233,29 +227,30 @@ class _WasteBankState extends State<WasteBank> {
     });
   }
 
+  // Menampilkan informasi bank sampah dalam dialog
   void _showWasteBankInformation(dynamic item) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color.fromARGB(255, 59, 142, 110),
+          backgroundColor: const Color.fromARGB(255, 59, 142, 110),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
           title: Text(
             item['wasteBankName'],
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
           ),
           content: Container(
-            constraints: BoxConstraints(
-              maxWidth: 400, // Atur lebar maksimum dialog
-              maxHeight: 500, // Atur tinggi maksimum dialog
+            constraints: const BoxConstraints(
+              maxWidth: 400,
+              maxHeight: 500,
             ),
             child: Scrollbar(
               thumbVisibility: true,
               child: Padding(
-                padding: const EdgeInsets.only(right: 8.0), // Add left padding
+                padding: const EdgeInsets.only(right: 8.0),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -264,10 +259,9 @@ class _WasteBankState extends State<WasteBank> {
                         elevation: 4,
                         margin: const EdgeInsets.symmetric(vertical: 8.0),
                         child: ListTile(
-                          title: Text(
+                          title: const Text(
                             'Jenis Sampah',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold), // Bold title
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: Text(item['wasteType']),
                         ),
@@ -276,10 +270,9 @@ class _WasteBankState extends State<WasteBank> {
                         elevation: 4,
                         margin: const EdgeInsets.symmetric(vertical: 8.0),
                         child: ListTile(
-                          title: Text(
+                          title: const Text(
                             'Harga Sampah',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold), // Bold title
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: Text(item['wastePrice']),
                         ),
@@ -288,10 +281,9 @@ class _WasteBankState extends State<WasteBank> {
                         elevation: 4,
                         margin: const EdgeInsets.symmetric(vertical: 8.0),
                         child: ListTile(
-                          title: Text(
+                          title: const Text(
                             'Nama Pemilik',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold), // Bold title
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: Text(item['wasteBankOwner']),
                         ),
@@ -300,10 +292,9 @@ class _WasteBankState extends State<WasteBank> {
                         elevation: 4,
                         margin: const EdgeInsets.symmetric(vertical: 8.0),
                         child: ListTile(
-                          title: Text(
+                          title: const Text(
                             'No. Telepon',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold), // Bold title
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: Text(item['phoneNumber']),
                         ),
@@ -312,10 +303,9 @@ class _WasteBankState extends State<WasteBank> {
                         elevation: 4,
                         margin: const EdgeInsets.symmetric(vertical: 8.0),
                         child: ListTile(
-                          title: Text(
+                          title: const Text(
                             'Wilayah',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold), // Bold title
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: Text(item['wasteBankLocation']),
                         ),
@@ -324,10 +314,9 @@ class _WasteBankState extends State<WasteBank> {
                         elevation: 4,
                         margin: const EdgeInsets.symmetric(vertical: 8.0),
                         child: ListTile(
-                          title: Text(
+                          title: const Text(
                             'Jam Buka',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold), // Bold title
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: Text(item['openTime']),
                         ),
@@ -336,23 +325,20 @@ class _WasteBankState extends State<WasteBank> {
                         elevation: 4,
                         margin: const EdgeInsets.symmetric(vertical: 8.0),
                         child: ListTile(
-                          title: Text(
+                          title: const Text(
                             'Jam Tutup',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold), // Bold title
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: Text(item['closedTime']),
                         ),
                       ),
-                      // Menambahkan bagian Status Operational
                       Card(
                         elevation: 4,
                         margin: const EdgeInsets.only(top: 8.0),
                         child: ListTile(
-                          title: Text(
+                          title: const Text(
                             'Status Operational',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold), // Bold title
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: Text(item['operationalStatus']),
                         ),
@@ -365,10 +351,10 @@ class _WasteBankState extends State<WasteBank> {
           ),
           actions: [
             Align(
-              alignment: Alignment.centerRight, // Align to the right
+              alignment: Alignment.centerRight,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white, // Background color
+                  backgroundColor: Colors.white,
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -382,6 +368,7 @@ class _WasteBankState extends State<WasteBank> {
     );
   }
 
+  // Mengambil ikon berdasarkan jenis sampah
   IconData _getIconForWasteType(String? wasteType) {
     switch (wasteType) {
       case 'Plastik':

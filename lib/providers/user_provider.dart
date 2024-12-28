@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProvider with ChangeNotifier {
+  // Atribut pengguna
   int? _userId;
   String? _userName;
   String? _userEmail;
@@ -12,6 +13,7 @@ class UserProvider with ChangeNotifier {
   String? _userDateBirth;
   String? _userPhoto;
 
+  // Getter untuk atribut pengguna
   int? get userId => _userId;
   String? get userName => _userName;
   String? get userEmail => _userEmail;
@@ -22,6 +24,7 @@ class UserProvider with ChangeNotifier {
   String? get userDateBirth => _userDateBirth;
   String? get userPhoto => _userPhoto;
 
+  // Memuat data pengguna dari SharedPreferences
   Future<void> loadUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _userId = prefs.getInt('userId');
@@ -35,6 +38,7 @@ class UserProvider with ChangeNotifier {
     _userPhoto = prefs.getString('userPhoto');
   }
 
+  // Menyimpan data pengguna ke SharedPreferences
   Future<void> saveUserData({
     required int userId,
     required String userNumber,
@@ -53,7 +57,6 @@ class UserProvider with ChangeNotifier {
     await prefs.setString('userDateBirth', userDateBirth);
     await prefs.setString('userPhoto', userPhoto);
 
-    // Perbarui nilai di provider
     _userId = userId;
     _userNumber = userNumber;
     _userAddress = userAddress;
@@ -65,6 +68,7 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // Memperbarui data pengguna di SharedPreferences
   Future<void> updateUserData({
     required int userId,
     required String userName,
@@ -87,7 +91,6 @@ class UserProvider with ChangeNotifier {
     await prefs.setString('userDateBirth', userDateBirth);
     await prefs.setString('userPhoto', userPhoto);
 
-    // Perbarui nilai di provider
     _userId = userId;
     _userName = userName;
     _userEmail = userEmail;
@@ -101,6 +104,7 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // Mengatur ulang data pengguna
   void resetUserData() {
     _userId = null;
     _userName = null;

@@ -1,9 +1,9 @@
-import 'package:trashify/controllers/education/education_controller.dart';
-import 'package:trashify/providers/user_provider.dart';
-import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:trashify/controllers/education/education_controller.dart';
+import 'package:trashify/providers/user_provider.dart';
 
 class Education extends StatefulWidget {
   const Education({super.key});
@@ -13,8 +13,7 @@ class Education extends StatefulWidget {
 }
 
 class _EducationState extends State<Education> {
-  final EducationController controller =
-      EducationController(); // Create an instance of your controller
+  final EducationController controller = EducationController();
 
   @override
   void initState() {
@@ -71,15 +70,11 @@ class _EducationState extends State<Education> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(
-              Icons.video_library, // Ganti ikon notifikasi dengan ikon video
-              color: Colors.white,
-            ),
+            icon: const Icon(Icons.video_library, color: Colors.white),
             onPressed: () {
-              Navigator.pushNamed(context,
-                  '/galeri_konten_edukasi'); // Ganti dengan named route
+              Navigator.pushNamed(context, '/galeri_konten_edukasi');
             },
-          )
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -151,7 +146,6 @@ class _EducationState extends State<Education> {
                     });
                   },
                   onSelected: (String selection) {
-                    // Simpan saran yang dipilih
                     setState(() {
                       controller.searchQuery = selection;
                     });
@@ -175,10 +169,8 @@ class _EducationState extends State<Education> {
                         fillColor: Colors.white,
                       ),
                       onChanged: (value) {
-                        // Update searchQuery setiap kali teks berubah
                         setState(() {
-                          controller.searchQuery =
-                              value; // Update variabel pencarian
+                          controller.searchQuery = value;
                         });
                       },
                     );
@@ -186,15 +178,10 @@ class _EducationState extends State<Education> {
                   optionsViewBuilder: (BuildContext context,
                       AutocompleteOnSelected<String> onSelected,
                       Iterable<String> options) {
-                    // Hitung tinggi maksimum (1/4 layar)
                     double maxHeight =
                         MediaQuery.of(context).size.height * 0.25;
-
-                    // Hitung tinggi berdasarkan jumlah item
-                    double itemHeight = 56.0; // Tinggi setiap item ListTile
+                    double itemHeight = 56.0;
                     double dynamicHeight = options.length * itemHeight;
-
-                    // Batasi tinggi maksimum
                     double height =
                         dynamicHeight > maxHeight ? maxHeight : dynamicHeight;
 
@@ -202,7 +189,7 @@ class _EducationState extends State<Education> {
                       alignment: Alignment.topLeft,
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.9,
-                        height: height, // Gunakan tinggi dinamis
+                        height: height,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10.0),
@@ -246,7 +233,6 @@ class _EducationState extends State<Education> {
                   color: Colors.black,
                 ),
               ),
-              // Bagian dalam Widget build
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12.0),
                 child: SizedBox(
@@ -275,12 +261,11 @@ class _EducationState extends State<Education> {
                                             item['Judul_Edukasi']
                                                 .toLowerCase()
                                                 .contains(controller.searchQuery
-                                                    .toLowerCase())) // Filter berdasarkan pencarian
+                                                    .toLowerCase()))
                                         .map<Widget>((item) {
                                       String videoId;
                                       String youtubeUrl = item['Link_URL'];
 
-                                      // Cek apakah URL mengandung 'v='
                                       if (youtubeUrl.contains('v=')) {
                                         videoId = youtubeUrl
                                             .split('v=')[1]
@@ -377,7 +362,6 @@ class _EducationState extends State<Education> {
                                     }).toList() ??
                                     [],
                               ),
-                              // Menampilkan pesan jika tidak ada video ditemukan
                               if (controller.educationContent
                                       ?.where((item) =>
                                           item['Jenis_Edukasi'] == 'Video' &&
@@ -399,21 +383,15 @@ class _EducationState extends State<Education> {
                                     ),
                                   ),
                                 ),
-                              // Panah Navigasi Kiri
                               Positioned(
                                 left: 16,
-                                child: Icon(
-                                  Icons.arrow_back,
-                                  color: Colors.black,
-                                ),
+                                child:
+                                    Icon(Icons.arrow_back, color: Colors.black),
                               ),
-                              // Panah Navigasi Kanan
                               Positioned(
                                 right: 16,
-                                child: Icon(
-                                  Icons.arrow_forward,
-                                  color: Colors.black,
-                                ),
+                                child: Icon(Icons.arrow_forward,
+                                    color: Colors.black),
                               ),
                             ],
                           ),
@@ -435,12 +413,10 @@ class _EducationState extends State<Education> {
                             Text(
                               'Edukasi Artikel',
                               style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
                             ),
-                            // Filtered ListView
                             ListView.builder(
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
@@ -494,7 +470,6 @@ class _EducationState extends State<Education> {
                                 );
                               },
                             ),
-                            // Tampilkan pesan jika tidak ada edukasi ditemukan
                             if (controller.educationContent
                                     ?.where((item) =>
                                         item['Jenis_Edukasi'] == 'Artikel' &&

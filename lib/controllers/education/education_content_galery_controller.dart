@@ -1,23 +1,23 @@
-import 'package:trashify/services/comment_service.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
+import 'package:trashify/services/comment_service.dart';
 import 'package:trashify/services/education_service.dart';
+import 'dart:convert';
 
 class EducationContentGaleryController {
-  final EducationService educationService =
-      EducationService(); // Inisialisasi layanan edukasi
-  final CommentService commentService =
-      CommentService(); // Inisialisasi layanan edukasi
+  final CommentService commentService = CommentService();
+  final EducationService educationService = EducationService();
+
   bool isLoading = false;
   List<dynamic>? allContent;
-  List<dynamic>? educationContent;
   List<dynamic>? comment;
+  List<dynamic>? educationContent;
   List<String> suggestions = [];
   String searchQuery = '';
 
+  // Mengambil galeri konten edukasi berdasarkan userId
   Future<void> fetchEducationContentGalery(
       BuildContext context, int userId, Function(bool) setLoading) async {
-    setLoading(true); // Start loading
+    setLoading(true);
 
     try {
       final response =
@@ -25,18 +25,15 @@ class EducationContentGaleryController {
       if (response.statusCode == 200) {
         if (context.mounted) {
           allContent = json.decode(response.body);
-
           allContent!.sort((a, b) => DateTime.parse(b['created_at'])
               .compareTo(DateTime.parse(a['created_at'])));
-
-          // Take the latest 10 items
-          educationContent = allContent!.toList();
-        } else if (response.statusCode == 404) {
-          final data = json.decode(response.body);
-          if (context.mounted) {
-            showSnackBar(context, data['message'],
-                const Color.fromARGB(255, 181, 61, 62), 2000);
-          }
+          educationContent = allContent!.toList(); // Mengambil 10 item terbaru
+        }
+      } else if (response.statusCode == 404) {
+        final data = json.decode(response.body);
+        if (context.mounted) {
+          showSnackBar(context, data['message'],
+              const Color.fromARGB(255, 181, 61, 62), 2000);
         }
       } else {
         if (context.mounted) {
@@ -48,7 +45,7 @@ class EducationContentGaleryController {
         }
       }
 
-      // Fetch komentar
+      // Mengambil komentar
       final responseComment = await commentService.getComment();
       if (responseComment.statusCode == 200) {
         comment = json.decode(responseComment.body);
@@ -64,21 +61,20 @@ class EducationContentGaleryController {
             const Color.fromARGB(255, 181, 61, 62), 2000);
       }
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   }
 
+  // Menampilkan snackbar dengan pesan tertentu
   void showSnackBar(
       BuildContext context, String message, Color color, int time) {
     final overlay = Overlay.of(context);
     final overlayEntry = OverlayEntry(
       builder: (context) {
-        // Mendapatkan tinggi keyboard
         final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
         return Positioned(
-          bottom: 100.0 +
-              keyboardHeight, // Jarak dari bawah ditambah tinggi keyboard
+          bottom: 100.0 + keyboardHeight,
           left: 0,
           right: 0,
           child: Center(

@@ -18,6 +18,7 @@ class _GeneralSettingState extends State<GeneralSetting> {
     _checkLocationPermission();
   }
 
+  // Memeriksa izin lokasi saat inisialisasi
   Future<void> _checkLocationPermission() async {
     LocationPermission permission = await Geolocator.checkPermission();
     setState(() {
@@ -26,32 +27,31 @@ class _GeneralSettingState extends State<GeneralSetting> {
     });
   }
 
+  // Mengubah status izin lokasi berdasarkan nilai switch
   void _toggleLocationPermission(bool value) {
     if (value) {
       _requestLocationPermission();
     } else {
-      // Jika pengguna mematikan switch, kita tidak bisa mengubah status izin lokasi
-      // Namun, kita bisa mengatur status lokal menjadi false
       setState(() {
         _isLocationEnabled = false;
       });
     }
   }
 
+  // Meminta izin lokasi dari pengguna
   Future<void> _requestLocationPermission() async {
     LocationPermission permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
-      // Tampilkan dialog untuk memberi tahu pengguna
       _showPermissionDeniedDialog();
     } else {
-      // Jika izin diberikan, perbarui status slider
       setState(() {
         _isLocationEnabled = true; // Atur ke true jika izin diberikan
       });
     }
   }
 
+  // Menampilkan dialog jika izin lokasi ditolak
   void _showPermissionDeniedDialog() {
     showDialog(
       context: context,
@@ -69,7 +69,6 @@ class _GeneralSettingState extends State<GeneralSetting> {
             ),
             TextButton(
               onPressed: () {
-                // Arahkan pengguna ke pengaturan aplikasi
                 Geolocator.openLocationSettings();
                 Navigator.of(context).pop();
               },
@@ -142,21 +141,6 @@ class _GeneralSettingState extends State<GeneralSetting> {
                             judul: 'Notifikasi Push',
                             rute: () {},
                           ),
-                          _buildDaftarPengaturanNotifikasi(
-                            icon: Icons.notification_important,
-                            judul: 'Notifikasi Pengaduan',
-                            rute: () {},
-                          ),
-                          _buildDaftarPengaturanNotifikasi(
-                            icon: Icons.circle_notifications,
-                            judul: 'Notifikasi Informasi Pengangkutan',
-                            rute: () {},
-                          ),
-                          _buildDaftarPengaturanNotifikasi(
-                            icon: Icons.edit_notifications,
-                            judul: 'Notifikasi Edukasi',
-                            rute: () {},
-                          ),
                           const SizedBox(height: 10),
                           _buildLocationPermissionSetting(),
                           const SizedBox(height: 10),
@@ -173,6 +157,7 @@ class _GeneralSettingState extends State<GeneralSetting> {
     );
   }
 
+  // Membangun pengaturan izin lokasi
   Widget _buildLocationPermissionSetting() {
     return Card(
       color: Colors.white,
@@ -198,6 +183,7 @@ class _GeneralSettingState extends State<GeneralSetting> {
     );
   }
 
+  // Membangun daftar pengaturan notifikasi
   Widget _buildDaftarPengaturanNotifikasi({
     required IconData icon,
     required String judul,

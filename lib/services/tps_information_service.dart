@@ -3,7 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trashify/services/global_url.dart';
 
 class TpsInformationService {
-  Future<http.Response> getTpsInformationDetail(kecamatan) async {
+  // Mengambil detail informasi TPS berdasarkan kecamatan
+  Future<http.Response> getTpsInformationDetail(String kecamatan) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
 

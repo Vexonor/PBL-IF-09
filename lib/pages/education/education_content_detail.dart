@@ -1,7 +1,7 @@
-import 'package:trashify/controllers/education/education_content_detail_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:trashify/controllers/education/education_content_detail_controller.dart';
 
 class EducationContentDetail extends StatefulWidget {
   const EducationContentDetail({super.key});
@@ -12,7 +12,7 @@ class EducationContentDetail extends StatefulWidget {
 
 class _EducationContentDetailState extends State<EducationContentDetail> {
   final EducationContentDetailController controller =
-      EducationContentDetailController(); // Create an instance of your controller
+      EducationContentDetailController();
 
   @override
   void initState() {
@@ -22,7 +22,6 @@ class _EducationContentDetailState extends State<EducationContentDetail> {
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       final educationId = args['educationId'];
 
-      // Fetch education content
       controller.fetchEducationAndComments(context, educationId, (loading) {
         if (mounted) {
           setState(() {
@@ -38,10 +37,10 @@ class _EducationContentDetailState extends State<EducationContentDetail> {
     super.dispose();
   }
 
+  // Memformat tanggal dari string ke format yang diinginkan
   String formatDate(String dateString) {
     DateTime dateTime = DateTime.parse(dateString);
-    return DateFormat('dd MMMM yyyy, HH:mm', 'id_ID')
-        .format(dateTime); // Format sesuai keinginan
+    return DateFormat('dd MMMM yyyy, HH:mm', 'id_ID').format(dateTime);
   }
 
   @override
@@ -54,7 +53,7 @@ class _EducationContentDetailState extends State<EducationContentDetail> {
         }
         Navigator.pushNamedAndRemoveUntil(
           context,
-          '/galeri_konten_edukasi', // Ganti dengan nama route yang sesuai
+          '/galeri_konten_edukasi',
           (Route<dynamic> route) =>
               route.isFirst || route.settings.name == '/edukasi',
         );
@@ -70,7 +69,7 @@ class _EducationContentDetailState extends State<EducationContentDetail> {
               if (context.mounted) {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
-                  '/galeri_konten_edukasi', // Ganti dengan nama route yang sesuai
+                  '/galeri_konten_edukasi',
                   (Route<dynamic> route) =>
                       route.isFirst || route.settings.name == '/edukasi',
                 );
@@ -185,7 +184,6 @@ class _EducationContentDetailState extends State<EducationContentDetail> {
                             if (controller
                                     .educationContent!['Status_Edukasi'] ==
                                 'Draf') {
-                              // Menampilkan Snackbar jika Status_Edukasi adalah 'Draf'
                               controller.showSnackBar(
                                   context,
                                   'Konten Edukasi masih Draf, Silakan tunggu admin untuk mengkonfirmasi edukasi.',
@@ -266,6 +264,7 @@ class _EducationContentDetailState extends State<EducationContentDetail> {
     );
   }
 
+  // Membangun judul untuk bagian konten
   Widget _buildTitle(String judul) {
     return Text(
       judul,
@@ -277,6 +276,7 @@ class _EducationContentDetailState extends State<EducationContentDetail> {
     );
   }
 
+  // Membangun deskripsi untuk bagian konten
   Widget _buildDescription(String isi) {
     return Container(
       padding: const EdgeInsets.all(12.0),
@@ -292,6 +292,7 @@ class _EducationContentDetailState extends State<EducationContentDetail> {
     );
   }
 
+  // Membangun deskripsi tanggal untuk bagian konten
   Widget _buildDescriptionDate(String isi) {
     return Container(
       padding: const EdgeInsets.all(12.0),
@@ -307,9 +308,10 @@ class _EducationContentDetailState extends State<EducationContentDetail> {
     );
   }
 
+  // Membangun thumbnail YouTube berdasarkan URL
   Widget _buildYoutubeThumbnail(String? url) {
     String videoId = '';
-    String youtubeUrl = url ?? ''; // Default to empty string if null
+    String youtubeUrl = url ?? '';
 
     if (youtubeUrl.isNotEmpty) {
       if (youtubeUrl.contains('v=')) {
@@ -330,22 +332,22 @@ class _EducationContentDetailState extends State<EducationContentDetail> {
         ? Stack(
             children: [
               AspectRatio(
-                aspectRatio: 16 / 9, // Mengatur rasio 16:9
+                aspectRatio: 16 / 9,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8), // Sudut melengkung
+                  borderRadius: BorderRadius.circular(8),
                   child: Image.network(
                     thumbnailUrl,
-                    fit: BoxFit.cover, // Mengisi area tanpa black bar
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
               Positioned(
-                top: 8, // Jarak dari atas
-                left: 8, // Jarak dari kiri
+                top: 8,
+                left: 8,
                 child: Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  color: Colors.black54, // Latar belakang semi-transparan
+                  color: Colors.black54,
                   child: Text(
                     'Preview Thumbnail',
                     style: TextStyle(
@@ -358,6 +360,6 @@ class _EducationContentDetailState extends State<EducationContentDetail> {
               ),
             ],
           )
-        : Container(); // Jika tidak ada thumbnail, kembalikan container kosong
+        : Container();
   }
 }

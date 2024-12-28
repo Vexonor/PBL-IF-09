@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:trashify/providers/user_provider.dart';
+import 'package:trashify/pages/settings/general_setting.dart';
 import 'package:trashify/pages/settings/password_setting.dart';
 import 'package:trashify/pages/settings/profile_setting.dart';
-import 'package:trashify/pages/settings/general_setting.dart';
 import 'package:trashify/pages/settings/terms_condition.dart';
+import 'package:trashify/providers/user_provider.dart';
 
 class Setting extends StatefulWidget {
   const Setting({super.key});
@@ -16,6 +16,7 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends State<Setting> {
+  // Fungsi untuk keluar dari sesi dan menghapus data pengguna
   Future<void> _keluarSesi(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
@@ -23,13 +24,11 @@ class _SettingState extends State<Setting> {
       context.read<UserProvider>().resetUserData();
     }
     if (context.mounted) {
-      if (context.mounted) {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          '/masuk', // Ganti dengan nama route yang sesuai
-          (Route<dynamic> route) => route.settings.name == '/masuk',
-        );
-      }
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/masuk', // Ganti dengan nama route yang sesuai
+        (Route<dynamic> route) => route.settings.name == '/masuk',
+      );
     }
   }
 
@@ -71,9 +70,7 @@ class _SettingState extends State<Setting> {
             Center(
               child: Column(
                 children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   Image.asset(
                     'assets/images/trashify.png',
                     width: 150,
@@ -103,10 +100,10 @@ class _SettingState extends State<Setting> {
                               'Ubah foto profil, nama, no. telp, dan lainnya',
                           rute: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ProfileSetting()));
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const ProfileSetting()),
+                            );
                           },
                         ),
                         _buildDaftarPengaturan(
@@ -116,10 +113,11 @@ class _SettingState extends State<Setting> {
                               'Perbarui kata sandi untuk mengamankan akun anda',
                           rute: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const PasswordSetting()));
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const PasswordSetting()),
+                            );
                           },
                         ),
                         const SizedBox(height: 10),
@@ -145,10 +143,10 @@ class _SettingState extends State<Setting> {
                           description: 'Atur berbagai fitur dari aplikasi',
                           rute: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const GeneralSetting()));
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const GeneralSetting()),
+                            );
                           },
                         ),
                         _buildDaftarPengaturan(
@@ -158,10 +156,11 @@ class _SettingState extends State<Setting> {
                               'Perjanjian hukum antara penyedia layanan dan pengguna',
                           rute: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SyaratKetentuan()));
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const TermsCondition()),
+                            );
                           },
                         ),
                         _buildDaftarPengaturan(
@@ -184,6 +183,7 @@ class _SettingState extends State<Setting> {
     );
   }
 
+  // Fungsi untuk membangun bagian pengaturan
   Widget _buildBagianPengaturan(String bagian) {
     return Text(
       bagian,
@@ -195,6 +195,7 @@ class _SettingState extends State<Setting> {
     );
   }
 
+  // Fungsi untuk membangun daftar pengaturan
   Widget _buildDaftarPengaturan({
     required IconData icon,
     required String judul,

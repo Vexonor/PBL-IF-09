@@ -68,9 +68,10 @@ class _RegisterState extends State<Register> {
                                 const Icon(Icons.people, color: Colors.grey),
                             labelText: 'Nama Lengkap',
                             labelStyle: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.grey),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey,
+                            ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15.0),
                             ),
@@ -92,9 +93,10 @@ class _RegisterState extends State<Register> {
                                 color: Colors.grey),
                             labelText: 'Alamat Email',
                             labelStyle: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.grey),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey,
+                            ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15.0),
                             ),
@@ -123,11 +125,13 @@ class _RegisterState extends State<Register> {
                                 color: Colors.grey),
                             labelText: 'Kata Sandi',
                             labelStyle: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.grey),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey,
+                            ),
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15.0)),
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 controller.isPasswordVisible
@@ -173,11 +177,13 @@ class _RegisterState extends State<Register> {
                                 color: Colors.grey),
                             labelText: 'Konfirmasi Kata Sandi',
                             labelStyle: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.grey),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey,
+                            ),
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15.0)),
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 controller.isConfirmationPasswordVisible
@@ -246,9 +252,10 @@ class _RegisterState extends State<Register> {
                                   : Text(
                                       'Daftar',
                                       style: GoogleFonts.poppins(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
                                     ),
                             ),
                           ),
@@ -260,9 +267,10 @@ class _RegisterState extends State<Register> {
                             Text(
                               'Sudah memiliki akun?',
                               style: TextStyle(
-                                  color: const Color(0xFF8c8e98),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500),
+                                color: const Color(0xFF8c8e98),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                             TextButton(
                               onPressed: () {

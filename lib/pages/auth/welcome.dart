@@ -19,6 +19,7 @@ class _WelcomeState extends State<Welcome> {
   @override
   void initState() {
     super.initState();
+    // Memuat data pengguna saat inisialisasi
     Provider.of<UserProvider>(context, listen: false).loadUserData();
   }
 
@@ -45,49 +46,46 @@ class _WelcomeState extends State<Welcome> {
             ),
           ],
         ),
-        backgroundColor: const Color.fromARGB(
-            255, 59, 142, 110), // Mengubah warna latar belakang AppBar
+        backgroundColor: const Color.fromARGB(255, 59, 142, 110),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Card(
-              color: Colors.white, // Warna latar belakang Card
-              elevation: 4, // Memberikan efek bayangan pada Card
+              color: Colors.white,
+              elevation: 4,
               child: Padding(
-                padding: const EdgeInsets.all(16.0), // Padding di dalam Card
+                padding: const EdgeInsets.all(16.0),
                 child: Form(
                   key: controller.formKey,
                   child: Column(
                     children: [
                       Text(
                         'Sebelum melanjutkan, Silakan lengkapi data diri Anda terlebih dahulu.',
-                        style: TextStyle(
-                          fontSize: 16,
-                        ), // Menggunakan Google Fonts
+                        style: TextStyle(fontSize: 16),
                       ),
                       SizedBox(height: 20),
                       Text(
                         'Foto Profil',
                         style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.grey),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.grey,
+                        ),
                       ),
                       Stack(
-                        alignment: Alignment
-                            .bottomRight, // Menempatkan ikon di bawah kanan
+                        alignment: Alignment.bottomRight,
                         children: [
                           Container(
                             width: 100,
                             height: 100,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Colors.grey[300], // Warna lingkaran
+                              color: Colors.grey[300],
                             ),
                             child: controller.profilePicture == null
-                                ? Icon(Icons.add, size: 40) // Ikon plus
+                                ? Icon(Icons.add, size: 40)
                                 : ClipOval(
                                     child: Image.file(
                                       File(controller.profilePicture!.path),
@@ -100,8 +98,7 @@ class _WelcomeState extends State<Welcome> {
                             height: 30,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: const Color.fromARGB(255, 59, 142,
-                                  110), // Latar belakang untuk ikon edit
+                              color: const Color.fromARGB(255, 59, 142, 110),
                             ),
                             child: IconButton(
                               icon: Icon(Icons.edit, color: Colors.white),
@@ -109,10 +106,9 @@ class _WelcomeState extends State<Welcome> {
                                   ? null
                                   : () async {
                                       await controller.pickImage();
-                                      setState(
-                                          () {}); // Memanggil setState untuk memperbarui UI
+                                      setState(() {});
                                     },
-                              iconSize: 15, // Ukuran ikon edit lebih kecil
+                              iconSize: 15,
                             ),
                           ),
                         ],
@@ -121,7 +117,8 @@ class _WelcomeState extends State<Welcome> {
                         Text(
                           controller.imageValidator ?? '',
                           style: TextStyle(
-                              color: const Color.fromARGB(255, 181, 61, 62)),
+                            color: const Color.fromARGB(255, 181, 61, 62),
+                          ),
                         ),
                       SizedBox(height: 20),
                       TextFormField(
@@ -213,7 +210,7 @@ class _WelcomeState extends State<Welcome> {
                       TextFormField(
                         controller: controller.birthDateController,
                         enabled: !controller.isProcessing,
-                        readOnly: true, // Agar tidak bisa diedit langsung
+                        readOnly: true,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.calendar_today,
                               color: Colors.grey),
@@ -242,7 +239,7 @@ class _WelcomeState extends State<Welcome> {
                                           .format(pickedDate);
                                   setState(() {
                                     controller.birthDateController.text =
-                                        formattedDate; // Set tanggal yang dipilih
+                                        formattedDate;
                                   });
                                 }
                               },
@@ -285,8 +282,7 @@ class _WelcomeState extends State<Welcome> {
                             ? null
                             : (value) {
                                 setState(() {
-                                  controller.selectedGender =
-                                      value; // Simpan pilihan gender di controller
+                                  controller.selectedGender = value;
                                 });
                               },
                         validator: (value) {
@@ -295,10 +291,7 @@ class _WelcomeState extends State<Welcome> {
                           }
                           return null;
                         },
-                        // Mengatur dropdown menu
-                        dropdownColor: Colors
-                            .white, // Mengatur warna latar belakang dropdown menu
-                        // Mengatur style untuk dropdown menu
+                        dropdownColor: Colors.white,
                         itemHeight: 50,
                         borderRadius: BorderRadius.circular(15.0),
                         isExpanded: true,
@@ -309,24 +302,19 @@ class _WelcomeState extends State<Welcome> {
                             ? null
                             : () {
                                 setState(() {
-                                  controller.isProcessing =
-                                      true; // Set isProcessing to true
+                                  controller.isProcessing = true;
                                 });
 
                                 controller
                                     .submitData(context, userId!)
                                     .then((_) {
-                                  // Setelah proses submit selesai, set isProcessing kembali ke false
                                   setState(() {
                                     controller.isProcessing = false;
                                   });
                                 }).catchError((error) {
-                                  // Tangani error jika ada
                                   setState(() {
-                                    controller.isProcessing =
-                                        false; // Pastikan untuk mengatur kembali ke false
+                                    controller.isProcessing = false;
                                   });
-                                  // Anda bisa menampilkan pesan kesalahan di sini jika diperlukan
                                   if (context.mounted) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
@@ -356,11 +344,14 @@ class _WelcomeState extends State<Welcome> {
                                   strokeWidth: 2,
                                 ),
                               )
-                            : Text('Kirim',
+                            : Text(
+                                'Kirim',
                                 style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white)),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
                       ),
                     ],
                   ),

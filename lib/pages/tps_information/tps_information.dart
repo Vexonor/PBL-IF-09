@@ -63,10 +63,10 @@ class _TpsInformationState extends State<TpsInformation> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 28, vertical: 28),
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.all(Radius.circular(50)),
                       border: Border.all(
                           color: const Color.fromARGB(255, 59, 142, 110)),
+                      borderRadius: const BorderRadius.all(Radius.circular(50)),
+                      color: Colors.white,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,6 +114,7 @@ class _TpsInformationState extends State<TpsInformation> {
     );
   }
 
+  // Fungsi untuk membangun tombol kecamatan
   Widget _buildTombolKecamatan(String district) {
     return ElevatedButton(
       onPressed: () {
@@ -147,18 +148,16 @@ class BackgroundPainter extends CustomPainter {
     final paintGreen = Paint()..color = Color.fromARGB(255, 59, 142, 110);
     final paintWhite = Paint()..color = Colors.white;
 
-    // Menggambar segitiga putih di kiri
     final pathWhite = Path()
       ..lineTo(0, 0)
       ..lineTo(size.width, 0)
       ..lineTo(size.width, size.height)
       ..close();
 
-    // Menggambar titik dari kanan atas, kiri atas, ke kiri bawah
     final pathGreen = Path()
-      ..moveTo(size.width, 0) // Titik atas kanan
-      ..lineTo(0, 0) // Titik atas kiri
-      ..lineTo(0, size.height) // Titik bawah kiri
+      ..moveTo(size.width, 0)
+      ..lineTo(0, 0)
+      ..lineTo(0, size.height)
       ..close();
 
     canvas.drawPath(pathWhite, paintWhite);

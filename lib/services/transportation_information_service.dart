@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trashify/services/global_url.dart';
 
 class TransportationInformationService {
+  // Mengambil informasi transportasi
   Future<http.Response> getTransportationInformation() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
@@ -17,7 +18,8 @@ class TransportationInformationService {
     return response;
   }
 
-  Future<http.Response> getWorkerInformation(idPetugas) async {
+  // Mengambil informasi petugas berdasarkan ID
+  Future<http.Response> getWorkerInformation(String idPetugas) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
 

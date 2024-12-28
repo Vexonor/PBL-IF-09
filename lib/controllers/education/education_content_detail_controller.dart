@@ -1,42 +1,37 @@
-import 'dart:convert'; // For JSON conversion
+import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:trashify/services/comment_service.dart';
-import 'package:flutter/material.dart'; // For Flutter widgets
 import 'package:trashify/services/education_service.dart';
 
-// Kelas EducationController bertanggung jawab untuk mengelola konten edukasi
 class EducationContentDetailController {
-  final EducationService educationService =
-      EducationService(); // Inisialisasi layanan edukasi
-  final CommentService commentService =
-      CommentService(); // Inisialisasi layanan edukasi
-  Map<String, dynamic>? educationContent; // Menyimpan konten edukasi
-  List<dynamic> comment = []; // Menyimpan comment
-  bool isLoading = false; // Menandakan apakah data sedang dimuat
-  bool isProcessing = false;
-  int totalComments = 0; // Total komentar
+  final CommentService commentService = CommentService();
+  final EducationService educationService = EducationService();
 
-  // Mengambil data konten edukasi berdasarkan educationId
+  bool isLoading = false;
+  bool isProcessing = false;
+  int totalComments = 0;
+  List<dynamic> comment = [];
+  Map<String, dynamic>? educationContent;
+
+  // Mengambil data konten edukasi dan komentar berdasarkan educationId
   Future<void> fetchEducationAndComments(
       BuildContext context, int educationId, Function(bool) setLoading) async {
-    setLoading(true); // Start loading
+    setLoading(true);
 
     try {
-      // Fetch konten edukasi
       final responseContent =
           await educationService.showEducationContentDetail(educationId);
       if (responseContent.statusCode == 200) {
         educationContent = json.decode(responseContent.body);
       } else {
-        // Tangani error untuk konten edukasi
         if (context.mounted) {
           final data = json.decode(responseContent.body);
           showSnackBar(context, data['message'],
               const Color.fromARGB(255, 181, 61, 62), 2000);
         }
-        return; // Keluar jika ada error
+        return;
       }
 
-      // Fetch komentar
       final responseComment = await commentService.showComment(educationId);
       if (responseComment.statusCode == 200) {
         comment = json.decode(responseComment.body);
@@ -44,13 +39,12 @@ class EducationContentDetailController {
             .compareTo(DateTime.parse(a['created_at'])));
         totalComments = comment.length;
       } else {
-        // Tangani error untuk komentar
         if (context.mounted) {
           final data = json.decode(responseComment.body);
           showSnackBar(context, data['message'],
               const Color.fromARGB(255, 181, 61, 62), 2000);
         }
-        return; // Keluar jika ada error
+        return;
       }
     } catch (e) {
       if (context.mounted) {
@@ -58,10 +52,11 @@ class EducationContentDetailController {
             const Color.fromARGB(255, 181, 61, 62), 2000);
       }
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   }
 
+  // Menghapus konten edukasi berdasarkan educationId
   Future<void> deleteEducationContent(
       BuildContext context, int educationId) async {
     final response =
@@ -74,32 +69,27 @@ class EducationContentDetailController {
         if (context.mounted) {
           Navigator.pushNamedAndRemoveUntil(
             context,
-            '/galeri_konten_edukasi', // Ganti dengan nama route yang sesuai
+            '/galeri_konten_edukasi',
             (Route<dynamic> route) =>
                 route.isFirst || route.settings.name == '/edukasi',
-          ); // Tutup dialog
+          );
         }
       }
-    } else if (response.statusCode == 403) {
+    } else if (response.statusCode == 403 || response.statusCode == 404) {
       final data = json.decode(response.body);
       if (context.mounted) {
         showSnackBar(context, data['message'],
             const Color.fromARGB(255, 181, 61, 62), 2000);
-      } // Menangani error
-    } else if (response.statusCode == 404) {
-      final data = json.decode(response.body);
-      if (context.mounted) {
-        showSnackBar(context, data['message'],
-            const Color.fromARGB(255, 181, 61, 62), 2000);
-      } // Menangani error
+      }
     } else {
       if (context.mounted) {
         showSnackBar(context, 'Terjadi kesalahan, silakan coba lagi!',
             const Color.fromARGB(255, 181, 61, 62), 2000);
-      } // Menangani error
+      }
     }
   }
 
+  // Menampilkan dialog konfirmasi untuk menghapus konten edukasi
   Future<void> showDeleteConfirmationDialog(BuildContext context) async {
     return showDialog(
       context: context,
@@ -111,28 +101,21 @@ class EducationContentDetailController {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Tutup dialog
+                Navigator.of(context).pop();
               },
-              child: Text(
-                'Batal',
-                style: TextStyle(color: Colors.grey),
-              ),
+              child: Text('Batal', style: TextStyle(color: Colors.grey)),
             ),
             TextButton(
               onPressed: isProcessing
                   ? null
                   : () async {
                       await deleteEducationContent(
-                          context,
-                          educationContent![
-                              'ID_Edukasi']); // Panggil fungsi untuk menghapus komentar
+                          context, educationContent!['ID_Edukasi']);
                     },
-              child: Text(
-                'Hapus',
-                style: TextStyle(
-                    color: const Color.fromARGB(255, 181, 61, 62),
-                    fontWeight: FontWeight.bold),
-              ),
+              child: Text('Hapus',
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 181, 61, 62),
+                      fontWeight: FontWeight.bold)),
             ),
           ],
         );
@@ -140,17 +123,16 @@ class EducationContentDetailController {
     );
   }
 
+  // Menampilkan snackbar dengan pesan tertentu
   void showSnackBar(
       BuildContext context, String message, Color color, int time) {
     final overlay = Overlay.of(context);
     final overlayEntry = OverlayEntry(
       builder: (context) {
-        // Mendapatkan tinggi keyboard
         final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
         return Positioned(
-          bottom: 10.0 +
-              keyboardHeight, // Jarak dari bawah ditambah tinggi keyboard
+          bottom: 10.0 + keyboardHeight,
           left: 0,
           right: 0,
           child: Center(
@@ -163,10 +145,7 @@ class EducationContentDetailController {
                   borderRadius: BorderRadius.circular(8.0),
                   border: Border.all(color: Colors.grey, width: 1.0),
                 ),
-                child: Text(
-                  message,
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: Text(message, style: TextStyle(color: Colors.white)),
               ),
             ),
           ),

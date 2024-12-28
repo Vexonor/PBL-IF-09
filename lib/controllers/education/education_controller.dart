@@ -1,23 +1,23 @@
-import 'package:trashify/services/comment_service.dart';
-import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:trashify/services/comment_service.dart';
 import 'package:trashify/services/education_service.dart';
 
 class EducationController {
-  final EducationService educationService =
-      EducationService(); // Inisialisasi layanan edukasi
-  final CommentService commentService =
-      CommentService(); // Inisialisasi layanan edukasi
+  final CommentService commentService = CommentService();
+  final EducationService educationService = EducationService();
+
   bool isLoading = false;
   List<dynamic>? allContent;
-  List<dynamic>? educationContent;
   List<dynamic>? comment;
+  List<dynamic>? educationContent;
   List<String> suggestions = [];
   String searchQuery = '';
 
+  // Mengambil konten edukasi dan komentar dari layanan
   Future<void> fetchEducationContent(
       BuildContext context, Function(bool) setLoading) async {
-    setLoading(true); // Start loading
+    setLoading(true); // Mulai loading
 
     try {
       final response = await educationService.getEducationContent();
@@ -25,7 +25,6 @@ class EducationController {
         if (context.mounted) {
           allContent = json.decode(response.body);
 
-          // Filter konten berdasarkan Jenis_Edukasi dan Status_Edukasi
           List<dynamic> videoContent = allContent!
               .where((item) =>
                   item['Jenis_Edukasi'] == 'Video' &&
@@ -37,7 +36,6 @@ class EducationController {
                   item['Status_Edukasi'] == 'Telah Diunggah')
               .toList();
 
-          // Sort and take the latest 10 for both types
           videoContent.sort((a, b) => DateTime.parse(b['created_at'])
               .compareTo(DateTime.parse(a['created_at'])));
           artikelContent.sort((a, b) => DateTime.parse(b['created_at'])
@@ -55,7 +53,7 @@ class EducationController {
         }
       }
 
-      // Fetch komentar
+      // Mengambil komentar
       final responseComment = await commentService.getComment();
       if (responseComment.statusCode == 200) {
         comment = json.decode(responseComment.body);
@@ -71,21 +69,20 @@ class EducationController {
             const Color.fromARGB(255, 181, 61, 62), 2000);
       }
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false); // Menghentikan loading
     }
   }
 
+  // Menampilkan snackbar dengan pesan tertentu
   void showSnackBar(
       BuildContext context, String message, Color color, int time) {
     final overlay = Overlay.of(context);
     final overlayEntry = OverlayEntry(
       builder: (context) {
-        // Mendapatkan tinggi keyboard
         final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
         return Positioned(
-          bottom: 100.0 +
-              keyboardHeight, // Jarak dari bawah ditambah tinggi keyboard
+          bottom: 100.0 + keyboardHeight,
           left: 0,
           right: 0,
           child: Center(

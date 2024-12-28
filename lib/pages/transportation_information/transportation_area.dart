@@ -9,16 +9,16 @@ import 'package:url_launcher/url_launcher.dart';
 
 class TransportationArea extends StatefulWidget {
   final DateTime selectedDate;
-  final String transportationTime;
   final LatLng coordinates;
-  final String idWorker; // Menambahkan parameter
+  final String idWorker;
+  final String transportationTime;
 
   const TransportationArea({
     super.key,
     required this.selectedDate,
-    required this.transportationTime,
     required this.coordinates,
-    required this.idWorker, // Menambahkan parameter
+    required this.idWorker,
+    required this.transportationTime,
   });
 
   @override
@@ -36,7 +36,6 @@ class _TransportationAreaState extends State<TransportationArea> {
     controller
         .fetchWorkerInformation(context, setState, widget.idWorker)
         .then((_) {
-      // Tampilkan BottomSheet hanya jika data berhasil dimuat
       if (controller.name != null) {
         if (mounted) {
           showSlider(context);
@@ -45,6 +44,7 @@ class _TransportationAreaState extends State<TransportationArea> {
     });
   }
 
+  // Menampilkan modal bottom sheet dengan informasi petugas
   void showSlider(BuildContext context) {
     String formattedDate = DateFormat('yyyy-MM-dd').format(widget.selectedDate);
     showModalBottomSheet(
@@ -52,8 +52,7 @@ class _TransportationAreaState extends State<TransportationArea> {
       isScrollControlled: true,
       builder: (BuildContext context) {
         return Container(
-          height:
-              MediaQuery.of(context).size.height * 1 / 3.3, // Tinggi 1/3 layar
+          height: MediaQuery.of(context).size.height * 1 / 3.3,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
             color: Colors.white,
@@ -98,23 +97,21 @@ class _TransportationAreaState extends State<TransportationArea> {
                   padding: const EdgeInsets.all(16.0),
                   child: Card(
                     color: Color.fromARGB(255, 175, 206, 194),
-                    elevation: 5, // Tambahkan elevasi untuk efek bayangan
+                    elevation: 5,
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(10), // Sudut melengkung
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
                         children: [
                           CircleAvatar(
-                            radius: 40, // Ukuran avatar
-                            backgroundColor:
-                                Colors.grey[300], // Warna latar belakang
+                            radius: 40,
+                            backgroundColor: Colors.grey[300],
                             child: Icon(
-                              Icons.person, // Ikon orang
-                              size: 40, // Ukuran ikon
-                              color: Colors.black, // Warna ikon
+                              Icons.person,
+                              size: 40,
+                              color: Colors.black,
                             ),
                           ),
                           SizedBox(width: 16),
@@ -127,7 +124,7 @@ class _TransportationAreaState extends State<TransportationArea> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '${controller.name}', // Nama petugas
+                                      '${controller.name}',
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
@@ -141,8 +138,7 @@ class _TransportationAreaState extends State<TransportationArea> {
                                           height: 35,
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
-                                            color: Colors
-                                                .white, // Latar belakang putih
+                                            color: Colors.white,
                                           ),
                                           child: IconButton(
                                             icon: Icon(Icons.phone),
@@ -150,19 +146,16 @@ class _TransportationAreaState extends State<TransportationArea> {
                                             color: Color.fromARGB(
                                                 255, 175, 206, 194),
                                             onPressed: () async {
-                                              String cleanedNumber = controller
-                                                  .cleanPhoneNumber(controller
-                                                      .number!); // Bersihkan nomor
+                                              String cleanedNumber =
+                                                  controller.cleanPhoneNumber(
+                                                      controller.number!);
                                               final Uri launchUri = Uri(
                                                 scheme: 'tel',
-                                                path:
-                                                    cleanedNumber, // Menggunakan nomor yang sudah dibersihkan
+                                                path: cleanedNumber,
                                               );
                                               try {
-                                                await launchUrl(
-                                                    launchUri); // Menggunakan launchUrl
+                                                await launchUrl(launchUri);
                                               } catch (e) {
-                                                // Jika tidak bisa meluncurkan, Anda bisa menampilkan pesan kesalahan
                                                 if (context.mounted) {
                                                   controller.showSnackBar(
                                                       context,
@@ -175,16 +168,13 @@ class _TransportationAreaState extends State<TransportationArea> {
                                             },
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: 12,
-                                        ),
+                                        SizedBox(width: 12),
                                         Container(
                                           width: 35,
                                           height: 35,
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
-                                            color: Colors
-                                                .white, // Latar belakang putih
+                                            color: Colors.white,
                                           ),
                                           child: IconButton(
                                             icon: Icon(Icons.report),
@@ -192,7 +182,6 @@ class _TransportationAreaState extends State<TransportationArea> {
                                             color: const Color.fromARGB(
                                                 255, 181, 61, 62),
                                             onPressed: () {
-                                              // Navigasi ke halaman tambah pengaduan
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -200,7 +189,9 @@ class _TransportationAreaState extends State<TransportationArea> {
                                                       ComplaintAdd(
                                                     initialDescription:
                                                         'Ada masalah pengangkutan sampah di kecamatan ${controller.workArea} pada tanggal $formattedDate / ${widget.transportationTime}',
-                                                  ), // Ganti dengan halaman pengaduan
+                                                    initialCoordinates:
+                                                        '${widget.coordinates.latitude}, ${widget.coordinates.longitude}',
+                                                  ),
                                                 ),
                                               );
                                             },
@@ -210,7 +201,7 @@ class _TransportationAreaState extends State<TransportationArea> {
                                     ),
                                     SizedBox(height: 8),
                                     Text(
-                                      'Area bertugas: Kec.${controller.workArea}', // Area bertugas
+                                      'Area bertugas: Kec.${controller.workArea}',
                                       style: TextStyle(
                                           fontSize: 14, color: Colors.white),
                                     ),
@@ -265,8 +256,7 @@ class _TransportationAreaState extends State<TransportationArea> {
         ),
       ),
       body: controller.isLoading
-          ? Center(
-              child: CircularProgressIndicator()) // Tampilkan loading indicator
+          ? Center(child: CircularProgressIndicator())
           : FlutterMap(
               mapController: _mapController,
               options: MapOptions(
@@ -307,8 +297,7 @@ class _TransportationAreaState extends State<TransportationArea> {
           alignment: Alignment.bottomLeft,
           child: FloatingActionButton(
             onPressed: () => showSlider(context),
-            backgroundColor: const Color.fromARGB(
-                255, 59, 142, 110), // Panggil fungsi showSlider
+            backgroundColor: const Color.fromARGB(255, 59, 142, 110),
             child: const Icon(Icons.list),
           ),
         ),

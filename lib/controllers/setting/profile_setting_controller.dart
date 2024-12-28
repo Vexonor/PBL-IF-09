@@ -9,26 +9,29 @@ import 'package:trashify/services/account_service.dart';
 
 class ProfileSettingController {
   final AccountService service = AccountService();
-  final formKey = GlobalKey<FormState>();
-  final nameController = TextEditingController();
-  final emailController = TextEditingController();
-  final nikController = TextEditingController();
-  final numberController = TextEditingController();
-  final addressController = TextEditingController();
-  final birthDateController = TextEditingController();
-  final genderController = TextEditingController();
-  XFile? profilePicture; // Menyimpan file gambar
-  String? currentProfilePicture; // Pesan kesalahan untuk gambar
-  String? imageValidator; // Pesan kesalahan untuk gambar
-  String? selectedGender;
-  bool isProcessing = false;
-  bool imageValidatorError = false; // Status kesalahan gambar
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController nikController = TextEditingController();
+  final TextEditingController numberController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController birthDateController = TextEditingController();
+  final TextEditingController genderController = TextEditingController();
 
+  bool isProcessing = false;
+  bool imageValidatorError = false;
+  String? currentProfilePicture;
+  String? imageValidator;
+  String? selectedGender;
+  XFile? profilePicture;
+
+  // Fungsi untuk memilih gambar dari galeri
   Future<void> pickImage() async {
     final ImagePicker picker = ImagePicker();
     profilePicture = await picker.pickImage(source: ImageSource.gallery);
   }
 
+  // Fungsi untuk mengirim data pengguna ke server
   Future<void> submitData(BuildContext context, int userId) async {
     if (!formKey.currentState!.validate()) {
       return;
@@ -50,7 +53,6 @@ class ProfileSettingController {
       fileName = null;
     }
 
-    // Kirim data ke server
     final response = await service.updateUserData(
       userId.toString(),
       nameController.text,
@@ -60,8 +62,8 @@ class ProfileSettingController {
       addressController.text,
       birthDateController.text,
       selectedGender!,
-      imageBytes, // Mengirim file gambar sebagai bytes
-      fileName, // Mengirim nama file
+      imageBytes,
+      fileName,
     );
 
     try {
@@ -84,12 +86,11 @@ class ProfileSettingController {
             userPhoto: data['Foto_Profil'],
           );
         }
-        // Navigasi ke halaman utama setelah berhasil
         if (context.mounted) {
           showSnackBar(context, data['message'],
               Color.fromARGB(255, 59, 142, 110), 2000);
         }
-      } else if (response.statusCode == 404) {
+      } else if (response.statusCode == 404 || response.statusCode == 500) {
         final data = json.decode(response.body);
         if (context.mounted) {
           showSnackBar(context, data['message'],
@@ -100,14 +101,7 @@ class ProfileSettingController {
           showSnackBar(context, 'Ukuran gambar terlalu besar!',
               const Color.fromARGB(255, 181, 61, 62), 2000);
         }
-      } else if (response.statusCode == 500) {
-        final data = json.decode(response.body);
-        if (context.mounted) {
-          showSnackBar(context, data['message'],
-              const Color.fromARGB(255, 181, 61, 62), 2000);
-        }
       } else {
-        // Tampilkan pesan kesalahan
         if (context.mounted) {
           showSnackBar(context, 'Terjadi kesalahan, silakan coba lagi!',
               const Color.fromARGB(255, 181, 61, 62), 2000);
@@ -119,21 +113,20 @@ class ProfileSettingController {
             const Color.fromARGB(255, 181, 61, 62), 2000);
       }
     } finally {
-      isProcessing = false; // Set loading menjadi false
+      isProcessing = false;
     }
   }
 
+  // Fungsi untuk menampilkan snackbar dengan pesan
   void showSnackBar(
       BuildContext context, String message, Color color, int time) {
     final overlay = Overlay.of(context);
     final overlayEntry = OverlayEntry(
       builder: (context) {
-        // Mendapatkan tinggi keyboard
         final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
         return Positioned(
-          bottom: 20.0 +
-              keyboardHeight, // Jarak dari bawah ditambah tinggi keyboard
+          bottom: 20.0 + keyboardHeight,
           left: 0,
           right: 0,
           child: Center(

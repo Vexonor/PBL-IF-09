@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trashify/services/global_url.dart';
 
 class ComplaintService {
+  // Mengambil daftar pengaduan
   Future<http.Response> getComplaint() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
@@ -18,6 +19,7 @@ class ComplaintService {
     return response;
   }
 
+  // Mengambil detail pengaduan berdasarkan ID
   Future<http.Response> getDetailComplaint(String complaintId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
@@ -32,6 +34,7 @@ class ComplaintService {
     return response;
   }
 
+  // Mengambil data pengaduan untuk diedit berdasarkan ID
   Future<http.Response> getEditComplaint(String complaintId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
@@ -46,13 +49,15 @@ class ComplaintService {
     return response;
   }
 
+  // Menyimpan pengaduan baru
   Future<http.Response> storeComplaint(
-      String id,
-      String category,
-      String description,
-      String coordinatePoint,
-      List<Uint8List>? complaintImageList,
-      List<String>? fileNames) async {
+    String id,
+    String category,
+    String description,
+    String coordinatePoint,
+    List<Uint8List>? complaintImageList,
+    List<String>? fileNames,
+  ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
 
@@ -66,15 +71,15 @@ class ComplaintService {
       'Accept': 'application/json',
     });
 
+    request.fields['Deskripsi_Pengaduan'] = description;
     request.fields['ID_User'] = id;
     request.fields['Kategori_Pengaduan'] = category;
-    request.fields['Deskripsi_Pengaduan'] = description;
     request.fields['Titik_Koordinat'] = coordinatePoint;
 
     if (complaintImageList != null) {
       for (int i = 0; i < complaintImageList.length; i++) {
         request.files.add(http.MultipartFile.fromBytes(
-          'Gambar_Pengaduan[]', // Use array notation for multiple files
+          'Gambar_Pengaduan[]',
           complaintImageList[i],
           filename: fileNames![i],
         ));
@@ -86,13 +91,15 @@ class ComplaintService {
     });
   }
 
+  // Memperbarui pengaduan yang sudah ada
   Future<http.Response> updateComplaint(
-      String id,
-      String category,
-      String description,
-      String coordinatePoint,
-      List<Uint8List>? complaintImageList,
-      List<String>? fileNames) async {
+    String id,
+    String category,
+    String description,
+    String coordinatePoint,
+    List<Uint8List>? complaintImageList,
+    List<String>? fileNames,
+  ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
 
@@ -106,14 +113,14 @@ class ComplaintService {
       'Accept': 'application/json',
     });
 
-    request.fields['Kategori_Pengaduan'] = category;
     request.fields['Deskripsi_Pengaduan'] = description;
+    request.fields['Kategori_Pengaduan'] = category;
     request.fields['Titik_Koordinat'] = coordinatePoint;
 
     if (complaintImageList != null) {
       for (int i = 0; i < complaintImageList.length; i++) {
         request.files.add(http.MultipartFile.fromBytes(
-          'Gambar_Pengaduan[]', // Use array notation for multiple files
+          'Gambar_Pengaduan[]',
           complaintImageList[i],
           filename: fileNames![i],
         ));
@@ -125,6 +132,7 @@ class ComplaintService {
     });
   }
 
+  // Menghapus pengaduan berdasarkan ID
   Future<http.Response> destroyComplaint(String complaintId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');

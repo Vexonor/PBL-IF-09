@@ -1,8 +1,8 @@
-import 'package:trashify/controllers/education/education_content_controller.dart';
-import 'package:trashify/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:trashify/controllers/education/education_content_controller.dart';
+import 'package:trashify/providers/user_provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class EducationContent extends StatefulWidget {
@@ -27,18 +27,10 @@ class _EducationContentState extends State<EducationContent> {
         if (mounted) {
           setState(() {
             controller.isLoading = loading;
-
-            // Periksa apakah educationContent tidak null
             if (controller.educationContent != null) {
-              // Ambil URL dari educationContent
               String? videoUrl = controller.educationContent!['Link_URL'];
-
-              // Periksa apakah videoUrl tidak null sebelum konversi
               if (videoUrl != null) {
-                // Konversi URL ke ID
                 String? videoId = YoutubePlayer.convertUrlToId(videoUrl);
-
-                // Update YoutubePlayerController dengan ID video
                 _youtubeController = YoutubePlayerController(
                   initialVideoId: videoId ?? "",
                   flags: const YoutubePlayerFlags(
@@ -46,8 +38,8 @@ class _EducationContentState extends State<EducationContent> {
                     mute: false,
                   ),
                 );
-              } else {}
-            } else {}
+              }
+            }
           });
         }
       });
@@ -93,7 +85,7 @@ class _EducationContentState extends State<EducationContent> {
               _youtubeController?.pause();
               Navigator.pushNamedAndRemoveUntil(
                 context,
-                '/edukasi', // Ganti dengan nama route yang sesuai
+                '/edukasi',
                 (Route<dynamic> route) => route.isFirst,
               );
             },
@@ -127,21 +119,11 @@ class _EducationContentState extends State<EducationContent> {
                       if (controller.educationContent != null &&
                           controller.educationContent!['Jenis_Edukasi'] ==
                               'Video') ...[
-                        YoutubePlayerBuilder(
-                          player: YoutubePlayer(
-                            controller: _youtubeController!,
-                            showVideoProgressIndicator: true,
-                            onReady: () {
-                              _youtubeController!.addListener(() {});
-                            },
-                          ),
-                          builder: (context, player) {
-                            return Column(
-                              children: [
-                                player, // Menampilkan player
-                                const SizedBox(height: 10),
-                              ],
-                            );
+                        YoutubePlayer(
+                          controller: _youtubeController!,
+                          showVideoProgressIndicator: true,
+                          onReady: () {
+                            _youtubeController!.addListener(() {});
                           },
                         ),
                       ],
@@ -156,7 +138,6 @@ class _EducationContentState extends State<EducationContent> {
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      // Description section
                       if (controller.educationContent != null) ...[
                         if (controller.educationContent!['Jenis_Edukasi'] ==
                             'Video') ...[
@@ -188,7 +169,6 @@ class _EducationContentState extends State<EducationContent> {
                               textAlign: TextAlign.center,
                             ),
                           ],
-                          // Button to toggle description visibility
                           TextButton(
                             onPressed: () {
                               setState(() {
@@ -206,7 +186,6 @@ class _EducationContentState extends State<EducationContent> {
                             ),
                           ),
                         ] else ...[
-                          // Directly show for 'Artikel'
                           Text(
                             controller.name != null
                                 ? 'Diunggah oleh: ${controller.name}'
@@ -238,8 +217,7 @@ class _EducationContentState extends State<EducationContent> {
                       const SizedBox(height: 10),
                       Divider(thickness: 1, color: Colors.grey[300]),
                       const SizedBox(height: 10),
-                      if (!controller
-                          .commentsVisible) // Jika komentar tidak terlihat
+                      if (!controller.commentsVisible)
                         Align(
                           alignment: Alignment.center,
                           child: ElevatedButton(
@@ -248,8 +226,7 @@ class _EducationContentState extends State<EducationContent> {
                                 controller.commentsVisible =
                                     !controller.commentsVisible;
                                 if (!controller.commentsVisible) {
-                                  controller.currentPage =
-                                      0; // Reset halaman saat menyembunyikan komentar
+                                  controller.currentPage = 0;
                                 }
                               });
                             },
@@ -269,7 +246,6 @@ class _EducationContentState extends State<EducationContent> {
                             ),
                           ),
                         ),
-                      // Menampilkan form komentar jika komentar terlihat
                       if (controller.commentsVisible) ...[
                         Form(
                           key: controller.formKey,
@@ -349,7 +325,7 @@ class _EducationContentState extends State<EducationContent> {
                                   backgroundColor:
                                       const Color.fromARGB(255, 59, 142, 110),
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 20),
+                                      horizontal: 10, vertical: 15),
                                 ),
                                 child: controller.isProcessing
                                     ? SizedBox(
@@ -367,7 +343,7 @@ class _EducationContentState extends State<EducationContent> {
                                         children: [
                                           const Icon(
                                             Icons.send,
-                                            size: 10,
+                                            size: 20,
                                             color: Colors.white,
                                           ),
                                         ],
@@ -437,7 +413,6 @@ class _EducationContentState extends State<EducationContent> {
                                           ),
                                         ),
                                       ),
-                                      // Tombol titik tiga untuk menghapus komentar
                                       if (commentUserId == userId) ...[
                                         IconButton(
                                           icon: Icon(Icons.more_vert),
@@ -452,13 +427,11 @@ class _EducationContentState extends State<EducationContent> {
                                       ]
                                     ],
                                   ),
-                                  const SizedBox(
-                                      height: 10), // Jarak antar list
+                                  const SizedBox(height: 10),
                                 ],
                               );
                             },
                           ),
-                          // Tombol untuk melihat komentar selanjutnya
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -488,8 +461,7 @@ class _EducationContentState extends State<EducationContent> {
                           ),
                         ],
                       ],
-                      // Tombol untuk menyembunyikan komentar
-                      if (controller.commentsVisible) // Jika komentar terlihat
+                      if (controller.commentsVisible)
                         Align(
                           alignment: Alignment.center,
                           child: ElevatedButton(
@@ -498,8 +470,7 @@ class _EducationContentState extends State<EducationContent> {
                                 controller.commentsVisible =
                                     !controller.commentsVisible;
                                 if (!controller.commentsVisible) {
-                                  controller.currentPage =
-                                      0; // Reset halaman saat menyembunyikan komentar
+                                  controller.currentPage = 0;
                                 }
                               });
                             },

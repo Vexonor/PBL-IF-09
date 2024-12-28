@@ -1,1 +1,0 @@
-// buat test kode doang hehe

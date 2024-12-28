@@ -1,15 +1,14 @@
-import 'dart:convert'; // Untuk encoding dan decoding JSON
-import 'package:flutter/material.dart'; // Paket material Flutter untuk komponen UI
-import 'package:trashify/services/complaint_service.dart'; // Mengimpor layanan pengaduan
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:trashify/services/complaint_service.dart';
 
-// Kelas controller untuk mengelola detail pengaduan
 class ComplaintDetailController {
-  final ComplaintService service =
-      ComplaintService(); // Instance dari layanan pengaduan
-  Map<String, dynamic>? complaintDetails; // Menyimpan detail pengaduan
-  String? complaintId; // Menyimpan ID pengaduan
-  bool isLoading = true; // Status loading
+  final ComplaintService service = ComplaintService();
+
+  bool isLoading = true;
   bool isProcessing = false;
+  Map<String, dynamic>? complaintDetails;
+  String? complaintId;
 
   // Mengatur ID pengaduan
   void setcomplaintId(String id) {
@@ -18,19 +17,19 @@ class ComplaintDetailController {
 
   // Mengambil detail pengaduan dari layanan
   Future<void> fetchComplaintDetails(BuildContext context) async {
-    isLoading = true; // Set loading menjadi true
+    isLoading = true;
 
     try {
       if (complaintId != null) {
         final response = await service.getDetailComplaint(complaintId!);
         if (response.statusCode == 200) {
-          complaintDetails = json.decode(response.body); // Decode respons JSON
+          complaintDetails = json.decode(response.body);
         } else if (response.statusCode == 404) {
           final data = json.decode(response.body);
           if (context.mounted) {
             showSnackBar(context, data['message'],
                 const Color.fromARGB(255, 181, 61, 62), 2000);
-          } // Menangani error
+          }
         } else {
           if (context.mounted) {
             showSnackBar(
@@ -38,16 +37,16 @@ class ComplaintDetailController {
                 'Gagal memuat Detail Pengaduan, silakan coba lagi!',
                 const Color.fromARGB(255, 181, 61, 62),
                 2000);
-          } // Menangani error
+          }
         }
       }
     } catch (e) {
       if (context.mounted) {
         showSnackBar(context, 'Terjadi kesalahan, silakan coba lagi!',
             const Color.fromARGB(255, 181, 61, 62), 2000);
-      } // Menangani pengecualian
+      }
     } finally {
-      isLoading = false; // Set loading menjadi false
+      isLoading = false;
     }
   }
 
@@ -63,46 +62,39 @@ class ComplaintDetailController {
           if (context.mounted) {
             Navigator.pushNamedAndRemoveUntil(
               context,
-              '/pengaduan', // Ganti dengan nama route yang sesuai
-              (Route<dynamic> route) =>
-                  route.isFirst, // Hanya menyisakan halaman pertama di stack
+              '/pengaduan',
+              (Route<dynamic> route) => route.isFirst,
             );
           }
           if (context.mounted) {
             showSnackBar(context, data['message'],
                 Color.fromARGB(255, 59, 142, 110), 2000);
           }
-        } else if (response.statusCode == 403) {
+        } else if (response.statusCode == 403 || response.statusCode == 404) {
           final data = json.decode(response.body);
           if (context.mounted) {
             showSnackBar(context, data['message'],
                 const Color.fromARGB(255, 181, 61, 62), 2000);
-          } // Menangani error
-        } else if (response.statusCode == 404) {
-          final data = json.decode(response.body);
-          if (context.mounted) {
-            showSnackBar(context, data['message'],
-                const Color.fromARGB(255, 181, 61, 62), 2000);
-          } // Menangani error
+          }
         } else {
           if (context.mounted) {
             showSnackBar(context, 'Terjadi kesalahan, silakan coba lagi!',
                 const Color.fromARGB(255, 181, 61, 62), 2000);
-          } // Menangani error
+          }
         }
       } else {
         if (context.mounted) {
           showSnackBar(context, 'Terjadi kesalahan, silakan coba lagi!',
               const Color.fromARGB(255, 181, 61, 62), 2000);
-        } // Menangani kasus ID null
+        }
       }
     } catch (e) {
       if (context.mounted) {
         showSnackBar(context, 'Terjadi kesalahan, silakan coba lagi!',
             const Color.fromARGB(255, 181, 61, 62), 2000);
-      } // Menangani pengecualian
+      }
     } finally {
-      isProcessing = false; // Set loading menjadi false
+      isProcessing = false;
     }
   }
 
@@ -130,8 +122,7 @@ class ComplaintDetailController {
               onPressed: isProcessing
                   ? null
                   : () {
-                      Navigator.of(context)
-                          .pop(); // Tutup dialog saat dibatalkan
+                      Navigator.of(context).pop();
                     },
               child: Text(
                 'Batal',
@@ -142,7 +133,7 @@ class ComplaintDetailController {
               onPressed: isProcessing
                   ? null
                   : () {
-                      deleteComplaint(context); // Panggil fungsi hapus
+                      deleteComplaint(context);
                     },
               child: Text(
                 'Hapus',
@@ -157,17 +148,16 @@ class ComplaintDetailController {
     );
   }
 
+  // Menampilkan snackbar dengan pesan
   void showSnackBar(
       BuildContext context, String message, Color color, int time) {
     final overlay = Overlay.of(context);
     final overlayEntry = OverlayEntry(
       builder: (context) {
-        // Mendapatkan tinggi keyboard
         final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
         return Positioned(
-          bottom: 20.0 +
-              keyboardHeight, // Jarak dari bawah ditambah tinggi keyboard
+          bottom: 20.0 + keyboardHeight,
           left: 0,
           right: 0,
           child: Center(

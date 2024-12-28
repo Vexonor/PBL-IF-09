@@ -13,13 +13,12 @@ class ComplaintEdit extends StatefulWidget {
 
 class _ComplaintEditState extends State<ComplaintEdit> {
   final ComplaintEditController controller = ComplaintEditController();
-  bool isDataLoaded = false; // Tambahkan flag ini
+  bool isDataLoaded = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!isDataLoaded) {
-      // Cek apakah data sudah dimuat
       final args =
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       final complaintId = args['complaintId'];
@@ -27,7 +26,7 @@ class _ComplaintEditState extends State<ComplaintEdit> {
       controller.loadComplaintData(context, complaintId).then((_) {
         if (mounted) {
           setState(() {
-            isDataLoaded = true; // Set flag ke true setelah data dimuat
+            isDataLoaded = true;
           });
         }
       });
@@ -67,8 +66,8 @@ class _ComplaintEditState extends State<ComplaintEdit> {
           ],
         ),
       ),
-      body: controller.isLoading // Cek apakah sedang loading
-          ? Center(child: CircularProgressIndicator()) // Tampilkan loading
+      body: controller.isLoading
+          ? Center(child: CircularProgressIndicator())
           : Padding(
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
@@ -125,13 +124,12 @@ class _ComplaintEditState extends State<ComplaintEdit> {
                             : () =>
                                 controller.openMapToSelectCoordinate(context),
                         decoration: InputDecoration(
-                            border: const OutlineInputBorder(),
-                            hintText: 'Ketuk untuk memilih koordinat dari map',
-                            hintStyle:
-                                TextStyle(fontSize: 14, color: Colors.grey),
-                            suffixIcon: const SizedBox(
-                              child: Icon(Icons.map),
-                            )),
+                          border: const OutlineInputBorder(),
+                          hintText: 'Ketuk untuk memilih koordinat dari map',
+                          hintStyle:
+                              TextStyle(fontSize: 14, color: Colors.grey),
+                          suffixIcon: const Icon(Icons.map),
+                        ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Titik koordinat tidak boleh kosong';
@@ -153,10 +151,8 @@ class _ComplaintEditState extends State<ComplaintEdit> {
                                   await controller.selectImages(context);
                                   setState(() {});
                                 },
-                          icon: const Icon(
-                            Icons.file_upload,
-                            color: Colors.white,
-                          ),
+                          icon: const Icon(Icons.file_upload,
+                              color: Colors.white),
                           label: Text(
                             'Pilih Gambar',
                             style: GoogleFonts.poppins(
@@ -210,8 +206,8 @@ class _ComplaintEditState extends State<ComplaintEdit> {
                                   ),
                                 ],
                                 image: DecorationImage(
-                                  image: NetworkImage(
-                                      '$imageStorageUrl/$image'), // Pastikan ini adalah URL yang valid
+                                  image:
+                                      NetworkImage('$imageStorageUrl/$image'),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -222,7 +218,7 @@ class _ComplaintEditState extends State<ComplaintEdit> {
                       Center(
                         child: ElevatedButton(
                           onPressed: controller.isProcessing
-                              ? null // Nonaktifkan tombol jika isProcessing adalah true
+                              ? null
                               : () {
                                   controller.submitComplaint(context,
                                       (isProcessing) {
@@ -239,27 +235,17 @@ class _ComplaintEditState extends State<ComplaintEdit> {
                           ),
                           child: controller.isProcessing
                               ? SizedBox(
-                                  width:
-                                      24, // Set width for the CircularProgressIndicator
-                                  height:
-                                      24, // Set height for the CircularProgressIndicator
+                                  width: 24,
+                                  height: 24,
                                   child: CircularProgressIndicator(
-                                    color: Colors
-                                        .white, // Set the color of the progress indicator
-                                    strokeWidth: 2, // Set the stroke width
-                                  ),
+                                      color: Colors.white, strokeWidth: 2),
                                 )
                               : Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    const Icon(
-                                      Icons.send,
-                                      color: Colors.white,
-                                    ),
-                                    const SizedBox(
-                                        width:
-                                            8), // Add some spacing between icon and text
+                                    const Icon(Icons.send, color: Colors.white),
+                                    const SizedBox(width: 8),
                                     Text(
                                       'Kirim',
                                       style: GoogleFonts.poppins(
@@ -280,6 +266,7 @@ class _ComplaintEditState extends State<ComplaintEdit> {
     );
   }
 
+  // Fungsi untuk membangun input radio
   Widget _buildRadioInput(String title) {
     return RadioListTile<String>(
       value: title,
@@ -293,9 +280,7 @@ class _ComplaintEditState extends State<ComplaintEdit> {
             },
       title: Text(
         title,
-        style: TextStyle(
-          fontSize: 14,
-        ),
+        style: TextStyle(fontSize: 14),
       ),
     );
   }

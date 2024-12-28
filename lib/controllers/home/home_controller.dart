@@ -1,16 +1,18 @@
-import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:trashify/services/education_service.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:trashify/services/education_service.dart';
 
 class HomeController {
   final EducationService service = EducationService();
-  List<dynamic>? educationContent;
-  bool isLoading = false;
 
+  bool isLoading = false;
+  List<dynamic>? educationContent;
+
+  // Mengambil konten edukasi dari service
   Future<void> fetchEducationContent(
       BuildContext context, Function(bool) setLoading) async {
-    setLoading(true); // Start loading
+    setLoading(true); // Mulai loading
 
     try {
       final response = await service.getEducationContent();
@@ -18,7 +20,6 @@ class HomeController {
         if (context.mounted) {
           List<dynamic> allContent = json.decode(response.body);
 
-          // Filter konten berdasarkan Jenis_Edukasi dan Status_Edukasi
           List<dynamic> videoContent = allContent
               .where((item) =>
                   item['Jenis_Edukasi'] == 'Video' &&
@@ -30,7 +31,6 @@ class HomeController {
                   item['Status_Edukasi'] == 'Telah Diunggah')
               .toList();
 
-          // Sort and take the latest 10 for both types
           videoContent.sort((a, b) => DateTime.parse(b['created_at'])
               .compareTo(DateTime.parse(a['created_at'])));
           artikelContent.sort((a, b) => DateTime.parse(b['created_at'])
@@ -60,17 +60,16 @@ class HomeController {
     }
   }
 
+  // Menampilkan snackbar dengan pesan tertentu
   void showSnackBar(
       BuildContext context, String message, Color color, int time) {
     final overlay = Overlay.of(context);
     final overlayEntry = OverlayEntry(
       builder: (context) {
-        // Mendapatkan tinggi keyboard
         final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
         return Positioned(
-          bottom: 100.0 +
-              keyboardHeight, // Jarak dari bawah ditambah tinggi keyboard
+          bottom: 100.0 + keyboardHeight,
           left: 0,
           right: 0,
           child: Center(
@@ -79,9 +78,9 @@ class HomeController {
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
                 decoration: BoxDecoration(
-                  color: color,
-                  borderRadius: BorderRadius.circular(8.0),
                   border: Border.all(color: Colors.grey, width: 1.0),
+                  borderRadius: BorderRadius.circular(8.0),
+                  color: color,
                 ),
                 child: Text(
                   message,
@@ -100,12 +99,10 @@ class HomeController {
     });
   }
 
+  // Membangun card responsif untuk tampilan
   Widget buildResponsiveCard(BuildContext context, String rute, String image,
       String fitur, String description) {
-    // Mengambil tinggi layar
     double screenHeight = MediaQuery.of(context).size.height;
-
-    // Menetapkan tinggi card sebagai persentase dari tinggi layar
     double cardHeight = screenHeight * 0.23; // 20% dari tinggi layar
 
     return InkWell(
@@ -117,7 +114,7 @@ class HomeController {
           elevation: 5,
           color: Colors.white,
           child: Container(
-            height: cardHeight, // Menggunakan tinggi responsif
+            height: cardHeight,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -143,9 +140,9 @@ class HomeController {
                 Container(
                   padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    color: Colors.white, // Warna lingkaran
-                    shape: BoxShape.circle, // Bentuk lingkaran
-                    border: Border.all(color: Colors.grey), // Border abu-abu
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.grey),
                   ),
                   child: const Icon(
                     Icons.arrow_forward,
@@ -158,7 +155,7 @@ class HomeController {
           ),
         ),
         Positioned(
-          top: -30, // Menonjol keluar dari bagian atas kartu
+          top: -30,
           left: 0,
           right: 0,
           child: Center(

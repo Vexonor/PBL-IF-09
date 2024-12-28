@@ -12,15 +12,15 @@ class Complaint extends StatefulWidget {
 class _ComplaintState extends State<Complaint> {
   final ComplaintController controller = ComplaintController();
 
-  // State variables for sorting order
-  bool isUnresolvedAscending = false; // Default is descending (latest first)
-  bool isInProgressAscending = false; // Default is descending (latest first)
-  bool isCompletedAscending = false; // Default is descending (latest first)
+  bool isCompletedAscending = false; // Mengurutkan pengaduan yang sudah selesai
+  bool isInProgressAscending =
+      false; // Mengurutkan pengaduan yang sedang diproses
+  bool isUnresolvedAscending =
+      false; // Mengurutkan pengaduan yang belum selesai
 
   @override
   void initState() {
     super.initState();
-    // Memanggil fungsi untuk mendapatkan ID pengguna dan pengaduan
     controller.getCurrentUserId(context).then((_) {
       setState(() {}); // Memperbarui UI setelah memuat data
     });
@@ -59,14 +59,11 @@ class _ComplaintState extends State<Complaint> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(
-              Icons.notifications,
-              color: Colors.white,
-            ),
+            icon: const Icon(Icons.notifications, color: Colors.white),
             onPressed: () {
               Navigator.pushNamed(context, '/notifikasi');
             },
-          )
+          ),
         ],
       ),
       body: controller.isLoading
@@ -169,7 +166,7 @@ class _ComplaintState extends State<Complaint> {
                                   color: isInProgressAscending
                                       ? Color.fromARGB(255, 59, 142, 110)
                                       : Colors.black,
-                                ), // Adjust spacing between icons
+                                ),
                                 Icon(
                                   Icons.arrow_downward,
                                   color: !isInProgressAscending
@@ -294,7 +291,7 @@ class _ComplaintState extends State<Complaint> {
                   fontSize: 6,
                   color: Colors.white,
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -302,6 +299,7 @@ class _ComplaintState extends State<Complaint> {
     );
   }
 
+  // Fungsi untuk menampilkan item pengaduan
   Widget _complaintItem(
       int id, String category, String description, String coordinate) {
     return Container(

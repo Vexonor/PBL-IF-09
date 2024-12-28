@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trashify/services/global_url.dart';
 
 class AccountService {
+  // Fungsi untuk mendaftar akun baru
   Future<http.Response> register(
       String name, String email, String password) async {
     final response = await http.post(
@@ -22,15 +23,19 @@ class AccountService {
     return response;
   }
 
+  // Fungsi untuk verifikasi kode
   Future<http.Response> verification(String code) async {
-    final response = await http.post(Uri.parse('$apiUrl/verification'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({'code': code}));
+    final response = await http.post(
+      Uri.parse('$apiUrl/verification'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'code': code}),
+    );
     return response;
   }
 
+  // Fungsi untuk login ke akun
   Future<http.Response> login(String email, String password) async {
     final response = await http.post(
       Uri.parse('$apiUrl/masuk'),
@@ -46,15 +51,17 @@ class AccountService {
     return response;
   }
 
+  // Fungsi untuk menyimpan data pengguna
   Future<http.Response> saveUserData(
-      String id,
-      String nik,
-      String nomor,
-      String alamat,
-      String tanggalLahir,
-      String jenisKelamin,
-      Uint8List? fotoProfil,
-      String? fileName) async {
+    String id,
+    String nik,
+    String number,
+    String address,
+    String birthDate,
+    String gender,
+    Uint8List? profilePhoto,
+    String? fileName,
+  ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
 
@@ -68,39 +75,38 @@ class AccountService {
       'Accept': 'application/json',
     });
 
-    // Menambahkan field ke request
     request.fields['ID_User'] = id;
-    request.fields['No_Telp'] = nomor;
-    request.fields['Alamat'] = alamat;
-    request.fields['Tanggal_Lahir'] = tanggalLahir;
-    request.fields['Jenis_Kelamin'] = jenisKelamin;
+    request.fields['Alamat'] = address;
+    request.fields['Jenis_Kelamin'] = gender;
     request.fields['Nik'] = nik;
+    request.fields['No_Telp'] = number;
+    request.fields['Tanggal_Lahir'] = birthDate;
 
-    // Menambahkan file gambar jika ada
-    if (fotoProfil != null) {
+    if (profilePhoto != null) {
       request.files.add(http.MultipartFile.fromBytes(
         'Foto_Profil',
-        fotoProfil,
+        profilePhoto,
         filename: fileName ?? 'image.jpg',
       ));
     }
 
-    // Mengirim request
     var response = await request.send();
     return await http.Response.fromStream(response);
   }
 
+  // Fungsi untuk memperbarui data pengguna
   Future<http.Response> updateUserData(
-      String id,
-      String nama,
-      String email,
-      String nik,
-      String nomor,
-      String alamat,
-      String tanggalLahir,
-      String jenisKelamin,
-      Uint8List? fotoProfil,
-      String? fileName) async {
+    String id,
+    String nama,
+    String email,
+    String nik,
+    String number,
+    String address,
+    String birthDate,
+    String gender,
+    Uint8List? profilePhoto,
+    String? fileName,
+  ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
 
@@ -114,29 +120,27 @@ class AccountService {
       'Accept': 'application/json',
     });
 
-    // Menambahkan field ke request
+    request.fields['Alamat'] = address;
+    request.fields['Jenis_Kelamin'] = gender;
+    request.fields['Nik'] = nik;
+    request.fields['No_Telp'] = number;
+    request.fields['Tanggal_Lahir'] = birthDate;
     request.fields['Nama'] = nama;
     request.fields['email'] = email;
-    request.fields['No_Telp'] = nomor;
-    request.fields['Alamat'] = alamat;
-    request.fields['Tanggal_Lahir'] = tanggalLahir;
-    request.fields['Jenis_Kelamin'] = jenisKelamin;
-    request.fields['Nik'] = nik;
 
-    // Menambahkan file gambar jika ada
-    if (fotoProfil != null) {
+    if (profilePhoto != null) {
       request.files.add(http.MultipartFile.fromBytes(
         'Foto_Profil',
-        fotoProfil,
+        profilePhoto,
         filename: fileName ?? 'image.jpg',
       ));
     }
 
-    // Mengirim request
     var response = await request.send();
     return await http.Response.fromStream(response);
   }
 
+  // Fungsi untuk memperbarui kata sandi pengguna
   Future<http.Response> updateUserPassword(
     String id,
     String oldPassword,
@@ -155,11 +159,9 @@ class AccountService {
       'Accept': 'application/json',
     });
 
-    // Menambahkan field ke request
     request.fields['Kata_Sandi_Lama'] = oldPassword;
     request.fields['Kata_Sandi_Baru'] = newPassword;
 
-    // Mengirim request
     var response = await request.send();
     return await http.Response.fromStream(response);
   }

@@ -5,11 +5,13 @@ import 'package:trashify/services/transportation_information_service.dart';
 class TransportationAreaController {
   final TransportationInformationService service =
       TransportationInformationService();
+
   bool isLoading = true;
-  String? workArea;
   String? name;
   String? number;
+  String? workArea;
 
+  // Mengambil informasi pekerja berdasarkan ID
   Future<void> fetchWorkerInformation(
       BuildContext context, Function updateState, String idPetugas) async {
     updateState(() {
@@ -21,24 +23,16 @@ class TransportationAreaController {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        // Misalkan Anda ingin menyimpan data ini ke dalam variabel
         workArea = data['Wilayah_Bertugas'];
         name = data['Nama'];
         number = data['No_Telp'];
-        // Lakukan sesuatu dengan data ini, misalnya menyimpannya ke dalam state
         updateState(() {});
-      } else if (response.statusCode == 403) {
+      } else if (response.statusCode == 403 || response.statusCode == 404) {
         final data = json.decode(response.body);
         if (context.mounted) {
           showSnackBar(context, data['message'],
               const Color.fromARGB(255, 181, 61, 62), 2000);
-        } // Menangani error
-      } else if (response.statusCode == 404) {
-        final data = json.decode(response.body);
-        if (context.mounted) {
-          showSnackBar(context, data['message'],
-              const Color.fromARGB(255, 181, 61, 62), 2000);
-        } // Menangani error
+        }
       } else {
         if (context.mounted) {
           showSnackBar(context, 'Terjadi kesalahan, silakan coba lagi!',
@@ -57,17 +51,16 @@ class TransportationAreaController {
     }
   }
 
+  // Menampilkan snackbar dengan pesan tertentu
   void showSnackBar(
       BuildContext context, String message, Color color, int time) {
     final overlay = Overlay.of(context);
     final overlayEntry = OverlayEntry(
       builder: (context) {
-        // Mendapatkan tinggi keyboard
         final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
         return Positioned(
-          bottom: 20.0 +
-              keyboardHeight, // Jarak dari bawah ditambah tinggi keyboard
+          bottom: 20.0 + keyboardHeight,
           left: 0,
           right: 0,
           child: Center(
@@ -97,8 +90,8 @@ class TransportationAreaController {
     });
   }
 
+  // Membersihkan nomor telepon dengan menghapus karakter yang tidak diperlukan
   String cleanPhoneNumber(String number) {
-    return number.replaceAll(
-        RegExp(r'[^0-9+]'), ''); // Menghapus semua karakter kecuali angka dan +
+    return number.replaceAll(RegExp(r'[^0-9+]'), '');
   }
 }

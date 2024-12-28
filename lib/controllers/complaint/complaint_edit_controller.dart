@@ -1,4 +1,3 @@
-// complaint_edit_controller.dart
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -9,22 +8,22 @@ import 'package:trashify/services/complaint_service.dart';
 
 class ComplaintEditController {
   final ComplaintService service = ComplaintService();
+  final ImagePicker picker = ImagePicker();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController complaintDescriptionController =
       TextEditingController();
   final TextEditingController coordinateController = TextEditingController();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final ImagePicker picker = ImagePicker();
-  String? complaintId;
-  Map<String, dynamic>? editedComplaint;
-  LatLng? selectedCoordinate;
-  List<XFile>? selectedImages = [];
-  List<String>? imageUrl = [];
-  String? complaintCategory;
+
   bool _isLoading = false;
   bool _isProcessing = false;
-
   bool get isLoading => _isLoading;
   bool get isProcessing => _isProcessing;
+  LatLng? selectedCoordinate;
+  List<String>? imageUrl = [];
+  List<XFile>? selectedImages = [];
+  Map<String, dynamic>? editedComplaint;
+  String? complaintCategory;
+  String? complaintId;
 
   void setLoading(bool value) {
     _isLoading = value;
@@ -34,32 +33,25 @@ class ComplaintEditController {
     _isProcessing = value;
   }
 
+  // Mengambil data pengaduan untuk diedit
   Future<Map<String, dynamic>?> fetchComplaintEditData(
       BuildContext context) async {
-    setLoading(true); // Set loading to true
-
+    setLoading(true);
     try {
       if (complaintId != null) {
         final response = await service.getEditComplaint(complaintId!);
-        print(response.statusCode);
-        print(response.body);
         if (response.statusCode == 200) {
           return json.decode(response.body);
-        } else if (response.statusCode == 403) {
-          final data = json.decode(response.body);
-          if (context.mounted) {
-            showSnackBar(context, data['message'],
-                const Color.fromARGB(255, 181, 61, 62), 2000);
-          }
-        } else if (response.statusCode == 404) {
+        } else if (response.statusCode == 403 || response.statusCode == 404) {
           final data = json.decode(response.body);
           if (context.mounted) {
             showSnackBar(context, data['message'],
                 const Color.fromARGB(255, 181, 61, 62), 2000);
           }
         } else {
+          final data = json.decode(response.body);
           if (context.mounted) {
-            showSnackBar(context, 'Terjadi kesalahan, silakan coba lagi!',
+            showSnackBar(context, data['message'],
                 const Color.fromARGB(255, 181, 61, 62), 2000);
           }
         }
@@ -73,20 +65,21 @@ class ComplaintEditController {
       if (context.mounted) {
         showSnackBar(context, 'Terjadi kesalahan, silakan coba lagi!',
             const Color.fromARGB(255, 181, 61, 62), 2000);
-      } // Menangani kesalahan umum
+      }
     } finally {
-      setLoading(false); // Set loading menjadi false setelah selesai
+      setLoading(false);
     }
     return null;
   }
 
+  // Memuat data pengaduan berdasarkan ID
   Future<void> loadComplaintData(
       BuildContext context, String complaintId) async {
     this.complaintId = complaintId;
     try {
       final fetchedData = await fetchComplaintEditData(context);
       if (fetchedData != null) {
-        editedComplaint = fetchedData; // Assign to the non-final variable
+        editedComplaint = fetchedData;
         complaintCategory = editedComplaint!['Kategori_Pengaduan'];
         complaintDescriptionController.text =
             editedComplaint!['Deskripsi_Pengaduan'];
@@ -111,11 +104,11 @@ class ComplaintEditController {
     }
   }
 
+  // Membuka peta untuk memilih koordinat
   Future<void> openMapToSelectCoordinate(BuildContext context) async {
     LatLng? initialCoordinate;
-
     if (selectedCoordinate != null) {
-      initialCoordinate = selectedCoordinate; // Pass if it exists
+      initialCoordinate = selectedCoordinate;
     }
 
     final LatLng? result = await Navigator.push(
@@ -132,6 +125,7 @@ class ComplaintEditController {
     }
   }
 
+  // Memilih gambar dari galeri
   Future<void> selectImages(BuildContext context) async {
     final List<XFile>? images = await picker.pickMultiImage();
     if (images != null) {
@@ -139,12 +133,13 @@ class ComplaintEditController {
     }
   }
 
+  // Mengirim pengaduan yang telah diedit
   Future<void> submitComplaint(
       BuildContext context, Function(bool) setProcessing) async {
     if (!formKey.currentState!.validate()) {
       return;
     } else {
-      setProcessing(true); // Set processing to true
+      setProcessing(true);
       List<Uint8List>? imageBytesList = [];
       List<String>? fileNames = [];
 
@@ -172,14 +167,14 @@ class ComplaintEditController {
         fileNames,
       );
 
-      setProcessing(false); // Set processing to false
+      setProcessing(false);
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         if (context.mounted) {
           Navigator.pushNamedAndRemoveUntil(
             context,
-            '/detail_pengaduan', // Ganti dengan nama route yang sesuai
+            '/detail_pengaduan',
             (Route<dynamic> route) =>
                 route.isFirst || route.settings.name == '/pengaduan',
             arguments: {
@@ -191,38 +186,26 @@ class ComplaintEditController {
           showSnackBar(context, data['message'],
               Color.fromARGB(255, 59, 142, 110), 2000);
         }
-      } else if (response.statusCode == 403) {
-        final data = json.decode(response.body);
-        if (context.mounted) {
-          showSnackBar(context, data['message'],
-              const Color.fromARGB(255, 181, 61, 62), 2000);
-        } // Menangani error
-      } else if (response.statusCode == 404) {
-        final data = json.decode(response.body);
-        if (context.mounted) {
-          showSnackBar(context, data['message'],
-              const Color.fromARGB(255, 181, 61, 62), 2000);
-        } // Menangani error
       } else {
+        final data = json.decode(response.body);
         if (context.mounted) {
-          showSnackBar(context, 'Terjadi kesalahan, silakan coba lagi!',
+          showSnackBar(context, data['message'],
               const Color.fromARGB(255, 181, 61, 62), 2000);
         }
       }
     }
   }
 
+  // Menampilkan snackbar dengan pesan
   void showSnackBar(
       BuildContext context, String message, Color color, int time) {
     final overlay = Overlay.of(context);
     final overlayEntry = OverlayEntry(
       builder: (context) {
-        // Mendapatkan tinggi keyboard
         final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
         return Positioned(
-          bottom: 20.0 +
-              keyboardHeight, // Jarak dari bawah ditambah tinggi keyboard
+          bottom: 20.0 + keyboardHeight,
           left: 0,
           right: 0,
           child: Center(

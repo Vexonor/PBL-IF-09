@@ -9,10 +9,6 @@ class NotificationCenter extends StatefulWidget {
 }
 
 class _NotificationCenterState extends State<NotificationCenter> {
-  Icon inbox = const Icon(
-    Icons.archive,
-    size: 25,
-  );
   Icon approved = const Icon(
     Icons.check,
     size: 25,
@@ -22,6 +18,10 @@ class _NotificationCenterState extends State<NotificationCenter> {
     Icons.close,
     size: 25,
     color: Color.fromARGB(255, 241, 89, 80),
+  );
+  Icon inbox = const Icon(
+    Icons.archive,
+    size: 25,
   );
 
   @override
@@ -58,46 +58,51 @@ class _NotificationCenterState extends State<NotificationCenter> {
       body: ListView(
         children: <Widget>[
           Expanded(
-              child: Container(
-            width: double.infinity,
-            margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-            child: Column(
-              children: <Widget>[
-                InkWell(
-                  onTap: () {},
-                  child: buildCard(
+            child: Container(
+              width: double.infinity,
+              margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              child: Column(
+                children: <Widget>[
+                  InkWell(
+                    onTap: () {},
+                    child: buildCard(
                       jenis: "Aduan Masuk",
                       description:
                           "Ada tempat sampah liar baru di samping lapangan sepak bola di Jl. Raja Ali Haji. Sampah semakin menumpuk dan berserakan sampai ke jalan, serta kondisinya mulai menimbulkan bau tidak sedap. Mohon segera ditindaklanjuti sebelum semakin parah.",
                       tanggal: "9 April, 2024 Pukul 08.00",
-                      icon: inbox),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: buildCard(
+                      icon: inbox,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: buildCard(
                       jenis: "Aduan Diterima",
                       description:
                           "Ada tempat sampah liar baru di samping lapangan sepak bola di Jl. Raja Ali Haji. Sampah semakin menumpuk dan berserakan sampai ke jalan, serta kondisinya mulai menimbulkan bau tidak sedap. Mohon segera ditindaklanjuti sebelum semakin parah.",
                       tanggal: "9 April, 2024 Pukul 08.00",
-                      icon: approved),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: buildCard(
+                      icon: approved,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: buildCard(
                       jenis: "Aduan Ditolak",
                       description:
                           "Ada tempat sampah liar baru di samping lapangan sepak bola di Jl. Raja Ali Haji. Sampah semakin menumpuk dan berserakan sampai ke jalan, serta kondisinya mulai menimbulkan bau tidak sedap. Mohon segera ditindaklanjuti sebelum semakin parah.",
                       tanggal: "9 April, 2024 Pukul 08.00",
-                      icon: declined),
-                ),
-              ],
+                      icon: declined,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ))
+          ),
         ],
       ),
     );
   }
 
+  // Fungsi untuk membangun kartu notifikasi
   Widget buildCard({
     required String jenis,
     required String description,
@@ -119,11 +124,12 @@ class _NotificationCenterState extends State<NotificationCenter> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Title(
-                    color: Colors.black,
-                    child: Text(
-                      jenis,
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    )),
+                  color: Colors.black,
+                  child: Text(
+                    jenis,
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ),
                 Container(
                   width: 250,
                   padding: const EdgeInsets.only(top: 5),
@@ -153,7 +159,7 @@ class _NotificationCenterState extends State<NotificationCenter> {
               ],
             ),
             const Padding(padding: EdgeInsets.all(5)),
-            icon
+            icon,
           ],
         ),
       ),

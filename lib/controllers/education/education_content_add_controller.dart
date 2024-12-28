@@ -1,31 +1,35 @@
-import 'dart:convert'; // For JSON conversion
-import 'package:trashify/services/education_service.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // For Flutter widgets
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trashify/services/education_service.dart';
 
 class EducationContentAddController {
   final EducationService service = EducationService();
-  final videoUrlController = TextEditingController();
-  final titleController = TextEditingController();
-  final descriptionController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController videoUrlController = TextEditingController();
+
   bool isProcessing = false;
-  String contentType = 'Artikel';
   int? userId;
+  String contentType = 'Artikel';
 
   EducationContentAddController() {
     init();
   }
 
+  // Inisialisasi untuk mendapatkan ID pengguna saat ini
   Future<void> init() async {
     await _getCurrentUserId();
   }
 
+  // Mengambil ID pengguna dari SharedPreferences
   Future<void> _getCurrentUserId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userId = prefs.getInt('userId');
   }
 
+  // Mengirim konten edukasi
   Future<void> submitEducationContent(BuildContext context) async {
     if (!formKey.currentState!.validate()) {
       return;
@@ -35,7 +39,6 @@ class EducationContentAddController {
       String videoUrl =
           contentType == 'Artikel' ? 'null' : videoUrlController.text;
 
-      // Mengirim pengaduan
       final response = await service.storeEducationContent(
         userId!.toString(),
         titleController.text,
@@ -52,7 +55,7 @@ class EducationContentAddController {
                 Color.fromARGB(255, 59, 142, 110), 2000);
             Navigator.pushNamedAndRemoveUntil(
               context,
-              '/galeri_konten_edukasi', // Ganti dengan nama route yang sesuai
+              '/galeri_konten_edukasi',
               (Route<dynamic> route) =>
                   route.isFirst || route.settings.name == '/edukasi',
             );
@@ -73,25 +76,24 @@ class EducationContentAddController {
         if (context.mounted) {
           showSnackBar(context, 'Terjadi kesalahan, silakan coba lagi!',
               const Color.fromARGB(255, 181, 61, 62), 2000);
-        } // Menangani pengecualian
+        }
       } finally {
-        isProcessing = false; // Set loading menjadi false
+        isProcessing = false;
         (context as Element).markNeedsBuild();
       }
     }
   }
 
+  // Menampilkan snackbar dengan pesan tertentu
   void showSnackBar(
       BuildContext context, String message, Color color, int time) {
     final overlay = Overlay.of(context);
     final overlayEntry = OverlayEntry(
       builder: (context) {
-        // Mendapatkan tinggi keyboard
         final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
         return Positioned(
-          bottom: 10.0 +
-              keyboardHeight, // Jarak dari bawah ditambah tinggi keyboard
+          bottom: 10.0 + keyboardHeight,
           left: 0,
           right: 0,
           child: Center(

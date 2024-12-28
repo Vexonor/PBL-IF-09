@@ -1,8 +1,9 @@
-import 'package:trashify/services/global_url.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trashify/services/global_url.dart';
 
 class CommentService {
+  // Mengambil semua komentar
   Future<http.Response> getComment() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
@@ -17,6 +18,7 @@ class CommentService {
     return response;
   }
 
+  // Menampilkan komentar berdasarkan ID pendidikan
   Future<http.Response> showComment(int educationId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
@@ -31,6 +33,7 @@ class CommentService {
     return response;
   }
 
+  // Menyimpan komentar baru
   Future<http.Response> storeComment(
     String educationId,
     String userId,
@@ -58,6 +61,7 @@ class CommentService {
     });
   }
 
+  // Menghapus komentar berdasarkan indeks
   Future<http.Response> destroyComment(int index) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');

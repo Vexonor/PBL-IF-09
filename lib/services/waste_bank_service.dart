@@ -3,7 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trashify/services/global_url.dart';
 
 class WasteBankService {
-  Future<http.Response> getWasteBank(jenisSampah) async {
+  // Mengambil data bank sampah berdasarkan jenis sampah
+  Future<http.Response> getWasteBank(String jenisSampah) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
 

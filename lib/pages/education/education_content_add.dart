@@ -1,6 +1,6 @@
-import 'package:trashify/controllers/education/education_content_add_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:trashify/controllers/education/education_content_add_controller.dart';
 
 class EducationContentAdd extends StatefulWidget {
   const EducationContentAdd({super.key});
@@ -15,9 +15,9 @@ class _EducationContentAddState extends State<EducationContentAdd> {
 
   @override
   void dispose() {
-    controller.videoUrlController.dispose();
-    controller.titleController.dispose();
     controller.descriptionController.dispose();
+    controller.titleController.dispose();
+    controller.videoUrlController.dispose();
     super.dispose();
   }
 
@@ -138,6 +138,7 @@ class _EducationContentAddState extends State<EducationContentAdd> {
     );
   }
 
+  // Fungsi untuk membangun form artikel
   Widget _buildArticleForm() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,9 +148,10 @@ class _EducationContentAddState extends State<EducationContentAdd> {
           controller: controller.titleController,
           textInputAction: TextInputAction.next,
           decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Masukkan judul konten...',
-              hintStyle: TextStyle(fontSize: 14)),
+            border: OutlineInputBorder(),
+            hintText: 'Masukkan judul konten...',
+            hintStyle: TextStyle(fontSize: 14),
+          ),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Judul konten tidak boleh kosong';
@@ -164,9 +166,10 @@ class _EducationContentAddState extends State<EducationContentAdd> {
           textInputAction: TextInputAction.next,
           maxLines: 4,
           decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Masukkan isi konten...',
-              hintStyle: TextStyle(fontSize: 14)),
+            border: OutlineInputBorder(),
+            hintText: 'Masukkan isi konten...',
+            hintStyle: TextStyle(fontSize: 14),
+          ),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Isi konten tidak boleh kosong';
@@ -179,6 +182,7 @@ class _EducationContentAddState extends State<EducationContentAdd> {
     );
   }
 
+  // Fungsi untuk membangun form video
   Widget _buildVideoForm() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,9 +192,10 @@ class _EducationContentAddState extends State<EducationContentAdd> {
           controller: controller.videoUrlController,
           textInputAction: TextInputAction.next,
           decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Masukkan link video...',
-              hintStyle: TextStyle(fontSize: 14)),
+            border: OutlineInputBorder(),
+            hintText: 'Masukkan link video...',
+            hintStyle: TextStyle(fontSize: 14),
+          ),
           validator: (value) {
             if (controller.contentType == 'Video' &&
                 (value == null || value.isEmpty)) {
@@ -211,9 +216,10 @@ class _EducationContentAddState extends State<EducationContentAdd> {
           controller: controller.titleController,
           textInputAction: TextInputAction.next,
           decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Masukkan judul video...',
-              hintStyle: TextStyle(fontSize: 14)),
+            border: OutlineInputBorder(),
+            hintText: 'Masukkan judul video...',
+            hintStyle: TextStyle(fontSize: 14),
+          ),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Judul video tidak boleh kosong';
@@ -227,9 +233,10 @@ class _EducationContentAddState extends State<EducationContentAdd> {
           controller: controller.descriptionController,
           maxLines: 5,
           decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Masukkan deskripsi video...',
-              hintStyle: TextStyle(fontSize: 14)),
+            border: OutlineInputBorder(),
+            hintText: 'Masukkan deskripsi video...',
+            hintStyle: TextStyle(fontSize: 14),
+          ),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Deskripsi video tidak boleh kosong';

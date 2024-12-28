@@ -9,32 +9,36 @@ import 'package:trashify/services/complaint_service.dart';
 
 class ComplaintAddController {
   final ComplaintService service = ComplaintService();
+  final ImagePicker picker = ImagePicker();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController complaintDescriptionController =
       TextEditingController();
   final TextEditingController coordinateController = TextEditingController();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final ImagePicker picker = ImagePicker();
+
   bool imageValidatorError = false;
   bool isProcessing = false;
   int? userId;
   LatLng? selectedCoordinate;
+  List<XFile>? selectedImages = [];
   String? complaintCategory = 'Pengangkutan Sampah';
   String? imageValidator;
-  List<XFile>? selectedImages = [];
 
   ComplaintAddController() {
     init();
   }
 
+  // Inisialisasi untuk mendapatkan ID pengguna saat ini
   Future<void> init() async {
     await _getCurrentUserId();
   }
 
+  // Mendapatkan ID pengguna dari SharedPreferences
   Future<void> _getCurrentUserId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userId = prefs.getInt('userId');
   }
 
+  // Membuka peta untuk memilih koordinat
   Future<void> openMapToSelectCoordinate(BuildContext context) async {
     LatLng? initialCoordinate;
 
@@ -56,6 +60,7 @@ class ComplaintAddController {
     }
   }
 
+  // Memilih gambar dari galeri
   Future<void> selectImages(BuildContext context) async {
     final List<XFile>? images = await picker.pickMultiImage();
     if (images != null) {
@@ -63,6 +68,7 @@ class ComplaintAddController {
     }
   }
 
+  // Validasi form sebelum pengiriman
   bool validateForm() {
     bool isValid = formKey.currentState!.validate();
     if (selectedImages!.isEmpty) {
@@ -73,6 +79,7 @@ class ComplaintAddController {
     return isValid;
   }
 
+  // Mengirim pengaduan
   Future<void> submitComplaint(BuildContext context) async {
     if (!formKey.currentState!.validate()) {
       return;
@@ -134,6 +141,7 @@ class ComplaintAddController {
     }
   }
 
+  // Menampilkan snackbar dengan pesan
   void showSnackBar(
       BuildContext context, String message, Color color, int time) {
     final overlay = Overlay.of(context);

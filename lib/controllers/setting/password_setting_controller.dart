@@ -4,15 +4,18 @@ import 'package:trashify/services/account_service.dart';
 
 class PasswordSettingController {
   final AccountService service = AccountService();
-  final formKey = GlobalKey<FormState>();
-  final oldPasswordController = TextEditingController();
-  final newPasswordController = TextEditingController();
-  final newConfirmationPasswordController = TextEditingController();
-  bool isProcessing = false;
-  bool isOldPasswordVisible = false;
-  bool isNewPasswordVisible = false;
-  bool isNewConfirmationPasswordVisible = false;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController oldPasswordController = TextEditingController();
+  final TextEditingController newPasswordController = TextEditingController();
+  final TextEditingController newConfirmationPasswordController =
+      TextEditingController();
 
+  bool isNewConfirmationPasswordVisible = false;
+  bool isNewPasswordVisible = false;
+  bool isOldPasswordVisible = false;
+  bool isProcessing = false;
+
+  // Mengirim data untuk memperbarui password pengguna
   Future<void> submitData(BuildContext context, int userId) async {
     if (!formKey.currentState!.validate()) {
       return;
@@ -20,7 +23,6 @@ class PasswordSettingController {
 
     isProcessing = true;
 
-    // Kirim data ke server
     final response = await service.updateUserPassword(
       userId.toString(),
       oldPasswordController.text,
@@ -30,33 +32,22 @@ class PasswordSettingController {
     try {
       if (response.statusCode == 201) {
         final data = json.decode(response.body);
-        // Navigasi ke halaman utama setelah berhasil
         if (context.mounted) {
           showSnackBar(context, data['message'],
               Color.fromARGB(255, 59, 142, 110), 2000);
         }
-      } else if (response.statusCode == 403) {
-        final data = json.decode(response.body);
-        if (context.mounted) {
-          showSnackBar(context, data['message'],
-              const Color.fromARGB(255, 181, 61, 62), 2000);
-        }
-      } else if (response.statusCode == 404) {
-        final data = json.decode(response.body);
-        if (context.mounted) {
-          showSnackBar(context, data['message'],
-              const Color.fromARGB(255, 181, 61, 62), 2000);
-        }
-      } else if (response.statusCode == 500) {
+      } else if (response.statusCode == 403 ||
+          response.statusCode == 404 ||
+          response.statusCode == 500) {
         final data = json.decode(response.body);
         if (context.mounted) {
           showSnackBar(context, data['message'],
               const Color.fromARGB(255, 181, 61, 62), 2000);
         }
       } else {
-        // Tampilkan pesan kesalahan
+        final data = json.decode(response.body);
         if (context.mounted) {
-          showSnackBar(context, 'Terjadi kesalahan, silakan coba lagi!',
+          showSnackBar(context, data['message'],
               const Color.fromARGB(255, 181, 61, 62), 2000);
         }
       }
@@ -66,21 +57,20 @@ class PasswordSettingController {
             const Color.fromARGB(255, 181, 61, 62), 2000);
       }
     } finally {
-      isProcessing = false; // Set loading menjadi false
+      isProcessing = false;
     }
   }
 
+  // Menampilkan snackbar dengan pesan tertentu
   void showSnackBar(
       BuildContext context, String message, Color color, int time) {
     final overlay = Overlay.of(context);
     final overlayEntry = OverlayEntry(
       builder: (context) {
-        // Mendapatkan tinggi keyboard
         final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
         return Positioned(
-          bottom: MediaQuery.of(context).size.height / 3.5 +
-              keyboardHeight, // Jarak dari bawah ditambah tinggi keyboard
+          bottom: MediaQuery.of(context).size.height / 3.5 + keyboardHeight,
           left: 0,
           right: 0,
           child: Center(

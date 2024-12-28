@@ -8,7 +8,7 @@ import 'package:trashify/pages/settings/general_setting.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class SelectCoordinate extends StatefulWidget {
-  final LatLng? initialCoordinate; // Optional parameter
+  final LatLng? initialCoordinate; // Parameter opsional
 
   const SelectCoordinate({super.key, this.initialCoordinate});
 
@@ -17,12 +17,13 @@ class SelectCoordinate extends StatefulWidget {
 }
 
 class _SelectCoordinateState extends State<SelectCoordinate> {
-  LatLng? _selectedCoordinate;
-  LatLng? _currentLocation;
   final LatLng _startCoordinate = const LatLng(1.0828, 104.0305);
   final MapController _mapController = MapController();
-  StreamSubscription<Position>? _positionStream; // Updated type
+
   bool _hasLocationPermission = false;
+  LatLng? _currentLocation;
+  LatLng? _selectedCoordinate;
+  StreamSubscription<Position>? _positionStream;
 
   @override
   void initState() {
@@ -33,10 +34,11 @@ class _SelectCoordinateState extends State<SelectCoordinate> {
 
   @override
   void dispose() {
-    _positionStream?.cancel(); // Stop listening to location updates
+    _positionStream?.cancel();
     super.dispose();
   }
 
+  // Mendengarkan perubahan lokasi
   void _listenToLocationChanges() {
     _positionStream = Geolocator.getPositionStream(
       locationSettings: LocationSettings(
@@ -47,12 +49,10 @@ class _SelectCoordinateState extends State<SelectCoordinate> {
       (Position position) {
         setState(() {
           _currentLocation = LatLng(position.latitude, position.longitude);
-          // Move the map to the user's location
           _mapController.move(_currentLocation!, 18);
         });
       },
       onError: (error) {
-        // Tampilkan SnackBar dengan tombol untuk membuka pengaturan
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -71,7 +71,6 @@ class _SelectCoordinateState extends State<SelectCoordinate> {
             ),
           );
         }
-        // Atur peta ke initialCoordinate jika terjadi kesalahan
         setState(() {
           _currentLocation = widget.initialCoordinate ?? _startCoordinate;
           _mapController.move(_currentLocation!, 18);
@@ -80,6 +79,7 @@ class _SelectCoordinateState extends State<SelectCoordinate> {
     );
   }
 
+  // Mendapatkan lokasi saat ini
   Future<void> _getCurrentLocation() async {
     try {
       LocationPermission permission = await Geolocator.checkPermission();
@@ -88,14 +88,12 @@ class _SelectCoordinateState extends State<SelectCoordinate> {
       }
 
       if (permission == LocationPermission.denied) {
-        // Jika izin ditolak, atur peta ke initialCoordinate
         setState(() {
           _currentLocation = widget.initialCoordinate ?? _startCoordinate;
           _mapController.move(_currentLocation!, 18);
-          _hasLocationPermission = false; // Izin tidak diberikan
+          _hasLocationPermission = false;
         });
 
-        // Tampilkan SnackBar dengan tombol untuk membuka pengaturan
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -114,12 +112,12 @@ class _SelectCoordinateState extends State<SelectCoordinate> {
             ),
           );
         }
-        return; // Keluar dari fungsi jika izin ditolak
+        return;
       }
 
       if (permission == LocationPermission.whileInUse ||
           permission == LocationPermission.always) {
-        _hasLocationPermission = true; // Izin diberikan
+        _hasLocationPermission = true;
         Position position = await Geolocator.getCurrentPosition(
           locationSettings: LocationSettings(
             accuracy: LocationAccuracy.high,
@@ -138,7 +136,7 @@ class _SelectCoordinateState extends State<SelectCoordinate> {
       setState(() {
         _currentLocation = widget.initialCoordinate ?? _startCoordinate;
         _mapController.move(_currentLocation!, 18);
-        _hasLocationPermission = false; // Izin tidak diberikan
+        _hasLocationPermission = false;
       });
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -150,6 +148,7 @@ class _SelectCoordinateState extends State<SelectCoordinate> {
     }
   }
 
+  // Menandai lokasi yang dipilih
   void _markLocation(TapPosition tapPosition, LatLng latLng) {
     setState(() {
       _selectedCoordinate = latLng;
@@ -189,7 +188,6 @@ class _SelectCoordinateState extends State<SelectCoordinate> {
       ),
       body: Stack(
         children: [
-          // The map
           FlutterMap(
             mapController: _mapController,
             options: MapOptions(
@@ -250,13 +248,11 @@ class _SelectCoordinateState extends State<SelectCoordinate> {
               ),
             ],
           ),
-          // The floating legend
           Positioned(
             top: 16.0,
             right: 16.0,
             child: _buildLegend(),
           ),
-          // Positioned button at the bottom center
           Positioned(
             bottom: 16.0,
             left: 0,
@@ -283,9 +279,9 @@ class _SelectCoordinateState extends State<SelectCoordinate> {
     );
   }
 
+  // Memindahkan peta ke marker yang dipilih
   void _moveToMarker(LatLng latLng) {
-    _mapController.move(latLng,
-        18); // Move the map to the specified coordinates with a zoom level of 18
+    _mapController.move(latLng, 18);
   }
 
   Widget _buildLegend() {
@@ -307,7 +303,7 @@ class _SelectCoordinateState extends State<SelectCoordinate> {
           GestureDetector(
             onTap: () {
               if (_currentLocation != null) {
-                _moveToMarker(_currentLocation!); // Move to current location
+                _moveToMarker(_currentLocation!);
               }
             },
             child: Row(
@@ -323,8 +319,7 @@ class _SelectCoordinateState extends State<SelectCoordinate> {
           GestureDetector(
             onTap: () {
               if (_selectedCoordinate != null) {
-                _moveToMarker(
-                    _selectedCoordinate!); // Move to selected coordinate
+                _moveToMarker(_selectedCoordinate!);
               }
             },
             child: Row(
@@ -341,8 +336,7 @@ class _SelectCoordinateState extends State<SelectCoordinate> {
           GestureDetector(
             onTap: () {
               if (widget.initialCoordinate != null) {
-                _moveToMarker(
-                    widget.initialCoordinate!); // Move to initial coordinate
+                _moveToMarker(widget.initialCoordinate!);
               }
             },
             child: Row(
@@ -355,7 +349,7 @@ class _SelectCoordinateState extends State<SelectCoordinate> {
               ],
             ),
           ),
-          SizedBox(height: 16), // Add some space before the copyright
+          SizedBox(height: 16),
           GestureDetector(
             onTap: () async {
               const url = 'https://openstreetmap.org/copyright';

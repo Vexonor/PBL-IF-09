@@ -15,6 +15,7 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
+    // Memeriksa status login pengguna saat inisialisasi
     controller.checkUserLoginStatus(context);
   }
 
@@ -128,15 +129,6 @@ class _LoginState extends State<Login> {
                             if (value == null || value.isEmpty) {
                               return 'Kata Sandi tidak boleh kosong!';
                             }
-                            // if (value.length < 8) {
-                            //   return 'Kata Sandi harus terdiri dari minimal 8 karakter!';
-                            // }
-                            // if (!RegExp(r'\d').hasMatch(value)) {
-                            //   return 'Kata Sandi harus mengandung setidaknya satu angka!';
-                            // }
-                            // if (!RegExp(r'[A-Z]').hasMatch(value)) {
-                            //   return 'Kata Sandi harus mengandung setidaknya satu huruf besar!';
-                            // }
                             return null;
                           },
                         ),
@@ -161,17 +153,17 @@ class _LoginState extends State<Login> {
                                   : () {
                                       setState(() {
                                         controller.isProcessing =
-                                            true; // Set isProcessing to true
+                                            true; // Mengatur status pemrosesan
                                       });
                                       controller.login(context).then((_) {
                                         setState(() {
                                           controller.isProcessing =
-                                              false; // Set isProcessing back to false
+                                              false; // Mengatur kembali status pemrosesan
                                         });
                                       }).catchError((error) {
                                         setState(() {
                                           controller.isProcessing =
-                                              false; // Ensure to set back to false
+                                              false; // Pastikan untuk mengatur kembali status pemrosesan
                                         });
                                       });
                                     },

@@ -24,30 +24,28 @@ class _SplashScreenState extends State<SplashScreen> {
         _controller.setLooping(false);
         _controller.addListener(() {
           if (_controller.value.position == _controller.value.duration) {
-            // Tambahkan waktu tunggu sebelum memeriksa status login
-            _checkUserLoginStatus();
+            _checkUserLoginStatus(); // Memeriksa status login pengguna
           }
         });
       });
   }
 
+  // Memeriksa status login pengguna
   Future<void> _checkUserLoginStatus() async {
     final prefs = await SharedPreferences.getInstance();
     final session = prefs.getString('token');
 
     if (session != null) {
-      // Jika session ada, arahkan ke halaman utama dengan transisi fade-in
+      // Jika session ada, arahkan ke halaman utama
       if (mounted) {
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) => MainPage(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-              // Mengatur fade-in effect
               const begin = 0.0;
               const end = 1.0;
-              const curve =
-                  Curves.easeInOut; // Menggunakan curve yang lebih halus
+              const curve = Curves.easeInOut;
 
               var tween =
                   Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
@@ -63,18 +61,16 @@ class _SplashScreenState extends State<SplashScreen> {
         );
       }
     } else {
-      // Jika session tidak ada, arahkan ke halaman login dengan transisi fade-in
+      // Jika session tidak ada, arahkan ke halaman login
       if (mounted) {
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) => Login(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-              // Mengatur fade-in effect
               const begin = 0.0;
               const end = 1.0;
-              const curve =
-                  Curves.easeInOut; // Menggunakan curve yang lebih halus
+              const curve = Curves.easeInOut;
 
               var tween =
                   Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
@@ -104,11 +100,10 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: _controller.value.isInitialized
             ? SizedBox(
-                width: double.infinity, // Menggunakan lebar penuh
-                height: double.infinity, // Menggunakan tinggi penuh
+                width: double.infinity,
+                height: double.infinity,
                 child: FittedBox(
-                  fit: BoxFit
-                      .cover, // Menggunakan BoxFit.cover untuk mengisi seluruh layar
+                  fit: BoxFit.cover,
                   child: SizedBox(
                     width: _controller.value.size.width,
                     height: _controller.value.size.height,
