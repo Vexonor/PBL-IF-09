@@ -19,6 +19,13 @@ class AdminSeeder extends Seeder
 
         $admins = DB::table('User')->where('role', 'Admin')->pluck('ID_User');
 
+        DB::table('Admin')->insert([
+            'ID_User' => 1,
+            'Role_Admin' => 'Master',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         foreach ($admins as $index) {
             DB::table('Admin')->insert([
                 'ID_User' => $index,

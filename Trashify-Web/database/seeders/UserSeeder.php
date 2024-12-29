@@ -19,7 +19,26 @@ class UserSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
 
-        foreach (range(1, 50) as $index) {
+        DB::table('User')->insert([
+            'ID_User' => 1,
+            'Nama' => 'Master Admin',
+            'Nik' => $faker->unique()->randomNumber(9, true),
+            'Tanggal_Lahir' => $faker->date('Y-m-d', '2000-12-31'),
+            'Jenis_Kelamin' => $faker->randomElement(['Laki-laki', 'Perempuan']),
+            'Alamat' => $faker->address,
+            'No_Telp' => $faker->phoneNumber,
+            'Foto_Profil' => null,
+            'email' => 'masteradmin@gmail.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('Password123'),
+            'role' => 'Admin',
+            'remember_token' => Str::random(10),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+
+        foreach (range(2, 50) as $index) {
             DB::table('User')->insert([
                 'Nama' => $faker->name,
                 'Nik' => $faker->unique()->randomNumber(9, true),
