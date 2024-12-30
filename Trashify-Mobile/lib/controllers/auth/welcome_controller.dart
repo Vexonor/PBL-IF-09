@@ -43,82 +43,82 @@ class WelcomeController {
 
   // Mengirim data pengguna ke server
   Future<void> submitData(BuildContext context, int userId) async {
-    if (!validateForm()) {
+    if (!formKey.currentState!.validate()) {
       return;
-    }
+    } else {
+      isProcessing = true;
 
-    isProcessing = true;
+      Uint8List? imageBytes;
+      String? fileName;
 
-    Uint8List? imageBytes;
-    String? fileName;
+      if (profilePicture != null) {
+        imageBytes = await profilePicture!.readAsBytes();
+        fileName = profilePicture!.name;
+      }
 
-    if (profilePicture != null) {
-      imageBytes = await profilePicture!.readAsBytes();
-      fileName = profilePicture!.name;
-    }
+      final response = await service.saveUserData(
+        userId.toString(),
+        nikController.text,
+        phoneController.text,
+        addressController.text,
+        birthDateController.text,
+        selectedGender!,
+        imageBytes,
+        fileName,
+      );
 
-    final response = await service.saveUserData(
-      userId.toString(),
-      nikController.text,
-      phoneController.text,
-      addressController.text,
-      birthDateController.text,
-      selectedGender!,
-      imageBytes,
-      fileName,
-    );
-
-    try {
-      if (response.statusCode == 201) {
-        final data = json.decode(response.body);
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('token', data['token']);
-        if (context.mounted) {
-          final userProvider =
-              Provider.of<UserProvider>(context, listen: false);
-          await userProvider.saveUserData(
-            userId: userId,
-            userNumber: phoneController.text,
-            userAddress: addressController.text,
-            userGender: selectedGender!,
-            userNik: int.parse(nikController.text),
-            userDateBirth: birthDateController.text,
-            userPhoto: data['Foto_Profil'],
-          );
+      try {
+        if (response.statusCode == 201) {
+          final data = json.decode(response.body);
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('token', data['token']);
+          if (context.mounted) {
+            final userProvider =
+                Provider.of<UserProvider>(context, listen: false);
+            await userProvider.saveUserData(
+              userId: userId,
+              userNumber: phoneController.text,
+              userAddress: addressController.text,
+              userGender: selectedGender!,
+              userNik: int.parse(nikController.text),
+              userDateBirth: birthDateController.text,
+              userPhoto: data['Foto_Profil'],
+            );
+          }
+          if (context.mounted) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/halaman_utama',
+              (Route<dynamic> route) => route.settings.name == '/halaman_utama',
+            );
+            showSnackBar(context, data['message'],
+                Color.fromARGB(255, 59, 142, 110), 300);
+          }
+        } else if (response.statusCode == 404 || response.statusCode == 500) {
+          final data = json.decode(response.body);
+          if (context.mounted) {
+            showSnackBar(context, data['message'],
+                const Color.fromARGB(255, 181, 61, 62), 2000);
+          }
+        } else if (response.statusCode == 422) {
+          if (context.mounted) {
+            showSnackBar(context, 'Ukuran gambar terlalu besar!',
+                const Color.fromARGB(255, 181, 61, 62), 2000);
+          }
+        } else {
+          if (context.mounted) {
+            showSnackBar(context, 'Terjadi kesalahan, silakan coba lagi!',
+                const Color.fromARGB(255, 181, 61, 62), 2000);
+          }
         }
-        if (context.mounted) {
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            '/halaman_utama',
-            (Route<dynamic> route) => route.settings.name == '/halaman_utama',
-          );
-          showSnackBar(
-              context, data['message'], Color.fromARGB(255, 59, 142, 110), 300);
-        }
-      } else if (response.statusCode == 404 || response.statusCode == 500) {
-        final data = json.decode(response.body);
-        if (context.mounted) {
-          showSnackBar(context, data['message'],
-              const Color.fromARGB(255, 181, 61, 62), 2000);
-        }
-      } else if (response.statusCode == 422) {
-        if (context.mounted) {
-          showSnackBar(context, 'Ukuran gambar terlalu besar!',
-              const Color.fromARGB(255, 181, 61, 62), 2000);
-        }
-      } else {
+      } catch (e) {
         if (context.mounted) {
           showSnackBar(context, 'Terjadi kesalahan, silakan coba lagi!',
               const Color.fromARGB(255, 181, 61, 62), 2000);
         }
+      } finally {
+        isProcessing = false;
       }
-    } catch (e) {
-      if (context.mounted) {
-        showSnackBar(context, 'Terjadi kesalahan, silakan coba lagi!',
-            const Color.fromARGB(255, 181, 61, 62), 2000);
-      }
-    } finally {
-      isProcessing = false;
     }
   }
 

@@ -302,32 +302,41 @@ class _WelcomeState extends State<Welcome> {
                             ? null
                             : () {
                                 setState(() {
-                                  controller.isProcessing = true;
+                                  controller.imageValidator = null;
+                                  controller.imageValidatorError = false;
                                 });
-
-                                controller
-                                    .submitData(context, userId!)
-                                    .then((_) {
-                                  setState(() {
-                                    controller.isProcessing = false;
+                                if (controller.validateForm()) {
+                                  controller
+                                      .submitData(context, userId!)
+                                      .then((_) {
+                                    setState(() {
+                                      controller.isProcessing = false;
+                                    });
+                                  }).catchError((error) {
+                                    setState(() {
+                                      controller.isProcessing = false;
+                                    });
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                'Terjadi kesalahan: $error')),
+                                      );
+                                      controller.showSnackBar(
+                                          context,
+                                          'Terjadi kesalahan: $error',
+                                          const Color.fromARGB(
+                                              255, 181, 61, 62),
+                                          2000);
+                                    }
                                   });
-                                }).catchError((error) {
+                                } else {
                                   setState(() {
-                                    controller.isProcessing = false;
+                                    controller.imageValidator =
+                                        controller.imageValidator;
                                   });
-                                  if (context.mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text(
-                                              'Terjadi kesalahan: $error')),
-                                    );
-                                    controller.showSnackBar(
-                                        context,
-                                        'Terjadi kesalahan: $error',
-                                        const Color.fromARGB(255, 181, 61, 62),
-                                        2000);
-                                  }
-                                });
+                                }
                               },
                         style: ElevatedButton.styleFrom(
                           padding:
