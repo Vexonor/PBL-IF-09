@@ -109,7 +109,6 @@ flutter:
 
 # Konfigurasi flutter_native_splash
 flutter_native_splash:
-  color: "#FF3B8E6E" # Warna latar belakang splash screen
-  image: assets/splash.png # Ganti dengan gambar splash screen jika ada
+  color: "#FF3B8E6E"
   android:fullscreen: true
   ios:fullscreen: true

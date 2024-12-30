@@ -36,7 +36,7 @@ class RegisterController {
           }
           if (context.mounted) {
             showSnackBar(context, data['message'],
-                Color.fromARGB(255, 59, 142, 110), 300);
+                Color.fromARGB(255, 59, 142, 110), 2000);
           }
         } else if (response.statusCode == 409 ||
             response.statusCode == 422 ||
