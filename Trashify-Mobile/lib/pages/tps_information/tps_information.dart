@@ -17,6 +17,7 @@ class _TpsInformationState extends State<TpsInformation> {
         automaticallyImplyLeading: false,
         backgroundColor: const Color.fromARGB(255, 59, 142, 110),
         elevation: 0,
+        leading: Icon(Icons.location_on, color: Colors.white,),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -31,23 +32,9 @@ class _TpsInformationState extends State<TpsInformation> {
                 ),
               ),
             ),
+            const SizedBox(width: 48),
           ],
         ),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.location_on,
-            color: Colors.white,
-          ),
-          onPressed: () {},
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              Navigator.pushNamed(context, '/notifikasi');
-            },
-          ),
-        ],
       ),
       body: CustomPaint(
         painter: BackgroundPainter(),

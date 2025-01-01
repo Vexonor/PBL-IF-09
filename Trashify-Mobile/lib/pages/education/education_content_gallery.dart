@@ -187,98 +187,137 @@ class _EducationContentGalleryState extends State<EducationContentGallery> {
                         ),
                       ),
                       Expanded(
-                        child: ListView.builder(
-                          itemCount: controller.educationContent
-                                  ?.where((item) => item['Judul_Edukasi']
-                                      .toLowerCase()
-                                      .contains(
-                                          controller.searchQuery.toLowerCase()))
-                                  .length ??
-                              0,
-                          itemBuilder: (context, index) {
-                            final item = controller.educationContent!
-                                .where((item) => item['Judul_Edukasi']
-                                    .toLowerCase()
-                                    .contains(
-                                        controller.searchQuery.toLowerCase()))
-                                .toList()[index];
-                            String videoId;
-                            String youtubeUrl = item['Link_URL'] ?? '';
-
-                            if (youtubeUrl.isNotEmpty) {
-                              if (youtubeUrl.contains('v=')) {
-                                videoId =
-                                    youtubeUrl.split('v=')[1].split('&')[0];
-                              } else if (youtubeUrl.contains('youtu.be/')) {
-                                videoId = youtubeUrl
-                                    .split('youtu.be/')[1]
-                                    .split('?')[0];
-                              } else {
-                                videoId = '';
-                              }
-                            } else {
-                              videoId = '';
-                            }
-
-                            String thumbnailUrl = videoId.isNotEmpty
-                                ? 'https://img.youtube.com/vi/$videoId/0.jpg'
-                                : '';
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  '/detail_konten_edukasi',
-                                  arguments: {
-                                    'educationId': item['ID_Edukasi'],
-                                  },
-                                );
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                                child: Card(
-                                  color: Colors.white,
-                                  elevation: 5,
-                                  child: ListTile(
-                                    leading: item['Jenis_Edukasi'] == 'Video'
-                                        ? AspectRatio(
-                                            aspectRatio: 16 / 9,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              child: Image.network(
-                                                thumbnailUrl,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          )
-                                        : null,
-                                    title: Text(
-                                      item['Judul_Edukasi'],
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    subtitle: Text(
-                                      item['Deskripsi_Edukasi'] ??
-                                          "Deskripsi tidak tersedia",
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    trailing: item['Jenis_Edukasi'] == 'Artikel'
-                                        ? Icon(Icons.article)
-                                        : Icon(Icons.play_arrow),
+                        child: controller.educationContent == null ||
+                                controller.educationContent!.isEmpty
+                            ? Center(
+                                child: Text(
+                                  'Belum ada Konten Edukasi yang dibuat',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 16,
+                                    color: Colors.grey,
                                   ),
                                 ),
+                              )
+                            : ListView.builder(
+                                itemCount: controller.educationContent
+                                        ?.where((item) => item['Judul_Edukasi']
+                                            .toLowerCase()
+                                            .contains(controller.searchQuery
+                                                .toLowerCase()))
+                                        .length ??
+                                    0,
+                                itemBuilder: (context, index) {
+                                  final item = controller.educationContent!
+                                      .where((item) => item['Judul_Edukasi']
+                                          .toLowerCase()
+                                          .contains(controller.searchQuery
+                                              .toLowerCase()))
+                                      .toList()[index];
+                                  String videoId;
+                                  String youtubeUrl = item['Link_URL'] ?? '';
+
+                                  if (youtubeUrl.isNotEmpty) {
+                                    if (youtubeUrl.contains('v=')) {
+                                      videoId = youtubeUrl
+                                          .split('v=')[1]
+                                          .split('&')[0];
+                                    } else if (youtubeUrl
+                                        .contains('youtu.be/')) {
+                                      videoId = youtubeUrl
+                                          .split('youtu.be/')[1]
+                                          .split('?')[0];
+                                    } else {
+                                      videoId = '';
+                                    }
+                                  } else {
+                                    videoId = '';
+                                  }
+
+                                  String thumbnailUrl = videoId.isNotEmpty
+                                      ? 'https://img.youtube.com/vi/$videoId/0.jpg'
+                                      : '';
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        '/detail_konten_edukasi',
+                                        arguments: {
+                                          'educationId': item['ID_Edukasi'],
+                                        },
+                                      );
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 5),
+                                      child: Card(
+                                        color: Colors.white,
+                                        elevation: 5,
+                                        child: ListTile(
+                                          leading: item['Jenis_Edukasi'] ==
+                                                  'Video'
+                                              ? AspectRatio(
+                                                  aspectRatio: 16 / 9,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                    child: Image.network(
+                                                      thumbnailUrl,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                )
+                                              : null,
+                                          title: Text(
+                                            item['Judul_Edukasi'],
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          subtitle: Text(
+                                            item['Deskripsi_Edukasi'] ??
+                                                "Deskripsi tidak tersedia",
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          trailing:
+                                              item['Jenis_Edukasi'] == 'Artikel'
+                                                  ? Icon(Icons.article)
+                                                  : Icon(Icons.play_arrow),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
-                        ),
                       ),
                     ],
                   ),
                 ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/tambah_konten_edukasi');
+            },
+            backgroundColor: const Color.fromARGB(
+                255, 59, 142, 110), // Warna latar belakang tombol
+            shape: const CircleBorder(), // Bentuk tombol
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                children: [
+                  const Icon(Icons.add, color: Colors.white), // Ikon tombol
+                  Text(
+                    'Tambah Edukasi', // Teks tombol
+                    style: TextStyle(
+                      fontSize: 6,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ));
   }
 }

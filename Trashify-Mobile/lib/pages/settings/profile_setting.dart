@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:trashify/controllers/setting/profile_setting_controller.dart';
@@ -43,6 +44,42 @@ class _ProfileSettingState extends State<ProfileSetting> {
     controller.birthDateController.text =
         Provider.of<UserProvider>(context).userDateBirth!;
     controller.selectedGender = Provider.of<UserProvider>(context).userGender!;
+  }
+
+  void _showImagePickerDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Pilih Sumber Gambar"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                GestureDetector(
+                  child: Text("Kamera"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    controller.pickImage(source: ImageSource.camera).then((_) {
+                      setState(() {});
+                    });
+                  },
+                ),
+                Padding(padding: EdgeInsets.all(8.0)),
+                GestureDetector(
+                  child: Text("Galeri"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    controller.pickImage(source: ImageSource.gallery).then((_) {
+                      setState(() {});
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -126,9 +163,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                           onPressed: controller.isProcessing
                               ? null
                               : () async {
-                                  await controller.pickImage();
-                                  setState(
-                                      () {}); // Memperbarui UI setelah memilih gambar
+                                  _showImagePickerDialog();
                                 },
                           iconSize: 15,
                         ),
@@ -166,7 +201,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                   enabled: !controller.isProcessing,
                                   decoration: InputDecoration(
                                     prefixIcon: const Icon(Icons.people,
-                                        color: Colors.grey),
+                                        color: Colors.black),
                                     labelText: 'Nama Lengkap',
                                     labelStyle: TextStyle(
                                         fontSize: 14,
@@ -175,6 +210,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
+                                    errorMaxLines: 2,
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -187,10 +223,11 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                 TextFormField(
                                   controller: controller.emailController,
                                   textInputAction: TextInputAction.next,
+                                  keyboardType: TextInputType.emailAddress,
                                   enabled: !controller.isProcessing,
                                   decoration: InputDecoration(
                                     prefixIcon: const Icon(Icons.email_outlined,
-                                        color: Colors.grey),
+                                        color: Colors.black),
                                     labelText: 'Alamat Email',
                                     labelStyle: TextStyle(
                                         fontSize: 14,
@@ -199,6 +236,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
+                                    errorMaxLines: 2,
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -221,7 +259,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
                                     prefixIcon: const Icon(Icons.credit_card,
-                                        color: Colors.grey),
+                                        color: Colors.black),
                                     labelText: 'NIK',
                                     labelStyle: TextStyle(
                                         fontSize: 14,
@@ -230,6 +268,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
+                                    errorMaxLines: 2,
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -252,7 +291,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
                                     prefixIcon: const Icon(Icons.phone,
-                                        color: Colors.grey),
+                                        color: Colors.black),
                                     labelText: 'No Telepon',
                                     labelStyle: TextStyle(
                                         fontSize: 14,
@@ -261,6 +300,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
+                                    errorMaxLines: 2,
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -279,7 +319,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                   textInputAction: TextInputAction.next,
                                   decoration: InputDecoration(
                                     prefixIcon: const Icon(Icons.home,
-                                        color: Colors.grey),
+                                        color: Colors.black),
                                     labelText: 'Alamat',
                                     labelStyle: TextStyle(
                                         fontSize: 14,
@@ -288,6 +328,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
+                                    errorMaxLines: 2,
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -304,7 +345,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                       true, // Agar tidak bisa diedit langsung
                                   decoration: InputDecoration(
                                     prefixIcon: const Icon(Icons.calendar_today,
-                                        color: Colors.grey),
+                                        color: Colors.black),
                                     labelText: 'Tanggal Lahir',
                                     labelStyle: TextStyle(
                                         fontSize: 14,
@@ -313,6 +354,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
+                                    errorMaxLines: 2,
                                   ),
                                   onTap: controller.isProcessing
                                       ? null
@@ -349,7 +391,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                     filled: true,
                                     fillColor: Colors.white,
                                     prefixIcon: const Icon(Icons.person,
-                                        color: Colors.grey),
+                                        color: Colors.black),
                                     labelText: 'Jenis Kelamin',
                                     labelStyle: TextStyle(
                                         fontSize: 14,
@@ -358,6 +400,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
+                                    errorMaxLines: 2,
                                   ),
                                   items: [
                                     DropdownMenuItem(

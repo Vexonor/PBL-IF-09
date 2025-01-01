@@ -55,16 +55,9 @@ class _ComplaintState extends State<Complaint> {
                 ),
               ),
             ),
+            const SizedBox(width: 48),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              Navigator.pushNamed(context, '/notifikasi');
-            },
-          ),
-        ],
       ),
       body: controller.isLoading
           ? Center(child: CircularProgressIndicator())
@@ -120,7 +113,21 @@ class _ComplaintState extends State<Complaint> {
                       controller: controller.unresolvedScrollController,
                       child: Padding(
                         padding: const EdgeInsets.only(right: 8.0),
-                        child: ListView.builder(
+                        child: controller.unresolvedComplaints.isEmpty
+                            ? Center(
+                              child: SingleChildScrollView(
+                                controller:
+                                      controller.unresolvedScrollController,
+                                child: Text(
+                                  'Tidak ada Pengaduan yang Belum Selesai',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            )
+                            : ListView.builder(
                           controller: controller.unresolvedScrollController,
                           itemCount: controller.unresolvedComplaints.length,
                           itemBuilder: (context, index) {
@@ -186,7 +193,21 @@ class _ComplaintState extends State<Complaint> {
                       controller: controller.inProgressScrollController,
                       child: Padding(
                         padding: const EdgeInsets.only(right: 8.0),
-                        child: ListView.builder(
+                        child: controller.inProgressComplaints.isEmpty
+                            ? Center(
+                              child: SingleChildScrollView(
+                                controller:
+                                      controller.inProgressScrollController,
+                                child: Text(
+                                  'Tidak ada Pengaduan yang Sedang Diproses',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            )
+                            : ListView.builder(
                           controller: controller.inProgressScrollController,
                           itemCount: controller.inProgressComplaints.length,
                           itemBuilder: (context, index) {
@@ -252,7 +273,21 @@ class _ComplaintState extends State<Complaint> {
                       controller: controller.completedScrollController,
                       child: Padding(
                         padding: const EdgeInsets.only(right: 8.0),
-                        child: ListView.builder(
+                        child: controller.completedComplaints.isEmpty
+                            ? Center(
+                              child: SingleChildScrollView(
+                                controller:
+                                      controller.completedScrollController,
+                                child: Text(
+                                  'Tidak ada Pengaduan yang Sudah Selesai',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            )
+                            : ListView.builder(
                           controller: controller.completedScrollController,
                           itemCount: controller.completedComplaints.length,
                           itemBuilder: (context, index) {

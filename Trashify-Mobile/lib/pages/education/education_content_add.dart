@@ -151,6 +151,7 @@ class _EducationContentAddState extends State<EducationContentAdd> {
             border: OutlineInputBorder(),
             hintText: 'Masukkan judul konten...',
             hintStyle: TextStyle(fontSize: 14),
+            errorMaxLines: 2,
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -169,6 +170,7 @@ class _EducationContentAddState extends State<EducationContentAdd> {
             border: OutlineInputBorder(),
             hintText: 'Masukkan isi konten...',
             hintStyle: TextStyle(fontSize: 14),
+            errorMaxLines: 2,
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -195,6 +197,7 @@ class _EducationContentAddState extends State<EducationContentAdd> {
             border: OutlineInputBorder(),
             hintText: 'Masukkan link video...',
             hintStyle: TextStyle(fontSize: 14),
+            errorMaxLines: 2,
           ),
           validator: (value) {
             if (controller.contentType == 'Video' &&
@@ -219,6 +222,7 @@ class _EducationContentAddState extends State<EducationContentAdd> {
             border: OutlineInputBorder(),
             hintText: 'Masukkan judul video...',
             hintStyle: TextStyle(fontSize: 14),
+            errorMaxLines: 2,
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -236,6 +240,7 @@ class _EducationContentAddState extends State<EducationContentAdd> {
             border: OutlineInputBorder(),
             hintText: 'Masukkan deskripsi video...',
             hintStyle: TextStyle(fontSize: 14),
+            errorMaxLines: 2,
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {

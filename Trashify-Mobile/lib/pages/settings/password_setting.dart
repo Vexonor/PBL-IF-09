@@ -94,7 +94,7 @@ class _PasswordSettingState extends State<PasswordSetting> {
                                   obscureText: !controller.isOldPasswordVisible,
                                   decoration: InputDecoration(
                                     prefixIcon: const Icon(Icons.lock_outline,
-                                        color: Colors.grey),
+                                        color: Colors.black),
                                     labelText: 'Kata Sandi Lama',
                                     labelStyle: TextStyle(
                                         fontSize: 14,
@@ -117,6 +117,7 @@ class _PasswordSettingState extends State<PasswordSetting> {
                                         });
                                       },
                                     ),
+                                    errorMaxLines: 2,
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -135,7 +136,7 @@ class _PasswordSettingState extends State<PasswordSetting> {
                                   obscureText: !controller.isNewPasswordVisible,
                                   decoration: InputDecoration(
                                     prefixIcon: const Icon(Icons.lock_outline,
-                                        color: Colors.grey),
+                                        color: Colors.black),
                                     labelText: 'Kata Sandi Baru',
                                     labelStyle: TextStyle(
                                         fontSize: 14,
@@ -158,6 +159,7 @@ class _PasswordSettingState extends State<PasswordSetting> {
                                         });
                                       },
                                     ),
+                                    errorMaxLines: 2,
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -184,7 +186,7 @@ class _PasswordSettingState extends State<PasswordSetting> {
                                       .isNewConfirmationPasswordVisible,
                                   decoration: InputDecoration(
                                     prefixIcon: const Icon(Icons.lock_outline,
-                                        color: Colors.grey),
+                                        color: Colors.black),
                                     labelText: 'Konfirmasi Kata Sandi Baru',
                                     labelStyle: TextStyle(
                                         fontSize: 14,
@@ -210,6 +212,7 @@ class _PasswordSettingState extends State<PasswordSetting> {
                                         });
                                       },
                                     ),
+                                    errorMaxLines: 2,
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -287,12 +290,6 @@ class _PasswordSettingState extends State<PasswordSetting> {
                                                   color: Colors.white)),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(height: 15),
-                                Text(
-                                  'Atau jika anda lupa kata sandi sebelumnya bisa menggunakan fitur Lupa Kata Sandi',
-                                  style: TextStyle(fontSize: 16),
-                                  textAlign: TextAlign.justify,
                                 ),
                               ],
                             ),

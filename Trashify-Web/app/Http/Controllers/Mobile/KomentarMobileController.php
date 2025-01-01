@@ -43,7 +43,7 @@ class KomentarMobileController extends Controller
      */
     public function show(string $idEdukasi)
     {
-        $komentar = Komentar::where('ID_Edukasi', $idEdukasi)->get();
+        $komentar = Komentar::with('UserTable')->where('ID_Edukasi', $idEdukasi)->get();
 
         if (!$komentar) {
             return response()->json(['message' => 'Komentar tidak ditemukan!'], 404);

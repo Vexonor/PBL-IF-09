@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:trashify/controllers/education/education_content_controller.dart';
 import 'package:trashify/providers/user_provider.dart';
+import 'package:trashify/services/global_url.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class EducationContent extends StatefulWidget {
@@ -142,6 +143,7 @@ class _EducationContentState extends State<EducationContent> {
                         if (controller.educationContent!['Jenis_Edukasi'] ==
                             'Video') ...[
                           if (controller.descriptionVisible) ...[
+                            SizedBox(height: 10),
                             Text(
                               controller.name != null
                                   ? 'Diunggah oleh: ${controller.name}'
@@ -152,6 +154,7 @@ class _EducationContentState extends State<EducationContent> {
                               ),
                               textAlign: TextAlign.center,
                             ),
+                            SizedBox(height: 5),
                             Text(
                               '${controller.educationContent!['Deskripsi_Edukasi']}',
                               style: TextStyle(
@@ -160,6 +163,7 @@ class _EducationContentState extends State<EducationContent> {
                               ),
                               textAlign: TextAlign.justify,
                             ),
+                            SizedBox(height: 5),
                             Text(
                               '${controller.totalComments} Komentar',
                               style: TextStyle(
@@ -186,6 +190,7 @@ class _EducationContentState extends State<EducationContent> {
                             ),
                           ),
                         ] else ...[
+                          SizedBox(height: 10),
                           Text(
                             controller.name != null
                                 ? 'Diunggah oleh: ${controller.name}'
@@ -196,6 +201,7 @@ class _EducationContentState extends State<EducationContent> {
                             ),
                             textAlign: TextAlign.center,
                           ),
+                          SizedBox(height: 5),
                           Text(
                             '${controller.educationContent!['Deskripsi_Edukasi']}',
                             style: TextStyle(
@@ -204,6 +210,7 @@ class _EducationContentState extends State<EducationContent> {
                             ),
                             textAlign: TextAlign.justify,
                           ),
+                          SizedBox(height: 5),
                           Text(
                             '${controller.totalComments} Komentar',
                             style: TextStyle(
@@ -250,9 +257,11 @@ class _EducationContentState extends State<EducationContent> {
                         Form(
                           key: controller.formKey,
                           child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Expanded(
                                 child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     TextFormField(
                                       controller: controller.commentController,
@@ -265,6 +274,7 @@ class _EducationContentState extends State<EducationContent> {
                                             'Ketikkan komentar anda disini',
                                         hintStyle: TextStyle(
                                             fontSize: 14, color: Colors.grey),
+                                        errorMaxLines: 2,
                                       ),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
@@ -307,47 +317,55 @@ class _EducationContentState extends State<EducationContent> {
                                 ),
                               ),
                               const SizedBox(width: 5),
-                              Text(
-                                '${controller.maxCharacters - controller.commentIndicator.length}',
-                                style:
-                                    TextStyle(color: controller.indicatorColor),
+                              Column(
+                                children: [
+                                  Text(
+                                    '${controller.maxCharacters - controller.commentIndicator.length}',
+                                    style: TextStyle(
+                                        color: controller.indicatorColor),
+                                  ),
+                                ],
                               ),
                               const SizedBox(width: 5),
-                              ElevatedButton(
-                                onPressed: controller.isProcessing
-                                    ? null
-                                    : () {
-                                        setState(() {
-                                          controller.submitComment(context);
-                                        });
-                                      },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      const Color.fromARGB(255, 59, 142, 110),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 15),
-                                ),
-                                child: controller.isProcessing
-                                    ? SizedBox(
-                                        width: 10,
-                                        height: 10,
-                                        child: CircularProgressIndicator(
-                                          color: Colors.white,
-                                          strokeWidth: 2,
-                                        ),
-                                      )
-                                    : Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const Icon(
-                                            Icons.send,
-                                            size: 20,
-                                            color: Colors.white,
+                              Column(
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: controller.isProcessing
+                                        ? null
+                                        : () {
+                                            setState(() {
+                                              controller.submitComment(context);
+                                            });
+                                          },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 59, 142, 110),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 15),
+                                    ),
+                                    child: controller.isProcessing
+                                        ? SizedBox(
+                                            width: 10,
+                                            height: 10,
+                                            child: CircularProgressIndicator(
+                                              color: Colors.white,
+                                              strokeWidth: 2,
+                                            ),
+                                          )
+                                        : Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const Icon(
+                                                Icons.send,
+                                                size: 20,
+                                                color: Colors.white,
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -379,38 +397,71 @@ class _EducationContentState extends State<EducationContent> {
                               int commentIndex = controller.currentPage *
                                       controller.commentsPerPage +
                                   index;
-                              int commentUserId =
-                                  controller.comment[commentIndex]['ID_User'] ??
-                                      '';
+                              int commentUserId = controller
+                                      .comment[commentIndex]['ID_User'] ??
+                                  '';
                               String commentText = controller
                                       .comment[commentIndex]['Isi_Komentar'] ??
                                   'Komentar tidak tersedia';
+                              String userName = controller.comment[commentIndex]
+                                      ['user_table']['Nama'] ??
+                                  'Anonim'; // Ambil nama pengguna dari user_table
+                              String userProfilePhoto =
+                                  controller.comment[commentIndex]['user_table']
+                                          ['Foto_Profil'] ??
+                                      ''; // Ambil foto profil dari user_table
 
                               return Column(
                                 children: [
                                   Row(
                                     children: [
-                                      const CircleAvatar(
+                                      // Tampilkan foto profil
+                                      CircleAvatar(
                                         radius: 20,
-                                        child: Icon(
-                                          Icons.person,
-                                          size: 20,
-                                          color: Colors.grey,
-                                        ),
+                                        backgroundColor: const Color.fromARGB(
+                                            255, 59, 142, 110),
+                                        backgroundImage:
+                                            userProfilePhoto.isNotEmpty
+                                                ? NetworkImage(
+                                                '$imageStorageUrl/$userProfilePhoto')
+                                                : null,
+                                        child: userProfilePhoto.isEmpty
+                                            ? Icon(
+                                                Icons.person,
+                                                size: 20,
+                                                color: Colors.white,
+                                              )
+                                            : null,
                                       ),
                                       const SizedBox(width: 10),
                                       Expanded(
-                                        child: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            color: Colors.grey[200],
-                                          ),
-                                          child: Text(
-                                            commentText,
-                                            style: TextStyle(fontSize: 14),
-                                          ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            // Tampilkan nama pengguna
+                                            Text(
+                                              userName,
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 5),
+                                            // Tampilkan komentar
+                                            Container(
+                                              padding: const EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: Colors.grey[200],
+                                              ),
+                                              child: Text(
+                                                commentText,
+                                                style: TextStyle(fontSize: 14),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                       if (commentUserId == userId) ...[

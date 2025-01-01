@@ -114,6 +114,7 @@ class _ComplaintAddState extends State<ComplaintAdd> {
                       border: const OutlineInputBorder(),
                       hintText: 'Ketikan keluhan Anda di sini',
                       hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
+                      errorMaxLines: 2,
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -141,6 +142,7 @@ class _ComplaintAddState extends State<ComplaintAdd> {
                       suffixIcon: const SizedBox(
                         child: Icon(Icons.map),
                       ),
+                      errorMaxLines: 2,
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -156,32 +158,69 @@ class _ComplaintAddState extends State<ComplaintAdd> {
                   const SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: controller.isProcessing
-                          ? null
-                          : () async {
-                              await controller.selectImages(context);
-                              setState(() {});
-                            },
-                      icon: const Icon(
-                        Icons.file_upload,
-                        color: Colors.white,
-                      ),
-                      label: Text(
-                        'Pilih Gambar',
-                        style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: controller.imageValidatorError
-                            ? const Color.fromARGB(255, 172, 42, 32)
-                            : const Color.fromARGB(255, 59, 142, 110),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: controller.isProcessing
+                                ? null
+                                : () async {
+                                    await controller.selectImages(context,
+                                        fromCamera: true);
+                                    setState(() {});
+                                  },
+                            icon: const Icon(
+                              Icons.camera_alt,
+                              color: Colors.white,
+                            ),
+                            label: Text(
+                              'Ambil Foto',
+                              style: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: controller.imageValidatorError
+                                  ? const Color.fromARGB(255, 172, 42, 32)
+                                  : const Color.fromARGB(255, 59, 142, 110),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: controller.isProcessing
+                                ? null
+                                : () async {
+                                    await controller.selectImages(context);
+                                    setState(() {});
+                                  },
+                            icon: const Icon(
+                              Icons.file_upload,
+                              color: Colors.white,
+                            ),
+                            label: Text(
+                              'Pilih Gambar',
+                              style: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: controller.imageValidatorError
+                                  ? const Color.fromARGB(255, 172, 42, 32)
+                                  : const Color.fromARGB(255, 59, 142, 110),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   if (controller.imageValidator != null)

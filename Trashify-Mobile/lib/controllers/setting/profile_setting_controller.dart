@@ -25,10 +25,10 @@ class ProfileSettingController {
   String? selectedGender;
   XFile? profilePicture;
 
-  // Fungsi untuk memilih gambar dari galeri
-  Future<void> pickImage() async {
+  // Fungsi untuk memilih sumber gambar (kamera atau galeri)
+  Future<void> pickImage({required ImageSource source}) async {
     final ImagePicker picker = ImagePicker();
-    profilePicture = await picker.pickImage(source: ImageSource.gallery);
+    profilePicture = await picker.pickImage(source: source, imageQuality: 50);
   }
 
   // Fungsi untuk mengirim data pengguna ke server

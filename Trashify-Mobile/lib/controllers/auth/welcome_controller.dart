@@ -22,23 +22,10 @@ class WelcomeController {
   String? selectedGender;
   XFile? profilePicture;
 
-  // Mengambil gambar dari galeri
-  Future<void> pickImage() async {
+  // Fungsi untuk memilih sumber gambar (kamera atau galeri)
+  Future<void> pickImage({required ImageSource source}) async {
     final ImagePicker picker = ImagePicker();
-    profilePicture = await picker.pickImage(source: ImageSource.gallery);
-  }
-
-  // Memvalidasi form sebelum pengiriman data
-  bool validateForm() {
-    bool isValid = formKey.currentState!.validate();
-    if (profilePicture == null) {
-      isValid = false;
-      imageValidator = 'Foto profil wajib diupload';
-      imageValidatorError = true;
-    } else {
-      imageValidatorError = false;
-    }
-    return isValid;
+    profilePicture = await picker.pickImage(source: source);
   }
 
   // Mengirim data pengguna ke server
@@ -54,6 +41,9 @@ class WelcomeController {
       if (profilePicture != null) {
         imageBytes = await profilePicture!.readAsBytes();
         fileName = profilePicture!.name;
+      } else {
+        imageBytes = null;
+        fileName = null;
       }
 
       final response = await service.saveUserData(

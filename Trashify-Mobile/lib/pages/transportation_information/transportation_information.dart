@@ -27,12 +27,7 @@ class _TransportationInformationState extends State<TransportationInformation> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 59, 142, 110),
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        leading: Icon(Icons.arrow_back, color: Colors.white),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -47,16 +42,9 @@ class _TransportationInformationState extends State<TransportationInformation> {
                 ),
               ),
             ),
+            SizedBox(width: 48),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              Navigator.pushReplacementNamed(context, '/notifikasi');
-            },
-          ),
-        ],
       ),
       body: Stack(
         children: [

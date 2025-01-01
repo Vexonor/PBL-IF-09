@@ -3,7 +3,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:trashify/controllers/waste_bank/waste_bank_controller.dart';
-import 'package:trashify/pages/notification.dart';
 
 class WasteBank extends StatefulWidget {
   const WasteBank({super.key});
@@ -22,6 +21,7 @@ class _WasteBankState extends State<WasteBank> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: const Color.fromARGB(255, 59, 142, 110),
+        leading: Icon(Icons.account_balance, color: Colors.white),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -36,26 +36,9 @@ class _WasteBankState extends State<WasteBank> {
                 ),
               ),
             ),
+            const SizedBox(width: 48),
           ],
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.account_balance, color: Colors.white),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const NotificationCenter()),
-            );
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              Navigator.pushNamed(context, '/notifikasi');
-            },
-          ),
-        ],
       ),
       body: SafeArea(
         child: Padding(

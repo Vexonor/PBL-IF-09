@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:trashify/controllers/auth/welcome_controller.dart';
@@ -21,6 +22,42 @@ class _WelcomeState extends State<Welcome> {
     super.initState();
     // Memuat data pengguna saat inisialisasi
     Provider.of<UserProvider>(context, listen: false).loadUserData();
+  }
+
+  void _showImagePickerDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Pilih Sumber Gambar"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                GestureDetector(
+                  child: Text("Kamera"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    controller.pickImage(source: ImageSource.camera).then((_) {
+                      setState(() {});
+                    });
+                  },
+                ),
+                Padding(padding: EdgeInsets.all(8.0)),
+                GestureDetector(
+                  child: Text("Galeri"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    controller.pickImage(source: ImageSource.gallery).then((_) {
+                      setState(() {});
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -105,8 +142,7 @@ class _WelcomeState extends State<Welcome> {
                               onPressed: controller.isProcessing
                                   ? null
                                   : () async {
-                                      await controller.pickImage();
-                                      setState(() {});
+                                      _showImagePickerDialog();
                                     },
                               iconSize: 15,
                             ),
@@ -127,8 +163,8 @@ class _WelcomeState extends State<Welcome> {
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
-                          prefixIcon:
-                              const Icon(Icons.credit_card, color: Colors.grey),
+                          prefixIcon: const Icon(Icons.credit_card,
+                              color: Colors.black),
                           labelText: 'NIK',
                           labelStyle: TextStyle(
                             fontSize: 14,
@@ -138,6 +174,7 @@ class _WelcomeState extends State<Welcome> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15.0),
                           ),
+                          errorMaxLines: 2,
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -160,7 +197,7 @@ class _WelcomeState extends State<Welcome> {
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           prefixIcon:
-                              const Icon(Icons.phone, color: Colors.grey),
+                              const Icon(Icons.phone, color: Colors.black),
                           labelText: 'No Telepon',
                           labelStyle: TextStyle(
                             fontSize: 14,
@@ -170,6 +207,7 @@ class _WelcomeState extends State<Welcome> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15.0),
                           ),
+                          errorMaxLines: 2,
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -188,7 +226,7 @@ class _WelcomeState extends State<Welcome> {
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
                           prefixIcon:
-                              const Icon(Icons.home, color: Colors.grey),
+                              const Icon(Icons.home, color: Colors.black),
                           labelText: 'Alamat',
                           labelStyle: TextStyle(
                             fontSize: 14,
@@ -198,6 +236,7 @@ class _WelcomeState extends State<Welcome> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15.0),
                           ),
+                          errorMaxLines: 2,
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -213,7 +252,7 @@ class _WelcomeState extends State<Welcome> {
                         readOnly: true,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.calendar_today,
-                              color: Colors.grey),
+                              color: Colors.black),
                           labelText: 'Tanggal Lahir',
                           labelStyle: TextStyle(
                             fontSize: 14,
@@ -223,6 +262,7 @@ class _WelcomeState extends State<Welcome> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15.0),
                           ),
+                          errorMaxLines: 2,
                         ),
                         onTap: controller.isProcessing
                             ? null
@@ -302,41 +342,31 @@ class _WelcomeState extends State<Welcome> {
                             ? null
                             : () {
                                 setState(() {
-                                  controller.imageValidator = null;
-                                  controller.imageValidatorError = false;
+                                  controller.isProcessing = true;
                                 });
-                                if (controller.validateForm()) {
-                                  controller
-                                      .submitData(context, userId!)
-                                      .then((_) {
-                                    setState(() {
-                                      controller.isProcessing = false;
-                                    });
-                                  }).catchError((error) {
-                                    setState(() {
-                                      controller.isProcessing = false;
-                                    });
-                                    if (context.mounted) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                            content: Text(
-                                                'Terjadi kesalahan: $error')),
-                                      );
-                                      controller.showSnackBar(
-                                          context,
-                                          'Terjadi kesalahan: $error',
-                                          const Color.fromARGB(
-                                              255, 181, 61, 62),
-                                          2000);
-                                    }
-                                  });
-                                } else {
+                                controller
+                                    .submitData(context, userId!)
+                                    .then((_) {
                                   setState(() {
-                                    controller.imageValidator =
-                                        controller.imageValidator;
+                                    controller.isProcessing = false;
                                   });
-                                }
+                                }).catchError((error) {
+                                  setState(() {
+                                    controller.isProcessing = false;
+                                  });
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              'Terjadi kesalahan: $error')),
+                                    );
+                                    controller.showSnackBar(
+                                        context,
+                                        'Terjadi kesalahan: $error',
+                                        const Color.fromARGB(255, 181, 61, 62),
+                                        2000);
+                                  }
+                                });
                               },
                         style: ElevatedButton.styleFrom(
                           padding:

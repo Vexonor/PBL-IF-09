@@ -129,17 +129,11 @@ class _GeneralSettingState extends State<GeneralSetting> {
                         children: [
                           const SizedBox(height: 10),
                           Text(
-                            'Atur preferensi aplikasi umum Anda untuk meningkatkan pengalaman pengguna.',
+                            'Atur preferensi aplikasi Anda untuk meningkatkan pengalaman Pengguna.',
                             style: TextStyle(
                               fontSize: 16,
                             ),
                             textAlign: TextAlign.justify,
-                          ),
-                          const SizedBox(height: 10),
-                          _buildDaftarPengaturanNotifikasi(
-                            icon: Icons.notifications_on,
-                            judul: 'Notifikasi Push',
-                            rute: () {},
                           ),
                           const SizedBox(height: 10),
                           _buildLocationPermissionSetting(),

@@ -51,8 +51,6 @@ class AutentikasiMobileController extends Controller
                 return response()->json(['message' => 'Email sudah digunakan!'], 409);
             }
             return response()->json(['message' => 'Validasi gagal!'], 422);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Terjadi kesalahan, silakan coba lagi!'], 500);
         }
     }
     
@@ -98,7 +96,7 @@ class AutentikasiMobileController extends Controller
         try {
             $validateDataDiri = $request->validate([
                 'ID_User' => 'required|string',
-                'Foto_Profil' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240',
+                'Foto_Profil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
                 'No_Telp' => 'required|string',
                 'Alamat' => 'required|string',
                 'Jenis_Kelamin' => 'required|string',
@@ -121,6 +119,8 @@ class AutentikasiMobileController extends Controller
             $filePath = $file->storeAs('uploads/foto_profil', $filename, 'public');
             
             $validateDataDiri['Foto_Profil'] = $filePath;
+        }else {
+            $validateDataDiri['Foto_Profil'] = '';
         }
 
         $token = $user->createToken('token')->plainTextToken;
@@ -168,7 +168,11 @@ class AutentikasiMobileController extends Controller
             
                 $validateDataDiri['Foto_Profil'] = $filePath;
             } else {
-                $validateDataDiri['Foto_Profil'] = $user->Foto_Profil;
+                $file = $request->file('Foto_Profil');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $filePath = $file->storeAs('uploads/foto_profil', $filename, 'public');
+            
+                $validateDataDiri['Foto_Profil'] = $filePath;
             }
         } else {
             $validateDataDiri['Foto_Profil'] = $user->Foto_Profil;
@@ -212,42 +216,4 @@ class AutentikasiMobileController extends Controller
             return response()->json(['message' => 'Kata Sandi gagal diperbarui!'], 500);
         }
     }
-
-    // public function sendVerificationEmail(Request $request)
-    // {
-    //     $user = User::where('email', $request->email)->first();
-        
-    //     if ($user) {
-    //         $verificationCode = rand(100000, 999999); // Generate a random verification code
-    //         $user->verification_code = $verificationCode;
-    //         $user->save();
-
-    //         // Send email with verification code
-    //         Mail::to($user->email)->send(new \App\Mail\VerificationMail($verificationCode));
-
-    //         return response()->json(['message' => 'Verification code sent to your email.'], 200);
-    //     }
-
-    //     return response()->json(['message' => 'User  not found.'], 404);
-    // }
-
-    // public function verify(Request $request)
-    // {
-    //     $request->validate([
-    //         'email' => 'required|email',
-    //         'verification_code' => 'required|integer',
-    //     ]);
-
-    //     $user = User::where('email', $request->email)->first();
-
-    //     if ($user && $user->verification_code == $request->verification_code) {
-    //         $user->is_verified = true; // Set user as verified
-    //         $user->verification_code = null; // Clear the verification code
-    //         $user->save();
-
-    //         return response()->json(['message' => 'Email verified successfully.'], 200);
-    //     }
-
-    //     return response()->json(['message' => 'Invalid verification code.'], 400);
-    // }
 }

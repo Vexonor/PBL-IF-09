@@ -52,17 +52,6 @@ class _HomeState extends State<Home> {
             color: Colors.white,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.notifications,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, '/notifikasi');
-            },
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(

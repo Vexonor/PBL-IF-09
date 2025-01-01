@@ -32,6 +32,8 @@ class _ProfileState extends State<Profile> {
     final userNumber = Provider.of<UserProvider>(context).userNumber;
     final userPhoto = Provider.of<UserProvider>(context).userPhoto;
 
+    print(userPhoto);
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
@@ -76,11 +78,11 @@ class _ProfileState extends State<Profile> {
                   CircleAvatar(
                     radius: 40,
                     backgroundColor: Colors.white,
-                    backgroundImage: userPhoto != null
-                        ? CachedNetworkImageProvider(
-                            '$imageStorageUrl/$userPhoto')
-                        : null,
-                    child: userPhoto == null
+                    backgroundImage: userPhoto == null || userPhoto == ''
+                        ? null
+                        : CachedNetworkImageProvider(
+                            '$imageStorageUrl/$userPhoto'),
+                    child: userPhoto == null || userPhoto == ''
                         ? Icon(
                             Icons.person,
                             size: 40,

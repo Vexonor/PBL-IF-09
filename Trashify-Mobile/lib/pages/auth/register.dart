@@ -65,7 +65,7 @@ class _RegisterState extends State<Register> {
                           enabled: !controller.isProcessing,
                           decoration: InputDecoration(
                             prefixIcon:
-                                const Icon(Icons.people, color: Colors.grey),
+                                const Icon(Icons.people, color: Colors.black),
                             labelText: 'Nama Lengkap',
                             labelStyle: TextStyle(
                               fontSize: 14,
@@ -75,6 +75,7 @@ class _RegisterState extends State<Register> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15.0),
                             ),
+                            errorMaxLines: 2,
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -87,10 +88,11 @@ class _RegisterState extends State<Register> {
                         TextFormField(
                           controller: controller.emailController,
                           textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.emailAddress,
                           enabled: !controller.isProcessing,
                           decoration: InputDecoration(
                             prefixIcon: const Icon(Icons.email_outlined,
-                                color: Colors.grey),
+                                color: Colors.black),
                             labelText: 'Alamat Email',
                             labelStyle: TextStyle(
                               fontSize: 14,
@@ -100,6 +102,7 @@ class _RegisterState extends State<Register> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15.0),
                             ),
+                            errorMaxLines: 2,
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -122,7 +125,7 @@ class _RegisterState extends State<Register> {
                           obscureText: !controller.isPasswordVisible,
                           decoration: InputDecoration(
                             prefixIcon: const Icon(Icons.lock_outline,
-                                color: Colors.grey),
+                                color: Colors.black),
                             labelText: 'Kata Sandi',
                             labelStyle: TextStyle(
                               fontSize: 14,
@@ -146,6 +149,7 @@ class _RegisterState extends State<Register> {
                                 });
                               },
                             ),
+                            errorMaxLines: 2,
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -174,7 +178,7 @@ class _RegisterState extends State<Register> {
                               !controller.isConfirmationPasswordVisible,
                           decoration: InputDecoration(
                             prefixIcon: const Icon(Icons.lock_outline,
-                                color: Colors.grey),
+                                color: Colors.black),
                             labelText: 'Konfirmasi Kata Sandi',
                             labelStyle: TextStyle(
                               fontSize: 14,
@@ -198,6 +202,7 @@ class _RegisterState extends State<Register> {
                                 });
                               },
                             ),
+                            errorMaxLines: 2,
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {

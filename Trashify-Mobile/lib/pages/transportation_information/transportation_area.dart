@@ -102,7 +102,7 @@ class _TransportationAreaState extends State<TransportationArea> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: Row(
                         children: [
                           CircleAvatar(
@@ -119,7 +119,8 @@ class _TransportationAreaState extends State<TransportationArea> {
                             child: Card(
                               color: Color.fromARGB(255, 59, 142, 110),
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 4, horizontal: 12),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -204,6 +205,7 @@ class _TransportationAreaState extends State<TransportationArea> {
                                       'Area bertugas: Kec.${controller.workArea}',
                                       style: TextStyle(
                                           fontSize: 14, color: Colors.white),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ],
                                 ),

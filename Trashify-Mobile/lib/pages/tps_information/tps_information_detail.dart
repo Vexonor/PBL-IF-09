@@ -71,7 +71,7 @@ class _TpsInformationDetailState extends State<TpsInformationDetail> {
       builder: (context) {
         return Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Container(
+          child: SizedBox(
             height: MediaQuery.of(context).size.height * 0.35,
             child: ListView.builder(
               itemCount: sortedTpsList.length,

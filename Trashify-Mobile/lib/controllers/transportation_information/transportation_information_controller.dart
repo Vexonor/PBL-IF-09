@@ -218,9 +218,15 @@ class TransportationInformationController {
             ],
           ),
           SizedBox(height: 4),
-          Flexible(
-            fit: FlexFit.loose,
-            child: Text(isi),
+          Padding(
+            padding: const EdgeInsets.only(left: 34.0),
+            child: SizedBox(
+              width: double.infinity,
+              child: Text(
+                isi,
+                textAlign: TextAlign.left,
+              ),
+            ),
           ),
         ],
       ),

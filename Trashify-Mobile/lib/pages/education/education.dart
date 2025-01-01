@@ -66,16 +66,9 @@ class _EducationState extends State<Education> {
                 ),
               ),
             ),
+            SizedBox(width: 48),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.video_library, color: Colors.white),
-            onPressed: () {
-              Navigator.pushNamed(context, '/galeri_konten_edukasi');
-            },
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -97,13 +90,13 @@ class _EducationState extends State<Education> {
                         onPressed: () {
                           Navigator.pushNamed(
                             context,
-                            '/tambah_konten_edukasi',
+                            '/galeri_konten_edukasi',
                           );
                         },
                         shape: const CircleBorder(),
                         backgroundColor:
                             const Color.fromARGB(255, 59, 142, 110),
-                        child: const Icon(Icons.add),
+                        child: const Icon(Icons.add, color: Colors.white),
                       ),
                       const SizedBox(width: 16),
                       Column(

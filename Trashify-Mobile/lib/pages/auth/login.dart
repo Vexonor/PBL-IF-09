@@ -68,10 +68,11 @@ class _LoginState extends State<Login> {
                         TextFormField(
                           controller: controller.emailController,
                           textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.emailAddress,
                           enabled: !controller.isProcessing,
                           decoration: InputDecoration(
                             prefixIcon: const Icon(Icons.email_outlined,
-                                color: Colors.grey),
+                                color: Colors.black),
                             labelText: 'Alamat Email',
                             labelStyle: TextStyle(
                                 fontSize: 14,
@@ -80,6 +81,7 @@ class _LoginState extends State<Login> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15.0),
                             ),
+                            errorMaxLines: 2,
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -102,7 +104,7 @@ class _LoginState extends State<Login> {
                           obscureText: !controller.isPasswordVisible,
                           decoration: InputDecoration(
                             prefixIcon: const Icon(Icons.lock_outline,
-                                color: Colors.grey),
+                                color: Colors.black),
                             labelText: 'Kata Sandi',
                             labelStyle: TextStyle(
                                 fontSize: 14,
@@ -124,6 +126,7 @@ class _LoginState extends State<Login> {
                                 });
                               },
                             ),
+                            errorMaxLines: 2,
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {

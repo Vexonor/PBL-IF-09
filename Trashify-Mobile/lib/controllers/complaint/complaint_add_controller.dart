@@ -60,11 +60,63 @@ class ComplaintAddController {
     }
   }
 
-  // Memilih gambar dari galeri
-  Future<void> selectImages(BuildContext context) async {
-    final List<XFile>? images = await picker.pickMultiImage();
-    if (images != null) {
+  // Mengambil beberapa foto dari kamera
+  Future<void> takeMultiplePicturesFromCamera(BuildContext context) async {
+    List<XFile> images = [];
+    bool continueTakingPhotos = true;
+
+    while (continueTakingPhotos) {
+      final XFile? image =
+          await picker.pickImage(source: ImageSource.camera, imageQuality: 50);
+      if (image != null) {
+        images.add(image);
+        // Tampilkan dialog untuk menanyakan apakah ingin mengambil foto lagi
+        if (context.mounted) {
+          continueTakingPhotos = await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Ambil Foto Lagi?'),
+                    content: Text('Apakah Anda ingin mengambil foto lagi?'),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text('Tidak'),
+                        onPressed: () {
+                          Navigator.of(context).pop(false);
+                        },
+                      ),
+                      TextButton(
+                        child: Text('Ya'),
+                        onPressed: () {
+                          Navigator.of(context).pop(true);
+                        },
+                      ),
+                    ],
+                  );
+                },
+              ) ??
+              false;
+        }
+      } else {
+        continueTakingPhotos = false;
+      }
+    }
+
+    if (images.isNotEmpty) {
       selectedImages = images;
+    }
+  }
+
+  // Memilih gambar dari galeri atau kamera
+  Future<void> selectImages(BuildContext context,
+      {bool fromCamera = false}) async {
+    if (fromCamera) {
+      await takeMultiplePicturesFromCamera(context);
+    } else {
+      final List<XFile>? images = await picker.pickMultiImage();
+      if (images != null) {
+        selectedImages = images;
+      }
     }
   }
 
