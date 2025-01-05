@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Mobile;
 use App\Http\Controllers\Controller;
 use App\Models\InformasiModel;
 use App\Models\PetugasModel;
-use App\Models\user;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class InformasiPengangkutanMobileController extends Controller

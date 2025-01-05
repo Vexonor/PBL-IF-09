@@ -42,7 +42,7 @@ class KontenEdukasiMobileController extends Controller
             $validateKontenEdukasi = $request->validate([
                 'ID_User' => 'required|string',
                 'Judul_Edukasi' => 'required|string|max:100',
-                'Deskripsi_Edukasi' => 'required|string|max:255',
+                'Deskripsi_Edukasi' => 'required|string',
                 'Jenis_Edukasi' => 'required|string',
             ]);
             } else {
@@ -51,7 +51,7 @@ class KontenEdukasiMobileController extends Controller
                 'ID_User' => 'required|string',
                 'Judul_Edukasi' => 'required|string|max:100',
                 'Link_URL' => 'required|string',
-                'Deskripsi_Edukasi' => 'required|string|max:255',
+                'Deskripsi_Edukasi' => 'required|string',
                 'Jenis_Edukasi' => 'required|string',
             ]);
         }

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:trashify/controllers/tps_information/tps_information_detail_controller.dart';
 import 'package:trashify/pages/complaint/complaint_add.dart';
-import 'package:trashify/pages/notification.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -21,9 +19,6 @@ class _TpsInformationDetailState extends State<TpsInformationDetail> {
       TpsInformationDetailController();
   final MapController mapController = MapController();
 
-  bool isLoading = false;
-  String? selectedTpsCode;
-
   @override
   void initState() {
     super.initState();
@@ -33,7 +28,7 @@ class _TpsInformationDetailState extends State<TpsInformationDetail> {
       controller.setDistrict(args['district']);
       controller.fetchTpsInformationDetail(context, (loading) {
         setState(() {
-          isLoading = loading;
+          controller.isLoading = loading;
         });
         if (!loading) {
           if (controller.tpsInformationDetail != null &&
@@ -45,15 +40,84 @@ class _TpsInformationDetailState extends State<TpsInformationDetail> {
     });
   }
 
+  // Fungsi untuk menampilkan rute ke TPS
+  void _showRouteToTps(String tpsCoordinates) async {
+    try {
+      List<String> coordinates = tpsCoordinates.split(',');
+      double tpsLatitude = double.parse(coordinates[0].trim());
+      double tpsLongitude = double.parse(coordinates[1].trim());
+
+      setState(() {
+        controller.isGpsLoading = true;
+      });
+
+      LatLng userLocation = await controller.getCurrentLocation();
+
+      setState(() {
+        controller.isGpsLoading = false;
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+      });
+
+      List<LatLng> route = await controller.getRouteFromOSRM(
+          userLocation, LatLng(tpsLatitude, tpsLongitude));
+
+      double centerLatitude = (userLocation.latitude + tpsLatitude) / 2;
+      double centerLongitude = (userLocation.longitude + tpsLongitude) / 2;
+
+      mapController.move(LatLng(centerLatitude, centerLongitude), 13);
+
+      setState(() {
+        controller.polylineCoordinates = route;
+      });
+    } catch (e) {
+      if (mounted) {
+        controller.showSnackBar(
+            context, 'Terjadi Kesalahan, Silakan coba lagi!', Colors.red, 2000);
+      }
+    }
+  }
+
+  // Fungsi untuk menampilkan di Google Maps
+  void _showRouteInGoogleMaps(String tpsCoordinates) async {
+    try {
+      List<String> coordinates = tpsCoordinates.split(',');
+      double tpsLatitude = double.parse(coordinates[0].trim());
+      double tpsLongitude = double.parse(coordinates[1].trim());
+
+      setState(() {
+        controller.isGpsLoading = true;
+      });
+
+      LatLng userLocation = await controller.getCurrentLocation();
+
+      setState(() {
+        controller.isGpsLoading = false;
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+      });
+
+      final String url =
+          'https://www.google.com/maps/dir/?api=1&origin=${userLocation.latitude},${userLocation.longitude}&destination=$tpsLatitude,$tpsLongitude&travelmode=driving';
+
+      launchUrlString(url);
+    } catch (e) {
+      if (mounted) {
+        controller.showSnackBar(
+            context, 'Terjadi Kesalahan, Silakan coba lagi!', Colors.red, 2000);
+      }
+    }
+  }
+
   void _showBottomSheet({Map<String, dynamic>? selectedTps}) {
     // Menampilkan bottom sheet untuk memilih TPS
     List<Map<String, dynamic>> sortedTpsList = [];
 
     if (selectedTps != null) {
       sortedTpsList.add(selectedTps);
-    } else if (selectedTpsCode != null) {
+    } else if (controller.selectedTpsCode != null) {
       final selectedTpsFromCode = controller.tpsInformationDetail!.firstWhere(
-        (tps) => tps['Kode_TPS'] == selectedTpsCode,
+        (tps) => tps['Kode_TPS'] == controller.selectedTpsCode,
         orElse: () => null,
       );
       if (selectedTpsFromCode != null) {
@@ -62,7 +126,7 @@ class _TpsInformationDetailState extends State<TpsInformationDetail> {
     }
 
     sortedTpsList.addAll(controller.tpsInformationDetail!
-        .where((tps) => tps['Kode_TPS'] != selectedTpsCode)
+        .where((tps) => tps['Kode_TPS'] != controller.selectedTpsCode)
         .cast<Map<String, dynamic>>());
 
     showModalBottomSheet(
@@ -82,13 +146,13 @@ class _TpsInformationDetailState extends State<TpsInformationDetail> {
                 double latitude = double.parse(coordinates[0].trim());
                 double longitude = double.parse(coordinates[1].trim());
 
-                bool isSelected = selectedTpsCode == tps['Kode_TPS'];
+                bool isSelected = controller.selectedTpsCode == tps['Kode_TPS'];
 
                 return GestureDetector(
                   onTap: () {
                     mapController.move(LatLng(latitude, longitude), 18);
                     setState(() {
-                      selectedTpsCode = tps['Kode_TPS'];
+                      controller.selectedTpsCode = tps['Kode_TPS'];
                     });
                     Navigator.pop(context);
                   },
@@ -143,45 +207,47 @@ class _TpsInformationDetailState extends State<TpsInformationDetail> {
                               child: Transform.rotate(
                                 angle: -45 * 3.141592653589793238 / 180,
                                 child: IconButton(
-                                  icon: const Icon(Icons.copy,
+                                  icon: const Icon(Icons.location_searching,
                                       color: Colors.white),
                                   iconSize: 16,
                                   onPressed: () {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: Text('Pilih Aksi'),
-                                          content: Text(
-                                              'Apa yang ingin Anda lakukan dengan koordinat ini?'),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Clipboard.setData(ClipboardData(
-                                                    text: tps[
-                                                        'Titik_Koordinat']));
-                                                controller.showSnackBar(
-                                                    context,
-                                                    'Koordinat disalin ke clipboard',
-                                                    const Color.fromARGB(
-                                                        255, 58, 103, 134),
-                                                    2000);
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text('Salin Koordinat'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                final String url =
-                                                    'https://www.google.com/maps/search/?api=1&query=${tps['Titik_Koordinat']}';
-                                                launchUrlString(url);
-                                                Navigator.of(context).pop();
-                                              },
-                                              child:
-                                                  Text('Buka di Google Maps'),
-                                            ),
-                                          ],
-                                        );
+                                        return controller.isGpsLoading
+                                            ? CircularProgressIndicator(
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                        Color>(Colors.blue),
+                                              )
+                                            : AlertDialog(
+                                                title: Text('Pilih Aksi'),
+                                                content: Text(
+                                                    'Apa yang ingin Anda lakukan dengan koordinat ini?'),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        controller
+                                                                .selectedTpsCode =
+                                                            tps['Kode_TPS'];
+                                                      });
+                                                      _showRouteToTps(tps[
+                                                          'Titik_Koordinat']);
+                                                    },
+                                                    child:
+                                                        Text('Tampilkan Rute'),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      _showRouteInGoogleMaps(tps[
+                                                          'Titik_Koordinat']);
+                                                    },
+                                                    child: Text(
+                                                        'Buka di Google Maps'),
+                                                  ),
+                                                ],
+                                              );
                                       },
                                     );
                                   },
@@ -244,6 +310,12 @@ class _TpsInformationDetailState extends State<TpsInformationDetail> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 59, 142, 110),
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -260,26 +332,8 @@ class _TpsInformationDetailState extends State<TpsInformationDetail> {
             ),
           ],
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const NotificationCenter()),
-              );
-            },
-          ),
-        ],
       ),
-      body: isLoading
+      body: controller.isLoading
           ? Center(child: CircularProgressIndicator())
           : controller.tpsInformationDetail != null &&
                   controller.tpsInformationDetail!.isNotEmpty
@@ -326,39 +380,62 @@ class _TpsInformationDetailState extends State<TpsInformationDetail> {
                                   'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                             ),
                             MarkerLayer(
-                              markers: markers.map((marker) {
-                                final tps = controller.tpsInformationDetail!
-                                    .firstWhere((t) {
-                                  final String coordinatePoint =
-                                      t['Titik_Koordinat'];
-                                  List<String> coordinates =
-                                      coordinatePoint.split(',');
-                                  double lat =
-                                      double.parse(coordinates[0].trim());
-                                  double lon =
-                                      double.parse(coordinates[1].trim());
-                                  return LatLng(lat, lon) == marker;
-                                });
+                              markers: [
+                                ...markers.map((marker) {
+                                  final tps = controller.tpsInformationDetail!
+                                      .firstWhere((t) {
+                                    final String coordinatePoint =
+                                        t['Titik_Koordinat'];
+                                    List<String> coordinates =
+                                        coordinatePoint.split(',');
+                                    double lat =
+                                        double.parse(coordinates[0].trim());
+                                    double lon =
+                                        double.parse(coordinates[1].trim());
+                                    return LatLng(lat, lon) == marker;
+                                  });
 
-                                return Marker(
-                                  width: 80.0,
-                                  height: 80.0,
-                                  point: marker,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        selectedTpsCode = tps['Kode_TPS'];
-                                      });
-                                      _showBottomSheet(selectedTps: tps);
-                                    },
+                                  return Marker(
+                                    width: 80.0,
+                                    height: 80.0,
+                                    point: marker,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          controller.selectedTpsCode =
+                                              tps['Kode_TPS'];
+                                        });
+                                        _showBottomSheet(selectedTps: tps);
+                                      },
+                                      child: const Icon(
+                                        Icons.location_on,
+                                        size: 40,
+                                        color: Color.fromARGB(255, 181, 61, 62),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                                if (controller.userLocation != null)
+                                  Marker(
+                                    width: 80.0,
+                                    height: 80.0,
+                                    point: controller.userLocation!,
                                     child: const Icon(
-                                      Icons.location_on,
+                                      Icons.my_location,
                                       size: 40,
-                                      color: Color.fromARGB(255, 181, 61, 62),
+                                      color: Colors.blue,
                                     ),
                                   ),
-                                );
-                              }).toList(),
+                              ],
+                            ),
+                            PolylineLayer(
+                              polylines: [
+                                Polyline(
+                                  points: controller.polylineCoordinates,
+                                  strokeWidth: 4,
+                                  color: Colors.blue,
+                                ),
+                              ],
                             ),
                             RichAttributionWidget(
                               attributions: [

@@ -18,7 +18,6 @@ class _TermsConditionState extends State<TermsCondition> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            // Kembali ke halaman sebelumnya
             Navigator.pop(context);
           },
         ),

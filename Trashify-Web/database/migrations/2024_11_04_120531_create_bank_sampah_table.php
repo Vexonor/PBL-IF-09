@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bank_sampah', function (Blueprint $table) {
+        Schema::create('Bank_Sampah', function (Blueprint $table) {
             $table->id('ID_BankSampah');
             $table->string('Nama_Bank_Sampah');
             $table->enum('Jenis_Sampah', ['Plastik', 'Kaca', 'Kertas', 'Logam', 'Organik', 'Elektronik']);

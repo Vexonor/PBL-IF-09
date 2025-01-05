@@ -19,7 +19,7 @@ class AutentikasiMobileController extends Controller
             // Validasi input
             $validateUser  = $request->validate([
                 'Nama' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:user',
+                'email' => 'required|string|email|max:255|unique:User',
                 'password' => 'required|string|min:8',
             ]);
             
@@ -145,7 +145,7 @@ class AutentikasiMobileController extends Controller
         try {
             $validateDataDiri = $request->validate([
                 'Nama' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:user,email,' . $user->ID_User . ',ID_User',
+                'email' => 'required|string|email|max:255|unique:User,email,' . $user->ID_User . ',ID_User',
                 'Foto_Profil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
                 'No_Telp' => 'required|string',
                 'Alamat' => 'required|string',

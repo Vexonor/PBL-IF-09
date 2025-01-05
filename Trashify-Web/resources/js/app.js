@@ -7,7 +7,7 @@ function fetchDataWithAJAX() {
   const wilayahFilter = document.querySelector('#wilayahFilter').value;
   const tahunFilter = document.querySelector('#tahunFilter').value || new Date().getFullYear();
 
-  let url = 'http://127.0.0.1:8000/api/informasiPengangkutan';
+  let url = 'https://trashifyadmin.site/api/informasiPengangkutan';
   const params = new URLSearchParams();
   if (wilayahFilter) {
     params.append('wilayah', wilayahFilter);

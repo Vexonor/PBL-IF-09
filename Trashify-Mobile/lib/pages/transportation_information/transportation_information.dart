@@ -27,7 +27,12 @@ class _TransportationInformationState extends State<TransportationInformation> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 59, 142, 110),
         elevation: 0,
-        leading: Icon(Icons.arrow_back, color: Colors.white),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

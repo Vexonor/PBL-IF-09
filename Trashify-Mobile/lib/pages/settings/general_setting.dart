@@ -176,31 +176,4 @@ class _GeneralSettingState extends State<GeneralSetting> {
       ),
     );
   }
-
-  // Membangun daftar pengaturan notifikasi
-  Widget _buildDaftarPengaturanNotifikasi({
-    required IconData icon,
-    required String judul,
-    required Function() rute,
-    Color color = Colors.black87,
-  }) {
-    return Card(
-      color: Colors.white,
-      elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      child: ListTile(
-        leading: Icon(icon, color: color),
-        title: Text(
-          judul,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: color,
-          ),
-        ),
-        onTap: rute,
-      ),
-    );
-  }
 }

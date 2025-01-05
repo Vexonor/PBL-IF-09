@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:trashify/controllers/waste_bank/waste_bank_controller.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class WasteBank extends StatefulWidget {
   const WasteBank({super.key});
@@ -13,6 +14,118 @@ class WasteBank extends StatefulWidget {
 
 class _WasteBankState extends State<WasteBank> {
   final WasteBankController controller = WasteBankController();
+  final MapController mapController = MapController();
+
+  void _showRouteToTps(String tpsCoordinates) async {
+    try {
+      List<String> coordinates = tpsCoordinates.split(',');
+      double tpsLatitude = double.parse(coordinates[0].trim());
+      double tpsLongitude = double.parse(coordinates[1].trim());
+
+      setState(() {
+        controller.isGpsLoading = true;
+      });
+
+      LatLng userLocation = await controller.getCurrentLocation();
+
+      setState(() {
+        controller.isGpsLoading = false;
+        Navigator.of(context).pop(); // Tutup dialog informasi
+      });
+
+      List<LatLng> route = await controller.getRouteFromOSRM(
+          userLocation, LatLng(tpsLatitude, tpsLongitude));
+
+      double centerLatitude = (userLocation.latitude + tpsLatitude) / 2;
+      double centerLongitude = (userLocation.longitude + tpsLongitude) / 2;
+
+      mapController.move(LatLng(centerLatitude, centerLongitude), 12);
+
+      setState(() {
+        controller.polylineCoordinates = route;
+      });
+    } catch (e) {
+      if (mounted) {
+        controller.showSnackBar(
+            context, 'Terjadi Kesalahan, Silakan coba lagi!', Colors.red, 2000);
+      }
+    }
+  }
+
+  // Fungsi untuk menampilkan di Google Maps
+  void _showRouteInGoogleMaps(String tpsCoordinates) async {
+    try {
+      List<String> coordinates = tpsCoordinates.split(',');
+      double tpsLatitude = double.parse(coordinates[0].trim());
+      double tpsLongitude = double.parse(coordinates[1].trim());
+
+      setState(() {
+        controller.isGpsLoading = true;
+      });
+
+      LatLng userLocation = await controller.getCurrentLocation();
+
+      setState(() {
+        controller.isGpsLoading = false;
+        Navigator.of(context).pop();
+      });
+
+      final String url =
+          'https://www.google.com/maps/dir/?api=1&origin=${userLocation.latitude},${userLocation.longitude}&destination=$tpsLatitude,$tpsLongitude&travelmode=driving';
+
+      launchUrlString(url);
+    } catch (e) {
+      if (mounted) {
+        controller.showSnackBar(
+            context, 'Terjadi Kesalahan, Silakan coba lagi!', Colors.red, 2000);
+      }
+    }
+  }
+
+  void _showRouteOptions(dynamic item) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 59, 142, 110),
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  String tpsCoordinates = item['coordinateLatitude'] +
+                      ',' +
+                      item['coordinateLongitude'];
+                  _showRouteToTps(tpsCoordinates);
+                },
+                child: const Text('Tampilkan Rute'),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 59, 142, 110),
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  String tpsCoordinates = item['coordinateLatitude'] +
+                      ',' +
+                      item['coordinateLongitude'];
+                  _showRouteInGoogleMaps(tpsCoordinates);
+                },
+                child: const Text('Buka di Google Maps'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,16 +177,67 @@ class _WasteBankState extends State<WasteBank> {
                         : const Color.fromARGB(255, 59, 142, 110),
                   ),
                   onPressed: () {
-                    controller.showSlider(context, (selectedWasteType) {
-                      setState(() {
-                        controller.selectedWasteType = selectedWasteType;
+                    if (controller.selectedWasteType == null) {
+                      controller.showSlider(context, (selectedWasteType) {
+                        setState(() {
+                          controller.selectedWasteType = selectedWasteType;
+                        });
+                        controller
+                            .fetchWasteBank(context, selectedWasteType)
+                            .then((_) {
+                          setState(() {});
+                        });
                       });
-                      controller
-                          .fetchWasteBank(context, selectedWasteType)
-                          .then((_) {
-                        setState(() {});
+                    } else {
+                      controller.showSlider(context, (selectedWasteType) {
+                        setState(() {
+                          controller.selectedWasteType = selectedWasteType;
+                        });
+                        controller
+                            .fetchWasteBank(context, selectedWasteType)
+                            .then((_) {
+                          setState(() {
+                            // Hitung ulang centerLatitude dan centerLongitude
+                            List<LatLng> markers = [];
+                            if (controller.wasteBank != null) {
+                              for (var item in controller.wasteBank!) {
+                                final String coordinatePoint =
+                                    item['coordinateLatitude'] +
+                                        ',' +
+                                        item['coordinateLongitude'];
+                                if (coordinatePoint.isNotEmpty) {
+                                  List<String> coordinates =
+                                      coordinatePoint.split(',');
+                                  if (coordinates.length == 2) {
+                                    double latitude =
+                                        double.parse(coordinates[0].trim());
+                                    double longitude =
+                                        double.parse(coordinates[1].trim());
+                                    markers.add(LatLng(latitude, longitude));
+                                  }
+                                }
+                              }
+                            }
+                            double centerLatitude = markers.isNotEmpty
+                                ? markers
+                                        .map((m) => m.latitude)
+                                        .reduce((a, b) => a + b) /
+                                    markers.length
+                                : 0.0;
+                            double centerLongitude = markers.isNotEmpty
+                                ? markers
+                                        .map((m) => m.longitude)
+                                        .reduce((a, b) => a + b) /
+                                    markers.length
+                                : 0.0;
+
+                            // Pindahkan peta ke posisi baru
+                            mapController.move(
+                                LatLng(centerLatitude, centerLongitude), 10);
+                          });
+                        });
                       });
-                    });
+                    }
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -169,16 +333,17 @@ class _WasteBankState extends State<WasteBank> {
         width: double.infinity,
         height: 300,
         child: FlutterMap(
+          mapController: mapController,
           options: MapOptions(
             initialCenter: LatLng(centerLatitude, centerLongitude),
-            initialZoom: 13,
+            initialZoom: 10,
           ),
           children: [
             TileLayer(
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
             ),
-            MarkerLayer(
-              markers: markers.map((marker) {
+            MarkerLayer(markers: [
+              ...markers.map((marker) {
                 final item = controller.wasteBank!.firstWhere((b) {
                   return LatLng(
                         double.parse(b['coordinateLatitude']),
@@ -202,7 +367,27 @@ class _WasteBankState extends State<WasteBank> {
                     ),
                   ),
                 );
-              }).toList(),
+              }),
+              if (controller.userLocation != null)
+                Marker(
+                  width: 80.0,
+                  height: 80.0,
+                  point: controller.userLocation!,
+                  child: const Icon(
+                    Icons.my_location,
+                    size: 40,
+                    color: Colors.blue,
+                  ),
+                ),
+            ]),
+            PolylineLayer(
+              polylines: [
+                Polyline(
+                  points: controller.polylineCoordinates,
+                  strokeWidth: 4,
+                  color: Colors.blue,
+                ),
+              ],
             ),
           ],
         ),
@@ -220,11 +405,41 @@ class _WasteBankState extends State<WasteBank> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
+          icon: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.close,
+                      color: Color.fromARGB(255, 59, 142, 110)),
+                  iconSize: 16,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ),
+            ],
+          ),
           title: Text(
             item['wasteBankName'],
             style: const TextStyle(
                 fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
           ),
+          actions: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+              ),
+              onPressed: () {
+                _showRouteOptions(item);
+              },
+              child: const Text('Aksi'),
+            ),
+          ],
           content: Container(
             constraints: const BoxConstraints(
               maxWidth: 400,
@@ -332,20 +547,6 @@ class _WasteBankState extends State<WasteBank> {
               ),
             ),
           ),
-          actions: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Tutup'),
-              ),
-            ),
-          ],
         );
       },
     );

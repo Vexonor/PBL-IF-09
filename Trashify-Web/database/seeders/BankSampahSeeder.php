@@ -17,7 +17,7 @@ class BankSampahSeeder extends Seeder
         $faker = Faker::create('id_ID');
 
         for ($i = 0; $i < 20; $i++) {
-            DB::table('bank_sampah')->insert([
+            DB::table('Bank_Sampah')->insert([
                 'Nama_Bank_Sampah' => $faker->company,
                 'Jenis_Sampah' => $faker->randomElement(['Plastik', 'Kaca', 'Kertas', 'Logam', 'Organik', 'Elektronik']),
                 'Harga_Sampah' => 'Rp ' . number_format($faker->numberBetween(1000, 30000), 0, ',', '.'),

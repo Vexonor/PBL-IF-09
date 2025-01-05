@@ -113,10 +113,8 @@ class ComplaintAddController {
     if (fromCamera) {
       await takeMultiplePicturesFromCamera(context);
     } else {
-      final List<XFile>? images = await picker.pickMultiImage();
-      if (images != null) {
-        selectedImages = images;
-      }
+      final List<XFile> images = await picker.pickMultiImage();
+      selectedImages = images;
     }
   }
 

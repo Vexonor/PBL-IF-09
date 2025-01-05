@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 class BankSampahModel extends Model
 {
     use HasFactory;
-    protected $table = "bank_sampah";
+    protected $table = "Bank_Sampah";
     protected $primaryKey = "ID_BankSampah";
     protected $fillable = [
         "Nama_Bank_Sampah",

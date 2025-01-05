@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:trashify/pages/notification.dart';
 import 'package:trashify/pages/settings/setting.dart';
 import 'package:trashify/providers/user_provider.dart';
 import 'package:trashify/services/global_url.dart';
@@ -32,8 +31,6 @@ class _ProfileState extends State<Profile> {
     final userNumber = Provider.of<UserProvider>(context).userNumber;
     final userPhoto = Provider.of<UserProvider>(context).userPhoto;
 
-    print(userPhoto);
-
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
@@ -45,21 +42,6 @@ class _ProfileState extends State<Profile> {
           style: GoogleFonts.poppins(
               fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.notifications,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const NotificationCenter()),
-              );
-            },
-          )
-        ],
       ),
       body: SafeArea(
         child: Column(
