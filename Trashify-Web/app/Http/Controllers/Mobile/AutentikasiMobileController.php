@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Mobile;
 
+use App\Mail\SendEmail;
+use App\Models\OTPModel;
 use App\Http\Controllers\Controller;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Warga;
@@ -35,22 +38,107 @@ class AutentikasiMobileController extends Controller
                 'ID_User' => $user->ID_User,
             ]);
 
-            // Membuat token untuk pengguna
-            $token = $user->createToken('token')->plainTextToken;
-
             if ($user && $warga) {
+                $kodeOTP = OTPModel::create([
+                    'ID_User' => $user->ID_User,
+                    'Kode_Otp' => rand(100000, 999999),
+                    'expired_at' => Date::now()->addMinutes(2)
+                ]);
+                event(new Registered($user));
+                $message = [
+                    'subject' => 'Trashify - Verification',
+                    'title' => 'Kode Verifikasi Anda',
+                    'code' => $kodeOTP->Kode_Otp,
+                ];
+
+                Mail::to($user->email)->send(new SendEmail($message));
                 return response()->json([
                     'message' => 'Berhasil mendaftarkan Akun',
-                    'token' => $token,
+                    'ID_User' => $user->ID_User,
                 ], 201);
             } else {
                 return response()->json(['message' => 'Gagal mendaftarkan Akun!'], 500);
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
             if ($e->validator->errors()->has('email')) {
-                return response()->json(['message' => 'Email sudah digunakan!'], 409);
+                $existingUser  = User::where('email', $request->email)->first();
+                if ($existingUser  && !$existingUser->email_verified_at) {
+                    return response()->json([
+                        'message' => 'Email sudah terdaftar, namun belum diverifikasi.',
+                        'ID_User' => $existingUser->ID_User 
+                    ], 410);
+                }
+                return response()->json(['message' => 'Email sudah terdaftar!'], 409);
             }
             return response()->json(['message' => 'Validasi gagal!'], 422);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function showVerifikasi(string $id)
+    {
+        $verifikasi = User::find($id);
+
+        if (!$verifikasi) {
+            return response()->json(['message' => 'User tidak ditemukan!'], 404);
+        }
+
+        return response()->json($verifikasi, 200);
+    }
+
+    public function verifikasiOtp(Request $request)
+    {
+        $request->validate([
+            'Kode_Otp' => 'required|string|max:6',
+        ]);
+
+        $otp = OTPModel::where('Kode_Otp', $request->Kode_Otp)->first();
+
+        if (!$otp || strtotime($otp->expired_at) < time()) {
+            return response()->json([
+                'Kode_Otp' => 'Kode OTP tidak ditemukan atau sudah kedaluwarsa.',
+            ], 403);
+        }
+
+        $otp->UserTable->email_verified_at = now();
+        $otp->UserTable->save();
+
+        return response()->json(['message' => 'Berhasil Verifikasi! Silakan masuk.'], 200);
+    }
+
+    public function kirimUlangOTP(Request $request)
+    {
+        $user = User::find($request->ID_User);
+
+        if (!$user) {
+            return response()->json(['message' => 'User tidak ditemukan'], 404);
+        }
+
+        $otp = rand(100000, 999999);
+        $expiredAt = now()->addMinutes(2);
+
+        $kodeOTP = OTPModel::updateOrCreate(
+            ['ID_User' => $user->ID_User],
+            [
+                'Kode_Otp' => $otp,
+                'expired_at' => $expiredAt
+            ]
+        );
+
+        if ($user) {
+            $message = [
+                'subject' => 'Trashify - Verification',
+                'title' => 'Kode Verifikasi Anda',
+                'code' => $kodeOTP->Kode_Otp,
+            ];
+
+            Mail::to($user->email)->send(new SendEmail($message));
+
+            return response()->json(['message' => 'Berhasil Mengirim ulang OTP'], 200);
+        } else {
+            return response()->json(['message' => 'Gagal Mengirim ulang OTP'], 401);
         }
     }
     
@@ -65,6 +153,10 @@ class AutentikasiMobileController extends Controller
 
         if (!$user) {
             return response()->json(['message' => 'Email belum terdaftar'], 404);
+        }
+
+        if (!$user->is_verified) {
+            return response()->json(['message' => 'Email sudah terdaftar, namun belum diverifikasi'], 403);
         }
 
         $token = $user->createToken('token')->plainTextToken;

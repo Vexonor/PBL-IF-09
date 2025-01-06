@@ -70,6 +70,17 @@ class LoginController {
               Navigator.pushReplacementNamed(context, '/halaman_utama');
             }
           }
+        } else if (response.statusCode == 403) {
+          final data = json.decode(response.body);
+          if (context.mounted) {
+            Navigator.pushReplacementNamed(
+              context,
+              '/verifikasi',
+              arguments: {
+                'userId': data['ID_User'].toString(),
+              },
+            );
+          }
         } else if (response.statusCode == 401 || response.statusCode == 404) {
           final data = json.decode(response.body);
           if (context.mounted) {

@@ -14,6 +14,7 @@ class RegisterController {
   bool isConfirmationPasswordVisible = false;
   bool isPasswordVisible = false;
   bool isProcessing = false;
+  String? idUser;
 
   // Fungsi untuk melakukan registrasi pengguna
   Future<void> register(BuildContext context) async {
@@ -32,11 +33,32 @@ class RegisterController {
         if (response.statusCode == 201) {
           final data = json.decode(response.body);
           if (context.mounted) {
-            Navigator.pushReplacementNamed(context, '/masuk');
+            Navigator.pushReplacementNamed(
+              context,
+              '/verifikasi',
+              arguments: {
+                'userId': data['ID_User'].toString(),
+              },
+            );
           }
           if (context.mounted) {
             showSnackBar(context, data['message'],
                 Color.fromARGB(255, 59, 142, 110), 2000);
+          }
+        } else if (response.statusCode == 410) {
+          final data = json.decode(response.body);
+          if (context.mounted) {
+            Navigator.pushReplacementNamed(
+              context,
+              '/verifikasi',
+              arguments: {
+                'userId': data['ID_User'].toString(),
+              },
+            );
+          }
+          if (context.mounted) {
+            showSnackBar(context, data['message'],
+                const Color.fromARGB(255, 181, 61, 62), 4000);
           }
         } else if (response.statusCode == 409 ||
             response.statusCode == 422 ||

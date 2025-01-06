@@ -235,17 +235,17 @@ class _RegisterState extends State<Register> {
                                   : () {
                                       setState(() {
                                         controller.isProcessing =
-                                            true; // Set isProcessing to true
+                                            true;
                                       });
                                       controller.register(context).then((_) {
                                         setState(() {
                                           controller.isProcessing =
-                                              false; // Set isProcessing back to false
+                                              false;
                                         });
                                       }).catchError((error) {
                                         setState(() {
                                           controller.isProcessing =
-                                              false; // Ensure to set back to false
+                                              false;
                                         });
                                       });
                                     },

@@ -24,6 +24,9 @@ Route::get('/user', function (Request $request) {
 //Auth
 Route::post('/masuk', [AutentikasiMobileController::class, 'masuk']);
 Route::post('/daftar', [AutentikasiMobileController::class, 'daftar']);
+Route::get('/verifikasi/{idUser}', [AutentikasiMobileController::class, 'showVerifikasi']);
+Route::post('/verifikasi/{idUser}', [AutentikasiMobileController::class, 'verifikasiOtp']);
+Route::post('/kirim_ulang_otp', [AutentikasiMobileController::class, 'kirimUlangOTP']);
 Route::post('/pembuka', [AutentikasiMobileController::class, 'store']);
 
 Route::middleware('auth:sanctum')->group(function () {

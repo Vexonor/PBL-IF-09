@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
-
+import preline from 'preline/plugin';
+import forms from '@tailwindcss/forms';
 
 export default {
     content: [
@@ -8,10 +9,10 @@ export default {
     "./resources/**/*.vue",
     'node_modules/preline/dist/*.js',
     './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-  ],
-  theme: {
+    ],
+    theme: {
     extend: {
-      colors: {
+        colors: {
         "Genoa" : "#368666",
         "Aquamarine" : "#B5FFCE",
         "Orange-Peel" : "#FF9900",
@@ -23,12 +24,12 @@ export default {
         "Charcoal" : "#323232"
         },
         fontFamily: {
-          poppins: ["Poppins", "mono"],
+            poppins: ["Poppins", "mono"],
         },
     },
-  },
-  plugins: [
-    preline,
-    forms,
-  ],
+    },
+    plugins: [
+        preline,
+        forms,
+    ],
 }

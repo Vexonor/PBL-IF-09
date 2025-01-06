@@ -23,14 +23,37 @@ class AccountService {
     return response;
   }
 
-  // Fungsi untuk verifikasi kode
-  Future<http.Response> verification(String code) async {
-    final response = await http.post(
-      Uri.parse('$apiUrl/verification'),
+  // Fungsi untuk mendapatkan informasi verifikasi kode
+  Future<http.Response> getVerification(String idUser) async {
+    final response = await http.get(
+      Uri.parse('$apiUrl/verifikasi/$idUser'),
       headers: {
         'Content-Type': 'application/json',
       },
-      body: jsonEncode({'code': code}),
+    );
+    return response;
+  }
+
+  // Fungsi untuk verifikasi kode
+  Future<http.Response> verification(String code, String userId) async {
+    final response = await http.post(
+      Uri.parse('$apiUrl/verifikasi/$userId'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'Kode_Otp': code}),
+    );
+    return response;
+  }
+
+  // Fungsi untuk mengirim ulang kode
+  Future<http.Response> resendOtp(String userId) async {
+    final response = await http.post(
+      Uri.parse('$apiUrl/kirim_ulang_otp'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'ID_User': userId}),
     );
     return response;
   }

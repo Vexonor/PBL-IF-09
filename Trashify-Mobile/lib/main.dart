@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:trashify/controllers/main_controller.dart';
 import 'package:trashify/pages/auth/login.dart';
 import 'package:trashify/pages/auth/register.dart';
+import 'package:trashify/pages/auth/verification.dart';
 import 'package:trashify/pages/auth/welcome.dart';
 import 'package:trashify/pages/complaint/additional/select_coordinate.dart';
 import 'package:trashify/pages/complaint/complaint.dart';
@@ -73,6 +74,7 @@ class _MyAppState extends State<MyApp> {
         // Rute untuk autentikasi
         '/masuk': (context) => Login(),
         '/daftar': (context) => Register(),
+        '/verifikasi': (context) => Verification(),
         '/pembuka': (context) => Welcome(),
         // Rute untuk fitur utama
         '/halaman_utama': (context) => MainPage(),
