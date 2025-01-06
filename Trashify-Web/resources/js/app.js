@@ -62,6 +62,12 @@ function processData(rawData, tahunFilter) {
     const tertundaData = [];
     const months = [];
 
+    const monthMap = {
+        'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4,
+        'Jun': 5, 'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9,
+        'Nov': 10, 'Dec': 11
+    };
+
     const currentYear = new Date().getFullYear();
     const filteredData = rawData.filter(item => {
         const date = new Date(item.Tanggal_Pengangkutan);
@@ -93,6 +99,12 @@ function processData(rawData, tahunFilter) {
                 tertundaData[index]++;
             }
         }
+    });
+
+    months.sort((a, b) => {
+        const [monthA, yearA] = a.split(' ');
+        const [monthB, yearB] = b.split(' ');
+        return yearA - yearB || monthMap[monthA] - monthMap[monthB];
     });
 
     displayChart(terangkutData, tidakTerangkutData, tertundaData, months);
