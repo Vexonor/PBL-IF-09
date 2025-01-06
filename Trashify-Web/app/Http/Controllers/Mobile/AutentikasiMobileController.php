@@ -155,8 +155,11 @@ class AutentikasiMobileController extends Controller
             return response()->json(['message' => 'Email belum terdaftar'], 404);
         }
 
-        if (!$user->is_verified) {
-            return response()->json(['message' => 'Email sudah terdaftar, namun belum diverifikasi'], 403);
+        if (!$user->email_verified_at) {
+            return response()->json([
+                'message' => 'Email sudah terdaftar, namun belum diverifikasi', 
+                'ID_User' => $user->ID_User,
+            ], 403);
         }
 
         $token = $user->createToken('token')->plainTextToken;
