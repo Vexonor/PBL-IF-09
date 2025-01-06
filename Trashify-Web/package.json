@@ -21,6 +21,7 @@
         "@preline/strong-password": "^2.5.0",
         "@preline/toggle-password": "^2.5.0",
         "apexcharts": "^3.54.1",
+        "chart.js": "^4.4.7",
         "preline": "^2.5.0"
     }
 }

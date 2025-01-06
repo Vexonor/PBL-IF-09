@@ -212,7 +212,9 @@
     </div>
 
     <!-- Chart -->
-    <div class="col-span-2" id="chart"></div>
+    <div class="col-span-2">
+        <canvas id="chart"></canvas>
+    </div>
 </div>
 
 

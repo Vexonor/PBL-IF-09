@@ -583,7 +583,7 @@
         <div class="w-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto">
             <div class="flex justify-between items-center py-3 px-4 border-b">
                 <h3 id="hs-vertically-centered-modal-label" class="font-bold 2xl:text-lg text-gray-800">
-                    Hapus Informasi Pengangkutan
+                    Hapus Bank Sampah
                 </h3>
                 <button type="button"
                     class="size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none"
