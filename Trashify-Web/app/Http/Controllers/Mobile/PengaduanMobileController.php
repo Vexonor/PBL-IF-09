@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Mobile;
 use App\Http\Controllers\Controller;
 use App\Models\FotoModel;
 use App\Models\LaporanModel;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -86,16 +87,16 @@ class PengaduanMobileController extends Controller
         $foto = FotoModel::where('ID_Pengaduan', $pengaduan->ID_Pengaduan)->pluck('Foto');
 
         $response = [
-        'ID_Pengaduan' => $pengaduan->ID_Pengaduan,
-        'ID_User' => $pengaduan->ID_User,
-        'Kategori_Pengaduan' => $pengaduan->Kategori_Pengaduan,
-        'Deskripsi_Pengaduan' => $pengaduan->Deskripsi_Pengaduan,
-        'Titik_Koordinat' => $pengaduan->Titik_Koordinat,
-        'Status_Pengaduan' => $pengaduan->Status_Pengaduan,
-        'created_at' => $pengaduan->created_at,
-        'updated_at' => $pengaduan->updated_at,
-        'Gambar_Pengaduan' => $foto, // Add the images to the response
-    ];
+            'ID_Pengaduan' => $pengaduan->ID_Pengaduan,
+            'ID_User' => $pengaduan->ID_User,
+            'Kategori_Pengaduan' => $pengaduan->Kategori_Pengaduan,
+            'Deskripsi_Pengaduan' => $pengaduan->Deskripsi_Pengaduan,
+            'Titik_Koordinat' => $pengaduan->Titik_Koordinat,
+            'Status_Pengaduan' => $pengaduan->Status_Pengaduan,
+            'created_at' => Carbon::parse($pengaduan->created_at)->timezone('Asia/Jakarta')->toDateTimeString(),
+            'updated_at' => Carbon::parse($pengaduan->updated_at)->timezone('Asia/Jakarta')->toDateTimeString(),
+            'Gambar_Pengaduan' => $foto,
+        ];
 
         return response()->json($response, 200);
     }

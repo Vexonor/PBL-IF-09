@@ -75,6 +75,55 @@ class TransportationInformationController {
     }
   }
 
+  List<String> _getAvailableTimes(DateTime selectedDate) {
+    List<String> times = [];
+    for (var item in transportationInformation) {
+      DateTime date = DateTime.parse(item['Tanggal_Pengangkutan']);
+      if (date == selectedDate &&
+          item['Wilayah_Pengangkutan'] == selectedDistrict) {
+        times.add(item['Jam_Pengangkutan']);
+      }
+    }
+
+    // Urutkan jam dari yang paling awal
+    times.sort((a, b) {
+      // Konversi jam ke DateTime untuk membandingkan
+      DateTime timeA = DateFormat('HH:mm').parse(a);
+      DateTime timeB = DateFormat('HH:mm').parse(b);
+      return timeA.compareTo(timeB);
+    });
+
+    return times;
+  }
+
+  void showTimePickerModal(BuildContext context, DateTime selectedDate) {
+    List<String> availableTimes = _getAvailableTimes(selectedDate);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Pilih Jam Pengangkutan'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: availableTimes.map((time) {
+                return ListTile(
+                  title: Text(time),
+                  onTap: () {
+                    Navigator.pop(context);
+                    showSlider(context, selectedDate, time);
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+
   // Memproses informasi detail transportasi
   void _processDetailInformation() {
     detailInformation.clear();
@@ -92,7 +141,8 @@ class TransportationInformationController {
   }
 
   // Menampilkan slider informasi transportasi
-  void showSlider(BuildContext context) {
+  void showSlider(
+      BuildContext context, DateTime selectedDate, String selectedTime) {
     Map<String, String>? detail = detailInformation[selectedDate];
     String status = detail?['status'] ?? 'Tidak Diketahui';
     IconData statusIcon;
@@ -160,7 +210,7 @@ class TransportationInformationController {
 
                               return TransportationArea(
                                 selectedDate: selectedDate,
-                                transportationTime: transportationTime,
+                                transportationTime: selectedTime,
                                 coordinates: coordinates,
                                 idWorker: idPetugas,
                               );
@@ -185,12 +235,10 @@ class TransportationInformationController {
                       _buildInformation(
                           'Status Pengangkutan', status, statusIcon),
                       _buildInformation(
-                          'Jam Pengangkutan',
-                          detail?['jam'] ?? 'Tidak Diketahui',
-                          Icons.access_time),
+                          'Jam Pengangkutan', selectedTime, Icons.access_time),
                       _buildInformation(
                           'Wilayah Pengangkutan',
-                          detail?['wilayah'] ?? 'Tidak Diketahui',
+                          detail?['wilayah'] ?? 'Tidak D iketahui',
                           Icons.location_on),
                     ],
                   ),

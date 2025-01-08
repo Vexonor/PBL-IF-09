@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Mobile;
 use App\Http\Controllers\Controller;
 use App\Models\KontenModel;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class KontenEdukasiMobileController extends Controller
@@ -42,7 +43,7 @@ class KontenEdukasiMobileController extends Controller
             $validateKontenEdukasi = $request->validate([
                 'ID_User' => 'required|string',
                 'Judul_Edukasi' => 'required|string|max:100',
-                'Deskripsi_Edukasi' => 'required|string',
+                'Deskripsi_Edukasi' => 'required|string|max:2000',
                 'Jenis_Edukasi' => 'required|string',
             ]);
             } else {
@@ -51,7 +52,7 @@ class KontenEdukasiMobileController extends Controller
                 'ID_User' => 'required|string',
                 'Judul_Edukasi' => 'required|string|max:100',
                 'Link_URL' => 'required|string',
-                'Deskripsi_Edukasi' => 'required|string',
+                'Deskripsi_Edukasi' => 'required|string|max:2000',
                 'Jenis_Edukasi' => 'required|string',
             ]);
         }
@@ -96,8 +97,20 @@ class KontenEdukasiMobileController extends Controller
         if (!$kontenEdukasi) {
             return response()->json(['message' => 'Konten Edukasi tidak ditemukan atau belum diunggah!'], 404);
         }
-
-        return response()->json($kontenEdukasi, 200);
+        
+        $response = [
+            'ID_User' => $kontenEdukasi->ID_User,
+            'ID_Edukasi' => $kontenEdukasi->ID_Edukasi,
+            'Judul_Edukasi' => $kontenEdukasi->Judul_Edukasi,
+            'Link_URL' => $kontenEdukasi->Link_URL,
+            'Deskripsi_Edukasi' => $kontenEdukasi->Deskripsi_Edukasi,
+            'Jenis_Edukasi' => $kontenEdukasi->Jenis_Edukasi,
+            'Status_Edukasi' => $kontenEdukasi->Status_Edukasi,
+            'created_at' => Carbon::parse($kontenEdukasi->created_at)->timezone('Asia/Jakarta')->toDateTimeString(),
+            'updated_at' => Carbon::parse($kontenEdukasi->updated_at)->timezone('Asia/Jakarta')->toDateTimeString(),
+        ];
+        
+        return response()->json($response, 200);
     }
 
     /**
@@ -115,14 +128,14 @@ class KontenEdukasiMobileController extends Controller
             // Validasi tanpa Link_URL
             $validateKontenEdukasi = $request->validate([
                 'Judul_Edukasi' => 'required|string|max:100',
-                'Deskripsi_Edukasi' => 'required|string|max:255',
+                'Deskripsi_Edukasi' => 'required|string|max:2000',
             ]);
         } else {
             // Validasi dengan Link_URL
             $validateKontenEdukasi = $request->validate([
                 'Judul_Edukasi' => 'required|string|max:100',
                 'Link_URL' => 'required|string',
-                'Deskripsi_Edukasi' => 'required|string|max:255',
+                'Deskripsi_Edukasi' => 'required|string|max:2000',
             ]);
         }
 

@@ -376,16 +376,6 @@ class _EducationState extends State<Education> {
                                     ),
                                   ),
                                 ),
-                              Positioned(
-                                left: 16,
-                                child:
-                                    Icon(Icons.arrow_back, color: Colors.black),
-                              ),
-                              Positioned(
-                                right: 16,
-                                child: Icon(Icons.arrow_forward,
-                                    color: Colors.black),
-                              ),
                             ],
                           ),
                   ),

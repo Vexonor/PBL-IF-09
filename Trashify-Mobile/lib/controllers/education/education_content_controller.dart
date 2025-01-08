@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trashify/services/comment_service.dart';
 import 'package:trashify/services/education_service.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class EducationContentController {
   final CommentService commentService = CommentService();
@@ -13,6 +14,7 @@ class EducationContentController {
 
   bool commentsVisible = false;
   bool descriptionVisible = false;
+  bool isFullScreen = false;
   bool isLoading = false;
   bool isProcessing = false;
   Color indicatorColor = Colors.grey;
@@ -25,6 +27,7 @@ class EducationContentController {
   Map<String, dynamic>? educationContent;
   String commentIndicator = '';
   String? name;
+  YoutubePlayerController? youtubeController;
 
   EducationContentController() {
     init();

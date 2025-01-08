@@ -383,16 +383,6 @@ class _HomeState extends State<Home> {
                                         }).toList() ??
                                         [],
                                   ),
-                                  Positioned(
-                                    left: 16,
-                                    child: Icon(Icons.arrow_back,
-                                        color: Colors.black),
-                                  ),
-                                  Positioned(
-                                    right: 16,
-                                    child: Icon(Icons.arrow_forward,
-                                        color: Colors.black),
-                                  ),
                                 ],
                               ),
                       ),

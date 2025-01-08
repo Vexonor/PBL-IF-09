@@ -14,6 +14,13 @@ class _TransportationInformationState extends State<TransportationInformation> {
   final TransportationInformationController controller =
       TransportationInformationController();
 
+  DateTime? getInitialDate() {
+    if (controller.markedDates.isNotEmpty) {
+      return controller.markedDates.reduce((a, b) => a.isBefore(b) ? a : b);
+    }
+    return DateTime.now();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -191,17 +198,15 @@ class _TransportationInformationState extends State<TransportationInformation> {
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         child: CalendarDatePicker(
-                          initialDate: controller.markedDates.isNotEmpty
-                              ? controller.markedDates.first
-                              : DateTime.now(),
-                          firstDate: DateTime(2020, 1, 1),
-                          lastDate: DateTime(2025, 12, 31),
+                          initialDate: getInitialDate(),
+                          firstDate: DateTime(2025, 1, 1),
+                          lastDate: DateTime(2045, 12, 31),
                           onDateChanged: (date) {
                             setState(() {
                               controller.selectedDate = date;
                             });
                             if (controller.markedDates.contains(date)) {
-                              controller.showSlider(context);
+                              controller.showTimePickerModal(context, date);
                             }
                           },
                           selectableDayPredicate: (date) {
