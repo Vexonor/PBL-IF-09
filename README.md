@@ -13,7 +13,7 @@
 ##### Manajer proyek : Ahmad Hamim Thohari, S.S.T., M.T.
 
 - Ketua Tim : 
-  - [3312301111] – Alif Hidayat Salim
+  - [3312301111] – Alif Hidayat Salim 
 
 - Anggota Tim :
   - [3312301001] - Lea Antony
